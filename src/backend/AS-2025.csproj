@@ -5,6 +5,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>AS_2025</RootNamespace>
+    <UserSecretsId>9ac021d0-d613-4e8d-92c2-792bb03e2ee5</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FastEndpoints" Version="5.33.0.12-beta" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ApplicationService\" />
+  </ItemGroup>
 
 </Project>
