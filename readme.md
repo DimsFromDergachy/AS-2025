@@ -1,25 +1,23 @@
 
-## Run:
-> dotnet run --project src/backend/AS-2025.csproj
+### Start
+> docker compose up -d
 
-## Test:
+#### Links
+| | | | |
+|-|:-:|:-:|:------: |
+PGAdmin | http://localhost:15432 |admin@pg.com | admin
+MINIO | http://localhost:5050 | minio | minio
+Scalar | https://localhost:58708/scalar
+
+### Down
+> docker compose down -v
+
+### Test:
 > hurl --test src/test/*.hurl
 
-## Infra (postgres, pgadmin, minio)
-> .env.example -> .env
-> docker-compose up -d
-
-## Scalar OpenAPI
-> https://localhost:58708/scalar
-
-## Docker build:
+### Docker build:
 > docker build -t as2025 .
 > docker run -p 8080:8080 -p 8081:8081 as2025
 
-## Down
-
-> docker compose down -v
-
-## Wipe everything
-
-docker system prune -a
+### Wipe everything
+> docker system prune -a
