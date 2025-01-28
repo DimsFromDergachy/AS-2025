@@ -3,7 +3,7 @@
 > dotnet run --project src/backend/AS-2025.csproj
 
 ## Test:
-> hurl --test src/test/login.hurl
+> hurl --test src/test/*.hurl
 
 ## Infra (postgres, pgadmin, minio)
 > .env.example -> .env

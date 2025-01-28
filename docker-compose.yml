@@ -31,9 +31,24 @@ services:
       postgres:
         condition: service_healthy
 
-networks:
-  as2025:
-    driver: bridge
+  minio:
+    image: mirror.gcr.io/minio/minio:RELEASE.2025-01-20T14-49-07Z
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-storage:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
 
 volumes:
   postgres-data:
