@@ -53,4 +53,4 @@ services:
 volumes:
   postgres-data:
   pgadmin:
-  minio-storage: {}
+  minio-storage:

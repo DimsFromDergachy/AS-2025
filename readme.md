@@ -5,15 +5,15 @@
 #### Links
 | | | | |
 |-|:-:|:-:|:------: |
-PGAdmin | http://localhost:15432 |admin@pg.com | admin
-MINIO | http://localhost:5050 | minio | minio
+PGAdmin | http://localhost:5050 |admin@pg.com | admin
+MINIO | http://localhost:9001 | minioadmin | minioadmin
 Scalar | https://localhost:58708/scalar
 
 ### Down
 > docker compose down -v
 
 ### Test:
-> hurl --test src/test/*.hurl
+> hurl --test **/*.hurl
 
 ### Docker build:
 > docker build -t as2025 .
