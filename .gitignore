@@ -42,6 +42,7 @@ TestResult.xml
 dlldata.c
 
 # .NET Core
+appsettings.Local.json
 project.lock.json
 project.fragment.lock.json
 artifacts/
@@ -316,6 +317,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
 .env*.local
 
 # vercel
