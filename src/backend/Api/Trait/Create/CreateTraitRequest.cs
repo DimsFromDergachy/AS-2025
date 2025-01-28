@@ -1,6 +1,9 @@
-﻿namespace AS_2025.Api.Endpoints.Trait.Create;
+﻿using Ardalis.Result;
+using MediatR;
 
-public record CreateTraitRequest
+namespace AS_2025.Api.Trait.Create;
+
+public record CreateTraitRequest : IRequest<Result<TraitViewModel>>
 {
     public string Code { get; init; } = string.Empty;
 

@@ -1,4 +1,4 @@
-﻿using AS_2025.Domain;
+﻿using AS_2025.Domain.Entities;
 using Task = System.Threading.Tasks.Task;
 
 namespace AS_2025.Repository;
