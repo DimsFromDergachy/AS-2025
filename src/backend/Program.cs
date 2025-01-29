@@ -4,7 +4,9 @@ using AS_2025.Database;
 using AS_2025.Identity;
 using AS_2025.Options;
 using AS_2025.Repository;
+using AS_2025.Schema;
 using Scalar.AspNetCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,8 +31,18 @@ builder.Services.AddOptions(applicationOptions);
 builder.Services.AddDatabase(applicationOptions);
 builder.Services.AddDatabaseHostedServices();
 builder.Services.AddRepositories();
+builder.Services.AddSchemaBuilders();
 
 builder.Services.AddExceptionHandler<ExceptionHandler>();
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 var app = builder.Build();
 

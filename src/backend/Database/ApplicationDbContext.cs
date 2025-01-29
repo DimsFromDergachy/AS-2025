@@ -15,6 +15,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(IAssemblyMarker).Assembly);
     }
 }

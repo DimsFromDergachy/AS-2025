@@ -32,8 +32,6 @@ public static class ServiceCollectionExtensions
             config.AddOpenBehavior(typeof(ValidationResultPipelineBehavior<,>));
         });
 
-
-
         return services;
     }
 }

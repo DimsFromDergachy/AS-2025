@@ -1,7 +1,11 @@
 ﻿using Ardalis.Result.AspNetCore;
 using AS_2025.Api.Trait.Create;
+using AS_2025.Api.Trait.List;
 using AS_2025.Api.Trait.Update;
+using AS_2025.Schema.List;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AS_2025.Api.Trait;
 
@@ -23,5 +27,13 @@ public static class TraitEndpoints
             var result = await mediator.Send(request with { Id = id });
             return result.ToMinimalApiResult();
         });
+
+        group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListTraitsRequest? request) =>
+        {
+            var result = await mediator.Send(request ?? new ListTraitsRequest());
+            return result.ToMinimalApiResult();
+        });
+
+        group.MapGet("/list/schema", ([FromServices] IListSchemaModelBuilder<ListTraitsItem> schemaModelBuilder) => schemaModelBuilder.Build());
     }
 }
