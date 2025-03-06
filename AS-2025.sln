@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS-2025", "src\backend\AS-2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{723CD42A-07C6-4E56-9568-43C51E1659C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "src\algo\test.csproj", "{EFE550C7-F2FC-4E3A-914A-019793AEAA02}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "algo", "src\algo\algo.csproj", "{EFE550C7-F2FC-4E3A-914A-019793AEAA02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -14,6 +14,6 @@ public class AlgoExampleTest
         Assert.Equal(3.1,    new AlgoExample().PI, 1);
         Assert.Equal(3.14,   new AlgoExample().PI, 2);
         Assert.Equal(3.142,  new AlgoExample().PI, 3);
-        Assert.Equal(3.1415, new AlgoExample().PI, 4);
+        Assert.Equal(3.1416, new AlgoExample().PI, 4);
     }
 }
