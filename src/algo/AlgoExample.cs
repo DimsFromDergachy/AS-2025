@@ -2,7 +2,7 @@
 
 public class AlgoExample
 {
-    public double PI = 4;
+    public double PI = 4.25;
 }
 
 public class AlgoExampleTest
