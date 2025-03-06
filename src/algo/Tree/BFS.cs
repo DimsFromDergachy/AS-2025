@@ -9,6 +9,7 @@ public static class BFS
     {
         (var vs, var edges) = graph;
         var visited = vs.ToDictionary(v => v, v => false);
+        visited[start] = true;
 
         var queue = new Queue<TVertex>();
         queue.Enqueue(start);
@@ -16,7 +17,6 @@ public static class BFS
         while (queue.Any())
         {
             var current = queue.Dequeue();
-            visited[current] = true;
 
             yield return current;
 
@@ -24,6 +24,7 @@ public static class BFS
             {
                 if (e.a.Equals(current) && !visited[e.b])
                 {
+                    visited[e.b] = true;
                     queue.Enqueue(e.b);
                 }
             }
@@ -46,11 +47,17 @@ public class BFSTest
     public void Simple()
     {
         var vs = new[] {'A', 'B', 'D', 'E', 'X', 'Z'}.ToHashSet();
-        var edges = new[] {('A', 'A'), ('A', 'B'),
-                           ('A', 'E'), ('E', 'D'), ('Z', 'X')};
+        var edges = new[] {('A', 'A'), ('A', 'B'), ('E', 'B'), ('B', 'D'),
+                           ('D', 'B'), ('A', 'E'), ('E', 'D'), ('Z', 'X')};
         var graph = (vs, edges);
 
-        Assert.Equal(['A', 'B', 'E', 'D'], graph.Path('A'));
+        Assert.Equal(graph.Path('A'), ['A', 'B', 'E', 'D']);
+        Assert.Equal(graph.Path('B'), ['B', 'D']);
+        Assert.Equal(graph.Path('D'), ['D', 'B']);
+        Assert.Equal(graph.Path('E'), ['E', 'B', 'D']);
+        Assert.Equal(graph.Path('X'), ['X']);
+        Assert.Equal(graph.Path('Z'), ['Z', 'X']);
+
         Assert.True(graph.Connected('A', 'A'));
         Assert.True(graph.Connected('A', 'B'));
         Assert.True(graph.Connected('A', 'D'));
@@ -58,5 +65,8 @@ public class BFSTest
         Assert.False(graph.Connected('A', 'X'));
         Assert.False(graph.Connected('A', 'Z'));
         Assert.False(graph.Connected('A', 'R'));
+
+        Assert.True(graph.Connected('Z', 'X'));
+        Assert.False(graph.Connected('X', 'Z'));
     }
 }
