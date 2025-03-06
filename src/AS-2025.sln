@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS-2025", "AS-2025.csproj", "{9CEB5A4D-5455-4E8C-9BC8-E4CDA7B457CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS-2025", "backend/AS-2025.csproj", "{9CEB5A4D-5455-4E8C-9BC8-E4CDA7B457CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
