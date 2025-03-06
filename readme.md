@@ -12,12 +12,11 @@ Scalar | https://localhost:58708/scalar
 ### Down
 > docker compose down -v
 
-### Test:
-> hurl --test **/*.hurl
+### Unit test:
+> dotnet test
 
-### Docker build:
-> docker build -t as2025 .
-> docker run -p 8080:8080 -p 8081:8081 as2025
+### Integration test:
+> hurl --test **/*.hurl
 
 ### Wipe everything
 > docker system prune -a
