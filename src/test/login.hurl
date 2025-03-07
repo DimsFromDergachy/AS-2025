@@ -3,12 +3,7 @@ GET https://localhost:5002/
 insecure: true
 HTTP 404
 
-POST https://localhost:5002/trait
+GET https://localhost:5002/api/trait/list
 [Options]
 insecure: true
-{
-"code": "12",
-"name": "DT",
-"description": "DT desc"
-}
 HTTP 200
