@@ -3,9 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AS_2025.Domain.Entities;
 
-public record Project : Entity<Guid>
+public record Project : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; }
+
+    public string Identity { get; init; } = string.Empty;
 
     [Required] 
     public string Name { get; set; } = string.Empty;
@@ -24,7 +26,7 @@ public record Project : Entity<Guid>
 
     public Client Client { get; set; }
 
-    public Employee ProjectManager { get; set; }
+    public Employee? ProjectManager { get; set; }
 
     public List<Team> AssignedTeams { get; set; } = new();
 

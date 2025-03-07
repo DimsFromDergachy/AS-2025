@@ -2,15 +2,15 @@
 
 public enum EmployeeType
 {
-    Undefined = 0,
-    Developer = 1,
-    QAEngineer = 2,
-    ProjectManager = 3,
-    BusinessAnalyst = 4,
-    UXDesigner = 5,
-    DevOpsEngineer = 6,
-    SupportEngineer = 7,
-    TeamLead = 8,
-    DepartmentHead = 9,
-    CEO = 10
+    Undefined,
+    Developer,
+    QAEngineer,
+    ProjectManager,
+    BusinessAnalyst,
+    UXDesigner,
+    DevOpsEngineer,
+    SupportEngineer,
+    TeamLead,
+    DepartmentHead,
+    CEO
 }

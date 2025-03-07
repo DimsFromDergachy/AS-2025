@@ -3,9 +3,11 @@ using AS_2025.Domain.Common;
 
 namespace AS_2025.Domain.Entities;
 
-public record Employee : Entity<Guid>
+public record Employee : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
+
+    public string Identity { get; init; } = string.Empty;
 
     [Required]
     public string FirstName { get; set; } = string.Empty;

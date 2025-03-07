@@ -4,9 +4,11 @@ using TaskStatus = AS_2025.Domain.Common.TaskStatus;
 
 namespace AS_2025.Domain.Entities;
 
-public record Task : Entity<Guid>
+public record Task : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
+
+    public string Identity { get; init; } = string.Empty;
 
     [Required(ErrorMessage = "Title is required.")]
     public string Title { get; set; } = string.Empty;
@@ -19,9 +21,9 @@ public record Task : Entity<Guid>
 
     public Employee? AssignedTo { get; set; }
 
-    public DateTime CreatedDate { get; set; }
+    public DateTime CreatedDateTime { get; set; }
 
-    public DateTime? CompletedDate { get; set; }
+    public DateTime? CompletedDateTime { get; set; }
 
     public int EstimatedHours { get; set; }
 
