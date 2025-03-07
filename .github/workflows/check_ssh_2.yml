@@ -1,0 +1,38 @@
+name: SSH Key Format Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-key:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Inspect SSH key format
+      run: |
+        # Create a temporary file with the key
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/test_key
+        chmod 600 ~/.ssh/test_key
+        
+        # Check if the key is valid
+        echo "Key inspection:"
+        file ~/.ssh/test_key
+        
+        # Try to get key fingerprint
+        echo "Attempting to get key fingerprint:"
+        ssh-keygen -l -f ~/.ssh/test_key || echo "Failed to get fingerprint - key format issue"
+        
+        # Dump key headers (safe to show publicly)
+        echo "Key headers (first line only):"
+        head -n 1 ~/.ssh/test_key
+    
+    - name: Test with ssh-agent
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+    - name: Try connection after ssh-agent
+      run: |
+        ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+        ssh -o StrictHostKeyChecking=accept-new ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "echo Connection via ssh-agent successful"
