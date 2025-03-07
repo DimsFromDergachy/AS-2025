@@ -25,3 +25,58 @@ jobs:
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: unnecessary
+        if_key_exists: replace
+
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to VM
+      run: |
+        # Deploy script
+        ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "
+          # Create directory if it doesn't exist
+          mkdir -p ${{ secrets.VM_PATH }}
+
+          # Go to project directory
+          cd ${{ secrets.VM_PATH }}
+
+          # Pull latest code (if git repo exists)
+          if [ -d .git ]; then
+            git pull
+          else
+            # First-time clone
+            git clone https://github.com/${{ github.repository }} .
+          fi
+
+          # Copy over the .env file if it doesn't exist
+          # This assumes you've already set up the .env file on the VM
+          if [ ! -f .env ]; then
+            echo 'Please set up your .env file manually on first deployment'
+          fi
+
+          # Ensure certificate directory exists
+          mkdir -p src/https
+
+          # Generate certificate if it doesn't exist
+          # if [ ! -f src/https/certificate.pfx ]; then
+          #   openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=localhost'
+          #   openssl pkcs12 -export -out src/https/certificate.pfx -inkey key.pem -in cert.pem -password pass:BLA_BLA_BLA
+          #   rm key.pem cert.pem
+          # fi
+
+          # Rebuild and restart containers
+          docker compose down
+          docker compose up --build -d
+        "
