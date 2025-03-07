@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: mirror.gcr.io/postgres:16.3
+    image: postgres:16.3
     container_name: postgres
     environment:
       POSTGRES_DB: "db"
@@ -17,7 +17,7 @@ services:
       retries: 3
 
   pgadmin:
-    image: mirror.gcr.io/dpage/pgadmin4:8.14
+    image: dpage/pgadmin4:8.14
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
@@ -30,14 +30,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "wget", "-O", "-", "http://localhost:80/misc/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
 
   minio:
-    image: mirror.gcr.io/minio/minio:RELEASE.2025-01-20T14-49-07Z
+    image: minio/minio:RELEASE.2025-01-20T14-49-07Z
     container_name: minio
     ports:
       - "${MINIO_HOST_PORT}:9000"
@@ -63,8 +58,14 @@ services:
       minio:
         condition: service_healthy
     ports:
-      - '5002:8080'
-      - '5003:8081'
+      - '5002:443'
+    environment:
+      Application__Database__ConnectionString: 'Host=postgres;Port=${POSTGRES_PORT};CommandTimeout=300;Database=${POSTGRES_DB};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};'
+      ASPNETCORE_URLS: 'https://+:443;http://+:8080'
+      ASPNETCORE_Kestrel__Certificates__Default__Password: '${CERTIFICATE_PASSWORD}'
+      ASPNETCORE_Kestrel__Certificates__Default__Path: '${CERTIFICATE_FILE}'
+    volumes:
+      - ./src/https:/https:ro
 
 volumes:
   postgres-data:

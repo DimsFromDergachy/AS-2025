@@ -60,4 +60,6 @@ app.MapGroup("api/identity")
     .WithTags("Identity")
     .MapIdentityApi<ApplicationUser>();
 
+app.UseHttpsRedirection();
+
 app.Run();
