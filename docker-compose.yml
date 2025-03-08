@@ -24,7 +24,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
       PGADMIN_LISTEN_PORT: 80
     ports:
-      - ${PGADMIN_PORT}:80
+      - "${PGADMIN_PORT}:80"
     volumes:
       - pgadmin:/var/lib/pgadmin
     depends_on:
@@ -49,6 +49,22 @@ services:
       timeout: 5s
       retries: 5
 
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - "${MONGODB_PORT}:27017"
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGODB_DB}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017/${MONGODB_DB} --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
   backend:
     build: ./src/backend/
     container_name: backend
@@ -57,8 +73,10 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
+      mongodb:
+        condition: service_healthy
     ports:
-      - '5002:443'
+      - "${APPLICATION_PORT}:443"
     environment:
       Application__Database__ConnectionString: 'Host=postgres;Port=${POSTGRES_PORT};CommandTimeout=300;Database=${POSTGRES_DB};User Id=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};'
       ASPNETCORE_URLS: 'https://+:443;http://+:8080'
@@ -71,3 +89,4 @@ volumes:
   postgres-data:
   pgadmin:
   minio-storage:
+  mongodb-data:  
