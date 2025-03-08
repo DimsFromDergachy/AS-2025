@@ -57,13 +57,44 @@ services:
       - mongodb-data:/data/db
     environment:
       MONGO_INITDB_DATABASE: ${MONGODB_DB}
-      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USER}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_ROOT_PASSWORD}
+      MONGO_USERNAME: ${MONGODB_USER}
+      MONGO_PASSWORD: ${MONGODB_PASSWORD}
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh mongodb:27017/${MONGODB_DB} --quiet
       interval: 10s
       timeout: 10s
       retries: 5
+    command: >
+      bash -c "
+        db = db.getSiblingDB(\"${MONGODB_DB}\");
+        db.createUser({
+          user: \"${MONGODB_USER}\",
+          pwd: \"${MONGODB_PASSWORD}\",
+          roles: [{ role: \"readWrite\", db: \"${MONGODB_DB}\" }]
+        });
+        docker-entrypoint.sh mongod
+      "
+
+  mongo-express: 
+    image: mongo-express:1.0.2-20-alpine3.19
+    ports: 
+      - "${MONGOEXPRESS_PORT}:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGODB_USER}:${MONGODB_PASSWORD}@mongodb:27017/${MONGODB_DB}?ssl=false
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: false
+      ME_CONFIG_MONGODB_SERVER: "mongodb"
+      ME_CONFIG_MONGODB_AUTH_DATABASE: ${MONGODB_DB}
+      ME_CONFIG_MONGODB_AUTH_USERNAME: ${MONGODB_USER}
+      ME_CONFIG_MONGODB_AUTH_PASSWORD: ${MONGODB_PASSWORD}
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGODB_USER}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGODB_PASSWORD}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    links:
+      - "mongodb"
 
   backend:
     build: ./src/backend/
