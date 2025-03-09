@@ -115,7 +115,7 @@ services:
       Application__Data__Root: "./data/2025"
       ASPNETCORE_URLS: "https://+:443;http://+:8080"
       ASPNETCORE_Kestrel__Certificates__Default__Password: "${CERTIFICATE_PASSWORD}"
-      ASPNETCORE_Kestrel__Certificates__Default__Path: "${CERTIFICATE_FILE}""
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "${CERTIFICATE_FILE}"
     volumes:
       - ./src/https:/https:ro
       - ./src/data:/data
