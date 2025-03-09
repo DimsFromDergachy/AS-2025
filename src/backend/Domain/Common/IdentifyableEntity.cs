@@ -2,5 +2,5 @@
 
 public interface IIdentifiableEntity<T>
 {
-    T Identity { get; init; }
+    T ExternalId { get; init; }
 }

@@ -8,9 +8,9 @@ public record Task : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
 
-    public string Identity { get; init; } = string.Empty;
+    public string ExternalId { get; init; } = string.Empty;
 
-    [Required(ErrorMessage = "Title is required.")]
+    [Required]
     public string Title { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
@@ -19,8 +19,6 @@ public record Task : Entity<Guid>, IIdentifiableEntity<string>
 
     public TaskStatus Status { get; set; } = TaskStatus.New;
 
-    public Employee? AssignedTo { get; set; }
-
     public DateTime CreatedDateTime { get; set; }
 
     public DateTime? CompletedDateTime { get; set; }
@@ -28,4 +26,6 @@ public record Task : Entity<Guid>, IIdentifiableEntity<string>
     public int EstimatedHours { get; set; }
 
     public int ActualHours { get; set; }
+
+    public Employee? AssignedTo { get; set; }
 }

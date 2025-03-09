@@ -7,7 +7,7 @@ public record Employee : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
 
-    public string Identity { get; init; } = string.Empty;
+    public string ExternalId { get; init; } = string.Empty;
 
     [Required]
     public string FirstName { get; set; } = string.Empty;
@@ -25,7 +25,7 @@ public record Employee : Entity<Guid>, IIdentifiableEntity<string>
     [Required]
     public decimal Salary { get; set; }
 
-    public List<Skill> Skills { get; set; } = new();
+    public List<EmployeeSkill> Skills { get; set; } = new();
     
     public Employee? Manager { get; init; }
 

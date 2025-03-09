@@ -7,7 +7,7 @@ public record Project : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; }
 
-    public string Identity { get; init; } = string.Empty;
+    public string ExternalId { get; init; } = string.Empty;
 
     [Required] 
     public string Name { get; set; } = string.Empty;

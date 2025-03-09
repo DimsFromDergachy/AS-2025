@@ -6,15 +6,15 @@ public record Team : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
 
-    public string Identity { get; init; } = string.Empty;
+    public string ExternalId { get; init; } = string.Empty;
 
     public string Name { get; set; } = string.Empty;
+
+    public TeamType Type { get; set; }
 
     public Employee? TeamLead { get; set; }
 
     public List<Employee> Members { get; set; } = new();
-
-    public TeamType Type { get; set; }
 
     public Department? Department { get; set; }
 

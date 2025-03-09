@@ -7,7 +7,7 @@ public record Client : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
 
-    public string Identity { get; init; } = string.Empty;
+    public string ExternalId { get; init; } = string.Empty;
 
     [Required]
     public string CompanyName { get; set; } = string.Empty;
@@ -15,14 +15,14 @@ public record Client : Entity<Guid>, IIdentifiableEntity<string>
     [Required]
     public ClientType Type { get; set; }
 
-    public List<Project> Projects { get; set; } = new();
-
-    public List<ContactPerson> Contacts { get; set; } = new();
-
     [Required]
     public DateTime PartnershipDateTime { get; set; }
 
     public ClientStatus Status { get; set; } = ClientStatus.Unknown;
 
     public Employee? AccountManager { get; set; }
+
+    public List<ContactPerson> Contacts { get; set; } = new();
+
+    public List<Project> Projects { get; set; } = new();
 }

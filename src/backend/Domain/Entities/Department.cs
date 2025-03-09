@@ -7,7 +7,7 @@ public record Department : Entity<Guid>, IIdentifiableEntity<string>
 {
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
 
-    public string Identity { get; init; } = string.Empty;
+    public string ExternalId { get; init; } = string.Empty;
 
     [Required] 
     public string Name { get; set; } = string.Empty;
@@ -15,7 +15,7 @@ public record Department : Entity<Guid>, IIdentifiableEntity<string>
     [Required]
     public Employee Head { get; set; }
 
-    public List<Employee> Employees { get; set; } = new();
-
     public List<Team> Teams { get; set; } = new();
+
+    public List<Employee> Employees { get; set; } = new();
 }
