@@ -3,6 +3,7 @@ using AS_2025.Domain.Entities;
 using AS_2025.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AS_2025.Database.Extensions;
 using Task = AS_2025.Domain.Entities.Task;
 
 namespace AS_2025.Database;
@@ -30,6 +31,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.ConfigureEnumsAsStrings(maxLength: 50);
         builder.ApplyConfigurationsFromAssembly(typeof(IAssemblyMarker).Assembly);
     }
 }
