@@ -2,7 +2,7 @@
 
 public enum ClientStatus
 {
-    Unknown,
+    Undefined,
     Lead,
     Prospect,
     Active,

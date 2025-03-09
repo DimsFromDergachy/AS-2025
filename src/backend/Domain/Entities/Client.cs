@@ -18,7 +18,7 @@ public record Client : Entity<Guid>, IIdentifiableEntity<string>
     [Required]
     public DateTime PartnershipDateTime { get; set; }
 
-    public ClientStatus Status { get; set; } = ClientStatus.Unknown;
+    public ClientStatus Status { get; set; } = ClientStatus.Undefined;
 
     public Employee? AccountManager { get; set; }
 

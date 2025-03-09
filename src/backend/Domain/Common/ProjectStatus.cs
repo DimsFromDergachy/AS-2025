@@ -2,6 +2,7 @@
 
 public enum ProjectStatus
 {
+    Undefined,
     Planning,
     InProgress,
     OnHold,

@@ -2,7 +2,7 @@
 
 public enum SkillType
 {
-    None,
+    Undefined,
     CSharp,
     Java,
     JavaScript

@@ -2,6 +2,7 @@
 
 public enum ClientType
 {
+    Undefined,
     Enterprise,
     SMB,
     Startup,

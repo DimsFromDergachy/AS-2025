@@ -10,13 +10,13 @@ public record Team : Entity<Guid>, IIdentifiableEntity<string>
 
     public string Name { get; set; } = string.Empty;
 
-    public TeamType Type { get; set; }
+    public TeamType Type { get; set; } = TeamType.Undefined;
+
+    public Department? Department { get; set; }
 
     public Employee? TeamLead { get; set; }
 
     public List<Employee> Members { get; set; } = new();
-
-    public Department? Department { get; set; }
 
     public List<Project> AssignedProjects { get; set; } = new();
 }

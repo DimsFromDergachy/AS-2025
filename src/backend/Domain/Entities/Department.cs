@@ -13,7 +13,7 @@ public record Department : Entity<Guid>, IIdentifiableEntity<string>
     public string Name { get; set; } = string.Empty;
 
     [Required]
-    public Employee Head { get; set; }
+    public Employee? Head { get; set; }
 
     public List<Team> Teams { get; set; } = new();
 
