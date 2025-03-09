@@ -12,7 +12,6 @@ public record Department : Entity<Guid>, IIdentifiableEntity<string>
     [Required] 
     public string Name { get; set; } = string.Empty;
 
-    [Required]
     public Employee? Head { get; set; }
 
     public List<Team> Teams { get; set; } = new();

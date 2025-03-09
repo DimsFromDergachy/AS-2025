@@ -19,11 +19,4 @@ public static class ServiceCollectionExtensions
 
         return services;
     }
-
-    public static IServiceCollection AddDatabaseHostedServices(this IServiceCollection services)
-    {
-        services.AddHostedService<ApplicationDbInitializerHostedService>();
-
-        return services;
-    }
 }

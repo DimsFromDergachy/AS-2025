@@ -3,10 +3,12 @@
 public record HostedServicesOptions
 {
     public static string ApplicationDbInitializer = "ApplicationDbInitializer";
+    public static string ImportData = "ImportData";
 
     public Dictionary<string, bool> EnabledMap { get; init; } = new()
     {
-        { ApplicationDbInitializer, true }
+        { ApplicationDbInitializer, true },
+        { ImportData, false }
     };
 
     public bool IsEnabled(string hostedServiceName)

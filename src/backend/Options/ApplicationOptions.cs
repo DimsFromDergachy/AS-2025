@@ -7,4 +7,6 @@ public record ApplicationOptions
     public DatabaseOptions Database { get; set; } = new();
 
     public HostedServicesOptions HostedServices { get; init; } = new();
+
+    public DataOptions Data { get; set; } = new();
 }

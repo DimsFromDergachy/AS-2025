@@ -1,8 +1,9 @@
-﻿using AS_2025.Options;
+﻿using AS_2025.Database;
+using AS_2025.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace AS_2025.Database;
+namespace AS_2025.HostedServices;
 
 public class ApplicationDbInitializerHostedService : IHostedService
 {

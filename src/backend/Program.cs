@@ -7,8 +7,11 @@ using AS_2025.Repository;
 using AS_2025.Schema;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using AS_2025.HostedServices;
+using AS_2025.Import;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddJsonFile("appsettings.Local.json");
 
 builder.Services.AddOpenApi();
 
@@ -29,7 +32,8 @@ builder.Configuration.GetSection(ApplicationOptions.SectionKey).Bind(application
 
 builder.Services.AddOptions(applicationOptions);
 builder.Services.AddDatabase(applicationOptions);
-builder.Services.AddDatabaseHostedServices();
+builder.Services.AddHostedServices();
+builder.Services.AddDataImportServices();
 builder.Services.AddRepositories();
 builder.Services.AddSchemaBuilders();
 
