@@ -20,16 +20,31 @@ public record Employee : Entity<Guid>, IIdentifiableEntity<string>
     public EmployeeLevel Level { get; set; } = EmployeeLevel.Undefined;
 
     [Required]
-    public DateTime HireDate { get; set; }
+    public DateOnly HireDate { get; set; }
 
     [Required]
     public decimal Salary { get; set; }
 
     public List<EmployeeSkill> Skills { get; set; } = new();
     
-    public Employee? Manager { get; init; }
+    public Employee? Manager { get; set; }
 
-    public Team? Team { get; init; }
+    public Team? Team { get; set; }
     
     public string FullName => $"{FirstName} {LastName}";
+
+    public Employee Update(Employee other)
+    {
+        FirstName = other.FirstName;
+        LastName = other.LastName;
+        Type = other.Type;
+        Level = other.Level;
+        HireDate = other.HireDate;
+        Salary = other.Salary;
+        Skills = other.Skills;
+        Manager = other.Manager;
+        Team = other.Team;
+
+        return this;
+    }
 }

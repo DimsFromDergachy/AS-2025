@@ -19,4 +19,14 @@ public record Team : Entity<Guid>, IIdentifiableEntity<string>
     public List<Employee> Members { get; set; } = new();
 
     public List<Project> AssignedProjects { get; set; } = new();
+
+    public Team Update(Team other)
+    {
+        Name = other.Name;
+        Type = other.Type;
+        Department = other.Department;
+        TeamLead = other.TeamLead;
+
+        return this;
+    }
 }

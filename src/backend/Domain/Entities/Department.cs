@@ -17,4 +17,11 @@ public record Department : Entity<Guid>, IIdentifiableEntity<string>
     public List<Team> Teams { get; set; } = new();
 
     public List<Employee> Employees { get; set; } = new();
+
+    public Department Update(Department other)
+    {
+        Name = other.Name;
+
+        return this;
+    }
 }

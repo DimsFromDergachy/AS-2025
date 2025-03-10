@@ -7,6 +7,12 @@ using AS_2025.Repository;
 using AS_2025.Schema;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using AS_2025.Api.Department;
+using AS_2025.Api.Employee;
+using AS_2025.Api.Menu;
+using AS_2025.Api.Team;
+using AS_2025.Api.Utils;
+using AS_2025.ApplicationServices;
 using AS_2025.HostedServices;
 using AS_2025.Import;
 
@@ -32,6 +38,7 @@ builder.Configuration.GetSection(ApplicationOptions.SectionKey).Bind(application
 
 builder.Services.AddOptions(applicationOptions);
 builder.Services.AddDatabase(applicationOptions);
+builder.Services.AddApplicationServices();
 builder.Services.AddHostedServices();
 builder.Services.AddDataImportServices();
 builder.Services.AddRepositories();
@@ -58,7 +65,12 @@ app.UseResponseCompression();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapTraitEndpoints();
+//app.MapTraitEndpoints();
+app.MapMenuEndpoints();
+app.MapDepartmentEndpoints();
+app.MapEmployeeEndpoints();
+app.MapTeamEndpoints();
+app.MapUtilsEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")

@@ -4,16 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AS_2025.Import.Handlers;
 
-public class DepartmentDataImportHandler : IDataImportHandler<Department>
+public class DepartmentDataImportHandler : BaseDataImportHandler, IDataImportHandler<Department>
 {
-    private readonly IContext _context;
-
-    public DepartmentDataImportHandler(IContext context)
+    public DepartmentDataImportHandler(IContext context) : base(context)
     {
-        _context = context;
     }
 
-    public async Task HandleAsync(IEnumerable<Department> data, CancellationToken cancellationToken)
+    public async Task HandleAsync(List<Department> data, CancellationToken cancellationToken)
     {
         var departmentsImported = data.Select(x => new Domain.Entities.Department()
         {
@@ -23,16 +20,16 @@ public class DepartmentDataImportHandler : IDataImportHandler<Department>
 
         foreach (var department in departmentsImported)
         {
-            await _context.Departments.Upsert(department)
-                .AllowIdentityMatch()
-                .On(x => x.ExternalId)
-                .WhenMatched((existing, imported) => new Domain.Entities.Department()
-                {
-                    Id = existing.Id,
-                    ExternalId = existing.ExternalId,
-                    Name = imported.Name
-                })
-                .RunAsync(cancellationToken);
+            var existing = await Context.Departments.SingleOrDefaultAsync(x => x.ExternalId == department.ExternalId, cancellationToken);
+            if (existing is null)
+            {
+                Context.Departments.Add(department);
+                continue;
+            }
+
+            existing.Update(department);
         }
+
+        await Context.SaveChangesAsync(cancellationToken);
     }
 }

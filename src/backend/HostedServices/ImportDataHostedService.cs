@@ -1,4 +1,5 @@
 ﻿using AS_2025.Import;
+using AS_2025.Import.Filesystem.Model;
 using AS_2025.Options;
 using Microsoft.Extensions.Options;
 
@@ -27,12 +28,30 @@ public class ImportDataHostedService : IHostedService
 
         var departmentsXlsxDataPath = Path.Combine(options.Value.Data.Root, "departments.xlsx");
 
-        _logger.LogInformation("Running import data from {DataPath }", departmentsXlsxDataPath);
+        _logger.LogInformation("Running import data from {DataPath}", departmentsXlsxDataPath);
 
-        var xlsxDataImportService = scope.ServiceProvider.GetRequiredService<XlsxDataImportService>();
-        await xlsxDataImportService.Import(departmentsXlsxDataPath, 0, cancellationToken);
+        var xlsxDepartmentDataImportService = scope.ServiceProvider.GetRequiredService<XlsxDataImportService<Department>>();
+        await xlsxDepartmentDataImportService.Import(departmentsXlsxDataPath, 0, cancellationToken);
+
+        _logger.LogInformation("Successfully imported data from {DataPath}", departmentsXlsxDataPath);
+
+        var employeesXlsxDataPath = Path.Combine(options.Value.Data.Root, "employees.xlsx");
 
         _logger.LogInformation("Running import data from {DataPath}", departmentsXlsxDataPath);
+
+        var xlsxEmployeeDataImportService = scope.ServiceProvider.GetRequiredService<XlsxDataImportService<Employee>>();
+        await xlsxEmployeeDataImportService.Import(employeesXlsxDataPath, 0, cancellationToken);
+
+        _logger.LogInformation("Successfully imported data from {DataPath}", employeesXlsxDataPath);
+
+        var teamsXlsxDataPath = Path.Combine(options.Value.Data.Root, "teams.xlsx");
+
+        _logger.LogInformation("Running import data from {DataPath}", departmentsXlsxDataPath);
+
+        var xlsxTeamDataImportService = scope.ServiceProvider.GetRequiredService<XlsxDataImportService<Team>>();
+        await xlsxTeamDataImportService.Import(teamsXlsxDataPath, 0, cancellationToken);
+
+        _logger.LogInformation("Successfully imported data from {DataPath}", teamsXlsxDataPath);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
