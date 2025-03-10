@@ -11,7 +11,7 @@ using AS_2025.HostedServices;
 using AS_2025.Import;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("appsettings.Local.json");
+builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 
 builder.Services.AddOpenApi();
 
