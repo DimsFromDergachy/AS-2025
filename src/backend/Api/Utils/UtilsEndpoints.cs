@@ -14,14 +14,21 @@ public static class UtilsEndpoints
 
         group.MapGet("/app-state", async ([FromServices] IContext context, CancellationToken cancellationToken) =>
         {
-            // TODO 
-            return context.Departments
-                .Include(x => x.Teams)
-                .Include(x => x.Employees)
-                .ToListAsync(cancellationToken);
+            var departmentsTask = context.Departments.AsNoTracking().ToListAsync(cancellationToken);
+            var teamsTask = context.Teams.AsNoTracking().ToListAsync(cancellationToken);
+            var employeesTask = context.Employees.AsNoTracking().ToListAsync(cancellationToken);
+
+            await Task.WhenAll(departmentsTask, teamsTask, employeesTask);
+
+            return new
+            {
+                Departments = departmentsTask.Result,
+                Teams = teamsTask.Result,
+                Employees = employeesTask.Result
+            };
         });
 
-        group.MapGet("/data-rescan", async ([FromServices] ImportDataHostedService importDataHostedService, CancellationToken cancellationToken) =>
+        group.MapPost("/data-rescan", async ([FromServices] ImportDataHostedService importDataHostedService, CancellationToken cancellationToken) =>
         {
             await importDataHostedService.StartAsync(cancellationToken);
         });
