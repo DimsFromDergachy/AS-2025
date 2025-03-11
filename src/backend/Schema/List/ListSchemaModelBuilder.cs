@@ -1,44 +1,29 @@
-﻿using AS_2025.Api.Trait.List;
+﻿using System.Reflection;
 using AS_2025.Common;
 
 namespace AS_2025.Schema.List;
 
-public interface IListSchemaModelBuilder<T>
-{
-    ListSchemaModel Build();
-}
-
-public class ListTraitsSchemaModelBuilder : IListSchemaModelBuilder<ListTraitsItem>
+public class ListSchemaModelBuilder<T> : IListSchemaModelBuilder<T> where T : class
 {
     public ListSchemaModel Build()
     {
+        var columns = new List<ListColumnSchemaItem>();
+
+        var properties = typeof(T).GetProperties();
+        foreach (var property in properties)
+        {
+            var attribute = property.GetCustomAttribute<ListColumnSchemaAttribute>();
+            if (attribute is null)
+            {
+                continue;
+            }
+
+            columns.Add(ListColumnSchemaItem.From(attribute, property.Name.ToCamelCase()));
+        }
+
         return new ListSchemaModel
         {
-            Columns = new List<ListSchemaColumnModel>
-            {
-                new ListSchemaColumnModel()
-                {
-                    Key = nameof(ListTraitsItem.Id).ToCamelCase()
-                },
-                new ListSchemaColumnModel()
-                {
-                    Key = nameof(ListTraitsItem.Code).ToCamelCase(),
-                    Order = 1,
-                    IsVisible = true,
-                    IsVisibleByDefault = true,
-                    FieldType = FieldType.String,
-                    FieldDisplayType = FieldDisplayType.Link
-                },
-                new ListSchemaColumnModel()
-                {
-                    Key = nameof(ListTraitsItem.Name).ToCamelCase(),
-                    Order = 2,
-                    IsVisible = true,
-                    IsVisibleByDefault = true,
-                    FieldType = FieldType.String,
-                    FieldDisplayType = FieldDisplayType.String
-                }
-            }
+            Columns = columns
         };
     }
 }

@@ -1,4 +1,3 @@
-using AS_2025.Api.Trait;
 using AS_2025.Common;
 using AS_2025.Database;
 using AS_2025.Identity;
@@ -13,6 +12,7 @@ using AS_2025.Api.Menu;
 using AS_2025.Api.Team;
 using AS_2025.Api.Utils;
 using AS_2025.ApplicationServices;
+using AS_2025.Exceptions;
 using AS_2025.HostedServices;
 using AS_2025.Import;
 
@@ -44,7 +44,7 @@ builder.Services.AddDataImportServices();
 builder.Services.AddRepositories();
 builder.Services.AddSchemaBuilders();
 
-builder.Services.AddExceptionHandler<ExceptionHandler>();
+builder.Services.AddExceptionHandler<ApplicationExceptionHandler>();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -54,6 +54,8 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
+
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
