@@ -120,6 +120,18 @@ services:
       - ./src/https:/https:ro
       - ./src/data:/app/data
 
+  frontend:
+    build: ./src/frontend
+    container_name: frontend
+    depends_on:
+      - backend
+    ports:
+      - 5004:443
+      - 5005:80
+    volumes:
+      - ./src/https:/etc/nginx/certs:ro
+      - ./src/https:/https:ro
+
 volumes:
   postgres-data:
   pgadmin:
