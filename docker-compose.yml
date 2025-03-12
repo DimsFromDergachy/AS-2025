@@ -107,7 +107,7 @@ services:
       mongodb:
         condition: service_healthy
     ports:
-      - "${APPLICATION_PORT}:443"
+      - "${BE_APPLICATION_PORT}:443"
     environment:
       Application__Database__ConnectionString: 'Host=postgres;Port=${POSTGRES_PORT};CommandTimeout=300;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};'
       Application__HostedServices__EnabledMap__ApplicationDbInitializer: true
@@ -126,8 +126,7 @@ services:
     depends_on:
       - backend
     ports:
-      - 5004:443
-      - 5005:80
+      - "${FE_APPLICATION_PORT}::443"
     volumes:
       - ./src/https/certificate.key:/etc/nginx/certs/certificate.key
       - ./src/https/certificate.pem:/etc/nginx/certs/certificate.pem
