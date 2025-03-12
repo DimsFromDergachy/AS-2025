@@ -3,9 +3,9 @@ using AS_2025.Common;
 
 namespace AS_2025.Schema.List;
 
-public class ListSchemaModelBuilder<T> : IListSchemaModelBuilder<T> where T : class
+public class ListSchemaModelBuilder
 {
-    public ListSchemaModel Build()
+    public ListSchemaModel Build<T>()
     {
         var columns = new List<ListColumnSchemaItem>();
 

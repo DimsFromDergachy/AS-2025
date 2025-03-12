@@ -1,4 +1,6 @@
-﻿namespace AS_2025.Schema.List;
+﻿using AS_2025.Tags;
+
+namespace AS_2025.Schema.List;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class ListColumnSchemaAttribute : Attribute
@@ -18,4 +20,8 @@ public class ListColumnSchemaAttribute : Attribute
     public bool Filterable { get; init; }
 
     public bool Sortable { get; init; }
+
+    public bool Searchable { get; init; }
+
+    public string TagReferenceEnum { get; init; }
 }

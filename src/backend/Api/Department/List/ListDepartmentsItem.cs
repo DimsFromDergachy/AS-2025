@@ -4,21 +4,21 @@ namespace AS_2025.Api.Department.List;
 
 public record ListDepartmentsItem
 {
-    [ListColumnSchema(DisplayType = ListColumnDisplayType.None)]
+    [ListColumnSchema(VisibilityType = ListColumnVisibilityType.Hidden, DisplayType = ListColumnDisplayType.None)]
     public Guid Id { get; init; }
 
-    [ListColumnSchema(DisplayType = ListColumnDisplayType.None)]
+    [ListColumnSchema(VisibilityType = ListColumnVisibilityType.Hidden, DisplayType = ListColumnDisplayType.None)]
     public string Url { get; init; }
 
-    [ListColumnSchema(Order = 1, DisplayType = ListColumnDisplayType.Link, UrlPattern = "/api/department/{id}")]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Link, Title = "Name", Order = 1, UrlPattern = "/api/department/{id}")]
     public string Name { get; init; }
 
-    [ListColumnSchema(Order = 2, DisplayType = ListColumnDisplayType.String)]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.String, Title = "Head", Order = 2)]
     public string Head { get; init; }
 
-    [ListColumnSchema(Order = 3, DisplayType = ListColumnDisplayType.Integer)]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Integer, Title = "Teams Count", Order = 3)]
     public int TeamsCount { get; init; }
 
-    [ListColumnSchema(Order = 4, DisplayType = ListColumnDisplayType.Integer)]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Integer, Title = "Employees Count", Order = 4)]
     public int EmployeesCount { get; init; }
 }

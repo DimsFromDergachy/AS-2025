@@ -8,5 +8,8 @@ public enum ListColumnDisplayType
     Double,
     Date,
     Checkbox,
-    Link
+    Link,
+    Percent,
+    Tags,
+    Tag
 }

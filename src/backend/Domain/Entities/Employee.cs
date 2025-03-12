@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AS_2025.Domain.Common;
+using AS_2025.ReferenceItem;
 
 namespace AS_2025.Domain.Entities;
 
 public record Employee : Entity<Guid>, IIdentifiableEntity<string>
 {
+    [ReferenceKey]
     public sealed override Guid Id { get; init; } = Guid.CreateVersion7();
 
     public string ExternalId { get; init; } = string.Empty;
@@ -30,7 +32,8 @@ public record Employee : Entity<Guid>, IIdentifiableEntity<string>
     public Employee? Manager { get; set; }
 
     public Team? Team { get; set; }
-    
+
+    [ReferenceValue]
     public string FullName => $"{FirstName} {LastName}";
 
     public Employee Update(Employee other)

@@ -15,6 +15,8 @@ using AS_2025.ApplicationServices;
 using AS_2025.Exceptions;
 using AS_2025.HostedServices;
 using AS_2025.Import;
+using AS_2025.ReferenceItem;
+using AS_2025.Tags;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -43,6 +45,8 @@ builder.Services.AddHostedServices();
 builder.Services.AddDataImportServices();
 builder.Services.AddRepositories();
 builder.Services.AddSchemaBuilders();
+builder.Services.AddReferenceItems();
+builder.Services.AddTags();
 
 builder.Services.AddExceptionHandler<ApplicationExceptionHandler>();
 

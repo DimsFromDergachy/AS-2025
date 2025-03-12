@@ -21,6 +21,10 @@ public class ListColumnSchemaItem
 
     public bool Sortable { get; init; }
 
+    public bool Searchable { get; init; }
+
+    public string TagReferenceEnum { get; init; }
+
     public static ListColumnSchemaItem From(ListColumnSchemaAttribute attribute, string key)
     {
         return new ListColumnSchemaItem
@@ -33,7 +37,9 @@ public class ListColumnSchemaItem
             DisplayPattern = attribute.DisplayPattern,
             UrlPattern = attribute.UrlPattern,
             Filterable = attribute.Filterable,
-            Sortable = attribute.Sortable
+            Sortable = attribute.Sortable,
+            Searchable = attribute.Searchable,
+            TagReferenceEnum = attribute.TagReferenceEnum,
         };
     }
 }

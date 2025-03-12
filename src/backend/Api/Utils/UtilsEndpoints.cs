@@ -1,5 +1,7 @@
 ﻿using AS_2025.Common;
 using AS_2025.HostedServices;
+using AS_2025.ReferenceItem;
+using AS_2025.Tags;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,5 +34,11 @@ public static class UtilsEndpoints
         {
             await importDataHostedService.StartAsync(cancellationToken);
         });
+
+        group.MapGet("/reference-enums", ([FromServices] ReferenceEnumListBuilder referenceEnumListBuilder) =>
+            referenceEnumListBuilder.Build(AppDomain.CurrentDomain.GetAssemblies()));
+
+        group.MapGet("/tagged-enums", ([FromServices] TaggedEnumListBuilder taggedEnumListBuilder) =>
+            taggedEnumListBuilder.Build(AppDomain.CurrentDomain.GetAssemblies()));
     }
 }
