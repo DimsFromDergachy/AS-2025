@@ -129,8 +129,7 @@ services:
       - 5004:443
       - 5005:80
     volumes:
-      - ./src/https:/etc/nginx/certs:ro
-      - ./src/https:/https:ro
+      - ./src/https/certificate.pem:/etc/nginx/certs/certificate.pem
 
 volumes:
   postgres-data:

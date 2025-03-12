@@ -309,7 +309,7 @@ __pycache__/
 
 # misc
 .DS_Store
-*.pem
+#*.pem
 
 # debug
 npm-debug.log*
