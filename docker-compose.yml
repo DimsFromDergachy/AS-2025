@@ -129,6 +129,7 @@ services:
       - 5004:443
       - 5005:80
     volumes:
+      - ./src/https/certificate.key:/etc/nginx/certs/certificate.key
       - ./src/https/certificate.pem:/etc/nginx/certs/certificate.pem
 
 volumes:
