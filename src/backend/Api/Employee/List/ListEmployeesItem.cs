@@ -30,7 +30,10 @@ public record ListEmployeesItem
     [ListColumnSchema(VisibilityType = ListColumnVisibilityType.Hidden, DisplayType = ListColumnDisplayType.None)]
     public List<EmployeeSkill> Skills { get; init; } = new();
 
-    [ListColumnSchema(DisplayType = ListColumnDisplayType.String, Title = "Manager", Order = 5)]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Percent, Title = "Efficiency", Order = 5)]
+    public int Efficiency { get; init; }
+
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.String, Title = "Manager", Order = 6)]
     public string Manager { get; init; }
 
     [ListColumnSchema(VisibilityType = ListColumnVisibilityType.Hidden, DisplayType = ListColumnDisplayType.None)]

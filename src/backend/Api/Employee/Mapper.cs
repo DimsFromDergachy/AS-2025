@@ -14,8 +14,10 @@ public static partial class Mapper
     [MapProperty("Team.Name", "TeamName")]
     [MapProperty("Type", "Type", Use = nameof(TypeToString))]
     [MapProperty("Level", "Level", Use = nameof(LevelToString))]
+    [MapValue("Efficiency", Use = nameof(GetEfficiency))]
     public static partial ListEmployeesItem ToListItem(Domain.Entities.Employee entity);
 
+    [UserMapping(Default = false)]
     private static string GuidToUrl(Guid id)
     {
         return $"/employee/{id}";
@@ -29,5 +31,10 @@ public static partial class Mapper
     private static string LevelToString(EmployeeLevel type)
     {
         return type.GetStringValue();
+    }
+
+    private static int GetEfficiency()
+    {
+        return new Random().Next(0, 100);
     }
 }
