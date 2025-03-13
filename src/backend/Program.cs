@@ -84,4 +84,6 @@ app.MapGroup("api/identity")
 
 app.UseHttpsRedirection();
 
+app.UseExceptionHandler();
+
 app.Run();

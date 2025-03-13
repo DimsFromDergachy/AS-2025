@@ -37,8 +37,12 @@ public class TaggedEnumListBuilder
                 }
 
                 var tagStyleAttribute = memberInfo.GetCustomAttribute<TagStyleAttribute>();
+                if (tagStyleAttribute is null)
+                {
+                    continue;
+                }
 
-                referenceItems.Add(new TaggedEnumItem(name, enumValue.GetStringValue(), tagStyleAttribute!.Style.GetStringValue()));
+                referenceItems.Add(new TaggedEnumItem(name, enumValue.GetStringValue(), tagStyleAttribute.Style.GetStringValue()));
             }
 
             result[enumType.Name] = referenceItems;
