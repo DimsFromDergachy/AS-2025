@@ -61,6 +61,16 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 
 builder.Services.AddProblemDetails();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 app.MapOpenApi();
@@ -85,5 +95,7 @@ app.MapGroup("api/identity")
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+
+app.UseCors("AllowLocalhost");
 
 app.Run();
