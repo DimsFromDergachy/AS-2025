@@ -327,4 +327,4 @@ yarn-error.log*
 next-env.d.ts
 
 
-./BoilerplateGenerator/generated/**
+/src/BoilerplateGenerator/generated/**
