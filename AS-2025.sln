@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS-2025", "src\backend\AS-2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{723CD42A-07C6-4E56-9568-43C51E1659C1}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		.env = .env
+		.gitignore = .gitignore
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
