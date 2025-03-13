@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AS-2025", "src\backend\AS-2025.csproj", "{9CEB5A4D-5455-4E8C-9BC8-E4CDA7B457CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{723CD42A-07C6-4E56-9568-43C51E1659C1}"
+	ProjectSection(SolutionItems) = preProject
+		.env = .env
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "algo", "src\algo\algo.csproj", "{EFE550C7-F2FC-4E3A-914A-019793AEAA02}"
 EndProject
