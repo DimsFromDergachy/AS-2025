@@ -1,32 +1,53 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router";
-import { Form, Input, Button, Checkbox, Layout, Row, Col, App } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { apiClient } from 'src/api/client';
+import { useNavigate } from 'react-router';
+import { Form, Input, Button, Layout, Row, Col, App } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { AuthContext } from 'src/shared/Auth/AuthContext';
 
 const { Content } = Layout;
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { message, notification } = App.useApp();
+  const { message } = App.useApp();
+  const { login, authorized } = React.useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [registerMode, setRegisterMode] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(true);
+  const [serverErrors, setServerErrors] = useState({});
   const [form] = Form.useForm();
   const values = Form.useWatch([], form);
-  
-  const onFinish = async (values) => {
+
+  const passwordRules = [
+    { required: true, message: 'Введите пароль' },
+    { min: 8, message: 'Минимум 8 символов' },
+    { pattern: /^(?=.*[A-Z])(?=.*\d).+$/, message: 'Заглавная буква и цифра' },
+  ];
+
+  const handleSubmit = async values => {
     setLoading(true);
     try {
-      fetch('/api/utils/app-state');
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // message.success('Вход выполнен успешно!');
-      // notification.success({ message: 'Вход выполнен успешно!' });
-      navigate('/dashboard');
+      const endpoint = registerMode ? 'identity/register' : 'identity/login';
+      const data = await apiClient.post(endpoint, values);
+  
+      if (registerMode) {
+        message.success('Регистрация успешна!');
+        setRegisterMode(false);
+        // form.resetFields();
+      } else {
+        login(data.accessToken);
+        navigate('/dashboard');
+      }
     } catch (error) {
-      message.error('Ошибка авторизации');
+      message.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+  
+  useEffect(() => {
+    if (authorized) navigate('/dashboard');
+  }, [authorized, navigate]);
 
   useEffect(() => {
     form
@@ -36,98 +57,106 @@ const LoginPage = () => {
   }, [form, values]);
 
   return (
-    <Layout className="min-h-screen">
-      <Content>
-        <Row 
-          justify="center" 
-          align="middle" 
-          className="min-h-screen"
-        >
-          <Col 
-            xs={22} 
-            sm={16} 
-            md={12} 
-            lg={8} 
-            xl={6}
-            className="overflow-hidden"  // Обеспечивает предотвращение переполнения
-          >
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-center text-2xl mb-6 font-semibold">
-                Вход
-              </h2>
-              <Form
-                form={form}
-                name="login_form"
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                layout="vertical"
-              >
-                <Form.Item
-                  name="username"
-                  rules={[{ required: true, message: 'Пожалуйста, введите логин!' }]}
-                >
-                  <Input 
-                    allowClear
-                    prefix={<UserOutlined />} 
-                    placeholder="Логин" 
-                    size="large"
-                    // className="mb-4"
-                  />
-                </Form.Item>
+    !authorized && (
+      <Layout className="min-h-screen bg-gray-100">
+        <Content>
+          <Row justify="center" align="middle" className="min-h-screen">
+            <Col xs={24} sm={20} md={16} lg={12} xl={8}>
+              <div className="bg-white rounded-xl shadow-lg p-8 mx-4">
+                <h1 className="text-3xl font-bold text-center mb-8">
+                  {registerMode ? 'Создать аккаунт' : 'Вход'}
+                </h1>
 
-                <Form.Item
-                  name="password"
-                  rules={[{ 
-                    required: true, 
-                    message: 'Пожалуйста, введите пароль!' 
-                  }]}
+                <Form
+                  form={form}
+                  onFinish={handleSubmit}
+                  layout="vertical"
+                  autoComplete="off"
                 >
-                  <Input.Password
-                    allowClear
-                    prefix={<LockOutlined />}
-                    placeholder="Пароль"
-                    size="large"
-                    // className="mb-6"
-                  />
-                </Form.Item>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      { required: true, message: 'Введите email' },
+                      { type: 'email', message: 'Неверный формат email' },
+                    ]}
+                  >
+                    <Input
+                      prefix={<MailOutlined />}
+                      placeholder="Email"
+                      size="large"
+                      status={serverErrors.InvalidEmail ? 'error' : ''}
+                      onChange={() => setServerErrors({})}
+                      autoFocus
+                    />
+                  </Form.Item>
 
-                <Form.Item 
-                  name="remember" 
-                  valuePropName="checked"
-                  // className="mb-6"
-                >
-                  <Checkbox>Запомнить меня</Checkbox>
-                </Form.Item>
+                  <Form.Item name="password" rules={passwordRules}>
+                    <Input.Password
+                      prefix={<LockOutlined />}
+                      placeholder="Пароль"
+                      size="large"
+                      onChange={() => setServerErrors({})}
+                    />
+                  </Form.Item>
 
-                {/* <Form.Item > */}
-                  <Button 
-                    type="primary" 
-                    disabled={disableSubmit}
-                    htmlType="submit" 
-                    loading={loading}
+                  {registerMode && (
+                    <Form.Item
+                      name="confirmPassword"
+                      dependencies={['password']}
+                      rules={[
+                        { required: true, message: 'Подтвердите пароль' },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue('password') === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error('Пароли не совпадают')
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password
+                        prefix={<LockOutlined />}
+                        placeholder="Подтвердите пароль"
+                        size="large"
+                        onChange={() => setServerErrors({})}
+                      />
+                    </Form.Item>
+                  )}
+
+                  <Button
+                    type="primary"
+                    htmlType="submit"
                     block
                     size="large"
-                    // className='mb-4'
+                    loading={loading}
+                    disabled={disableSubmit}
+                    className="mt-6 h-12 text-lg"
                   >
-                    Войти
+                    {registerMode ? 'Зарегистрироваться' : 'Войти'}
                   </Button>
-                {/* </Form.Item> */}
 
-                <div className="text-center space-x-2">
-                  {/* <Button type="link" className="p-0">
-                    Забыли пароль?
-                  </Button>
-                  <span className="text-gray-400">|</span> */}
-                  <Button type="link" onClick={() => {navigate('/register')}}>
-                    Регистрация
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
-  );};
+                  <div className="text-center mt-2">
+                    <Button
+                      type="link"
+                      onClick={() => setRegisterMode(!registerMode)}
+                      className="text-gray-600"
+                    >
+                      {registerMode
+                        ? 'Уже есть аккаунт? Войти'
+                        : 'Создать новый аккаунт'}
+                    </Button>
+                  </div>
+                </Form>
+              </div>
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
+    )
+  );
+};
 
 export default LoginPage;

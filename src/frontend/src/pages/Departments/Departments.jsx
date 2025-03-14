@@ -12,17 +12,17 @@ import {
 
 import { apiClient } from 'src/api/client';
 
-const Teams = () => {
+const Departments = () => {
   const [data, setData] = useState(null);
   const [columns, setColumns] = useState(null);
   const [searchText, setSearchText] = useState('');
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
   useEffect(() => {
-    apiClient.get('/team/list').then(({ items }) => {
+    apiClient.get('/department/list').then(({ items }) => {
       setData(items);
     });
-    apiClient.get('/team/list/schema').then(({ columns }) => {
+    apiClient.get('/department/list/schema').then(({ columns }) => {
       setColumns(columns);
     })
   }, []);
@@ -30,10 +30,10 @@ const Teams = () => {
   return (
     <div>
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold">Управление командами</h1>
+        <h1 className="text-2xl font-bold">Управление отделами</h1>
         <div className="flex gap-2 w-full sm:w-auto">
           <Input.Search
-            placeholder="Поиск по имени или роли"
+            placeholder="Поиск"
             enterButton={<SearchOutlined />}
             onSearch={setSearchText}
             className="w-full sm:w-64"
@@ -43,7 +43,7 @@ const Teams = () => {
             icon={<PlusOutlined />}
             className="bg-blue-500 hover:bg-blue-600"
           >
-            Добавить команду
+            Добавить
           </Button>
         </div>
       </div>
@@ -51,18 +51,6 @@ const Teams = () => {
       <AntTable
         columns={columns}
         dataSource={data}
-        rowClassName={record => record.children ? 'bg-gray-50' : ''}
-        expandable={{
-          expandedRowKeys,
-          onExpand: (expanded, record) => {
-            if (expanded) {
-              setExpandedRowKeys([...expandedRowKeys, record.key]);
-            } else {
-              setExpandedRowKeys(expandedRowKeys.filter(key => key !== record.key));
-            }
-          },
-          rowExpandable: record => !!record.children,
-        }}
         pagination={{
           pageSize: 10,
           showTotal: total => `Всего записей: ${total}`,
@@ -75,4 +63,4 @@ const Teams = () => {
   );
 };
 
-export default Teams;
+export default Departments;

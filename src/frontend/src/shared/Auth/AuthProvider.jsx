@@ -1,39 +1,38 @@
-import { authToken } from './authToken'
-import { useState, createContext } from 'react'
-import { jwtDecode } from 'jwt-decode'
+import { authService } from './authService'
+import { AuthContext } from './AuthContext'
+import { useState } from 'react'
+// import { jwtDecode } from 'jwt-decode'
 // import { UserRoleEnumStr } from '~/shared/auth/UserRoleEnum'
 
-const AuthContext = createContext({})
-
 export function AuthProvider({ children }) {
-  const [authTokenValue, setAuthTokenValue] = useState(authToken.restore())
+  const [authToken, setAuthToken] = useState(authService.restore())
 
   return (
     <AuthContext.Provider
       value={{
-        authorized: !!authTokenValue,
-        authInfo: authTokenValue
+        authorized: !!authToken,
+        authInfo: authToken
           ? (() => {
-              const tokenPayload = jwtDecode(authTokenValue)
+              // const tokenPayload = jwtDecode(authToken)
 
               return {
-                tokenPayload,
-                user: {
-                  // isAdmin: UserRoleEnumStr.Admin === tokenPayload.role,
-                  // isStudent: UserRoleEnumStr.Student === tokenPayload.role,
-                  // isMentor: UserRoleEnumStr.Mentor === tokenPayload.role,
-                  userId: tokenPayload.userId,
-                },
+                authToken,
+                // user: {
+                //   // isAdmin: UserRoleEnumStr.Admin === tokenPayload.role,
+                //   // isStudent: UserRoleEnumStr.Student === tokenPayload.role,
+                //   // isMentor: UserRoleEnumStr.Mentor === tokenPayload.role,
+                //   userId: tokenPayload.userId,
+                // },
               }
             })()
           : null,
         login(token) {
-          authToken.store(token)
-          setAuthTokenValue(token)
+          authService.store(token)
+          setAuthToken(token)
         },
         logout() {
-          authToken.remove()
-          setAuthTokenValue(null)
+          authService.remove()
+          setAuthToken(null)
           history.pushState(null, '', '/login')
         },
       }}

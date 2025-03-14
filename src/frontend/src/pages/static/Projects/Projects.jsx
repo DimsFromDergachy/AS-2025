@@ -130,7 +130,7 @@ const Projects = () => {
   ];
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow">
+    <div >
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-2xl font-bold">Управление IT-проектами</h1>
         <div className="flex gap-2 w-full sm:w-auto">

@@ -101,7 +101,7 @@ const Customers = () => {
   ];
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
+    <div>
       <div className="mb-4 flex justify-between items-center">
         <h1 className="text-2xl font-semibold">Управление заказчиками</h1>
         <Input.Search
@@ -125,6 +125,7 @@ const Customers = () => {
             showTotal: total => `Всего ${total} записей`,
           }}
           scroll={{ x: true }}
+          bordered
           className="custom-table"
         />
       </Spin>
