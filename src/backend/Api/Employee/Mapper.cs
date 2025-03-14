@@ -12,8 +12,8 @@ public static partial class Mapper
     [MapProperty("Manager.FullName", "Manager")]
     [MapProperty("Team.Id", "TeamId")]
     [MapProperty("Team.Name", "TeamName")]
-    [MapProperty("Type", "Type", Use = nameof(TypeToString))]
-    [MapProperty("Level", "Level", Use = nameof(LevelToString))]
+    [MapProperty("Type", "Type", Use = nameof(EmployeeTypeToString))]
+    [MapProperty("Level", "Level", Use = nameof(EmployeeLevelToString))]
     [MapValue("Efficiency", Use = nameof(GetEfficiency))]
     public static partial ListEmployeesItem ToListItem(Domain.Entities.Employee entity);
 
@@ -23,14 +23,14 @@ public static partial class Mapper
         return $"/employee/{id}";
     }
 
-    private static string TypeToString(EmployeeType type)
+    private static string EmployeeTypeToString(EmployeeType employeeType)
     {
-        return type.GetStringValue();
+        return employeeType.GetStringValue();
     }
 
-    private static string LevelToString(EmployeeLevel type)
+    private static string EmployeeLevelToString(EmployeeLevel employeeLevel)
     {
-        return type.GetStringValue();
+        return employeeLevel.GetStringValue();
     }
 
     private static int GetEfficiency()

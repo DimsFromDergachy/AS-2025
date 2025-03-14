@@ -1,4 +1,6 @@
 ﻿using AS_2025.Api.Team.List;
+using AS_2025.Common;
+using AS_2025.Domain.Common;
 using Riok.Mapperly.Abstractions;
 
 namespace AS_2025.Api.Team;
@@ -7,6 +9,7 @@ namespace AS_2025.Api.Team;
 public static partial class Mapper
 {
     [MapProperty(nameof(Domain.Entities.Team.Id), nameof(ListTeamsItem.Url), Use = nameof(GuidToUrl))]
+    [MapProperty("Type", "Type", Use = nameof(TeamTypeToString))]
     [MapProperty("Department.Name", "DepartmentName")]
     [MapProperty("TeamLead.FullName", "TeamLead")]
     [MapProperty("Members", "MembersCount", Use = nameof(MembersToCount))]
@@ -16,6 +19,11 @@ public static partial class Mapper
     private static string GuidToUrl(Guid id)
     {
         return $"/team/{id}";
+    }
+
+    private static string TeamTypeToString(TeamType teamType)
+    {
+        return teamType.GetStringValue();
     }
 
     private static int MembersToCount(List<Domain.Entities.Employee> members)
