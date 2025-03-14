@@ -16,6 +16,10 @@ public class TeamService
     public async Task<IReadOnlyCollection<Team>> ListAsync(CancellationToken cancellationToken)
     {
         return await _context.Teams
+            .Include(x => x.Department)
+            .Include(x => x.TeamLead)
+            .Include(x => x.Members)
+            .Include(x => x.AssignedProjects)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
