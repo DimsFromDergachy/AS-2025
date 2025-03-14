@@ -16,7 +16,7 @@ Scalar | http://localhost:5002/scalar
 > dotnet test
 
 ### Integration test:
-> hurl --test **/*.hurl --variable hostname=localhost
+> hurl --insecure --test **/*.hurl --variables-file ./src/test/.env.local --variable hostname=localhost
 
 ### Wipe everything
 > docker system prune -a
