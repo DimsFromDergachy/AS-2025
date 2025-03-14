@@ -70,22 +70,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOnRemoteVM", policy =>
     {
-        policy.WithOrigins($"https://103.90.72.212:5004");
+        policy.WithOrigins($"https://{applicationOptions.HostName}:{applicationOptions.FrontendOriginPort}");
     });
 });
-
-// builder.Services.AddCors(options =>
-// {
-//     options.AddPolicy("AllowOnRemoteVM", policy =>
-//     {
-//         // policy.WithOrigins($"http://localhost:{applicationOptions.FrontendOriginPort}")
-//         //     .AllowAnyHeader()
-//         //     .AllowAnyMethod();
-//         // policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}")
-//         //     .AllowAnyHeader()
-//         //     .AllowAnyMethod();
-//     });
-// });
 
 var app = builder.Build();
 
