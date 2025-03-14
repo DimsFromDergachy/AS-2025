@@ -1,21 +1,21 @@
 ﻿using AS_2025.Common;
-using AS_2025.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Task = AS_2025.Domain.Entities.Task;
 
 namespace AS_2025.ApplicationServices;
 
-public class TeamService
+public class TaskService
 {
     private readonly IContext _context;
 
-    public TeamService(IContext context)
+    public TaskService(IContext context)
     {
         _context = context;
     }
 
-    public async Task<IReadOnlyCollection<Team>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Task>> ListAsync(CancellationToken cancellationToken)
     {
-        return await _context.Teams
+        return await _context.Tasks
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

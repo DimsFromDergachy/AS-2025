@@ -7,6 +7,9 @@ public static class ServiceCollectionExtensions
         services.AddTransient<DepartmentService>();
         services.AddTransient<EmployeeService>();
         services.AddTransient<TeamService>();
+        services.AddTransient<ClientService>();
+        services.AddTransient<TaskService>();
+        services.AddTransient<ProjectService>();
 
         return services;
     }

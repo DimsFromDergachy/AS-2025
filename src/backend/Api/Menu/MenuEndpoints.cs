@@ -9,7 +9,7 @@ public static class MenuEndpoints
         var group = builder.MapGroup("api/menu")
             .WithTags("Menu");
 
-        group.MapGet("/list", () => Task.FromResult(new ListMenuResponse
+        group.MapGet("/list", () => System.Threading.Tasks.Task.FromResult(new ListMenuResponse
         {
             Items = new List<ListMenuItem>
             {

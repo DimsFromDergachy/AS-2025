@@ -6,8 +6,7 @@ var templates = new Dictionary<string, string>();
 #region DOMAIN
 
 // ReSharper disable once UseRawString
-templates["generated/Domain/Entities/{{ ModelName }}.cs"] = @"
-using AS_2025.Domain.Common;
+templates["generated/Domain/Entities/{{ ModelName }}.cs"] = @"using AS_2025.Domain.Common;
 using System.ComponentModel.DataAnnotations;
 
 namespace AS_2025.Domain.Entities;
@@ -25,8 +24,7 @@ public record {{ ModelName }} : Entity<Guid>, IIdentifiableEntity<string>
 #region EF CONFIGURATION
 
 // ReSharper disable once UseRawString
-templates["generated/Database/Configuration/{{ ModelName }}Configuration.cs"] = @"
-using AS_2025.Domain.Entities;
+templates["generated/Database/Configuration/{{ ModelName }}Configuration.cs"] = @"using AS_2025.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -51,8 +49,7 @@ public class {{ ModelName }}Configuration : IEntityTypeConfiguration<{{ ModelNam
 #region APPLICATION SERVICE
 
 // ReSharper disable once UseRawString
-templates["generated/ApplicationServices/{{ ModelName }}Service.cs"] = @"
-using AS_2025.Common;
+templates["generated/ApplicationServices/{{ ModelName }}Service.cs"] = @"using AS_2025.Common;
 using AS_2025.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -81,8 +78,7 @@ public class {{ ModelName }}Service
 #region LIST REPR
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{ModelName}/List/List{{ ModelName }}sHandler.cs"] = @"
-using Ardalis.Result;
+templates["generated/Api/{ModelName}/List/List{{ ModelName }}sHandler.cs"] = @"using Ardalis.Result;
 using AS_2025.ApplicationServices;
 using MediatR;
 
@@ -111,8 +107,7 @@ public class List{{ ModelName }}sHandler : IRequestHandler<List{{ ModelName }}sR
 ";
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{ModelName}/List/List{{ ModelName }}sItem.cs"] = @"
-using AS_2025.Schema.List;
+templates["generated/Api/{ModelName}/List/List{{ ModelName }}sItem.cs"] = @"using AS_2025.Schema.List;
 
 namespace AS_2025.Api.{{ ModelName }}.List;
 
@@ -127,8 +122,7 @@ public record List{{ ModelName }}sItem
 ";
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{ModelName}/List/List{{ ModelName }}sRequest.cs"] = @"
-using Ardalis.Result;
+templates["generated/Api/{ModelName}/List/List{{ ModelName }}sRequest.cs"] = @"using Ardalis.Result;
 using MediatR;
 
 namespace AS_2025.Api.{{ ModelName }}.List;
@@ -151,8 +145,7 @@ public record List{{ ModelName }}sResponse
 #region REFERENCE LIST REPR
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{ModelName}/ReferenceList/ReferenceList{{ ModelName }}sHandler.cs"] = @"
-using Ardalis.Result;
+templates["generated/Api/{ModelName}/ReferenceList/ReferenceList{{ ModelName }}sHandler.cs"] = @"using Ardalis.Result;
 using AS_2025.ApplicationServices;
 using AS_2025.ReferenceItem;
 using MediatR;
@@ -182,8 +175,7 @@ public class ReferenceList{{ ModelName }}sHandler : IRequestHandler<ReferenceLis
 ";
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{ModelName}/ReferenceList/ReferenceList{{ ModelName }}sRequest.cs"] = @"
-using Ardalis.Result;
+templates["generated/Api/{ModelName}/ReferenceList/ReferenceList{{ ModelName }}sRequest.cs"] = @"using Ardalis.Result;
 using AS_2025.ReferenceItem;
 using MediatR;
 
@@ -197,8 +189,7 @@ public record ReferenceList{{ ModelName }}sRequest : IRequest<Result<ReferenceLi
 #region REGISTER ENDPOINTS
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{{ ModelName }}/{{ ModelName }}Endpoints.cs"] = @"
-using Ardalis.Result.AspNetCore;
+templates["generated/Api/{{ ModelName }}/{{ ModelName }}Endpoints.cs"] = @"using Ardalis.Result.AspNetCore;
 using AS_2025.Api.{{ ModelName }}.List;
 using AS_2025.Api.{{ ModelName }}.ReferenceList;
 using AS_2025.Schema.List;
@@ -237,8 +228,7 @@ public static class {{ ModelName }}Endpoints
 #region REPR MAPPER
 
 // ReSharper disable once UseRawString
-templates["generated/Api/{{ ModelName }}/Mapper.cs"] = @"
-using AS_2025.Api.{{ ModelName }}.List;
+templates["generated/Api/{{ ModelName }}/Mapper.cs"] = @"using AS_2025.Api.{{ ModelName }}.List;
 using Riok.Mapperly.Abstractions;
 
 namespace AS_2025.Api.{{ ModelName }};
@@ -260,7 +250,7 @@ public static partial class Mapper
 
 try
 {
-    new Generator().Generate(templates, new List<string> { "Department", "Employee", "Team" });
+    new Generator().Generate(templates, new List<string> { "Client", "Project", "Task", "Team" });
 }
 catch (Exception ex)
 {

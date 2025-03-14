@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AS_2025.ApplicationServices;
 
-public class TeamService
+public class ClientService
 {
     private readonly IContext _context;
 
-    public TeamService(IContext context)
+    public ClientService(IContext context)
     {
         _context = context;
     }
 
-    public async Task<IReadOnlyCollection<Team>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Client>> ListAsync(CancellationToken cancellationToken)
     {
-        return await _context.Teams
+        return await _context.Clients
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

@@ -1,4 +1,5 @@
-﻿namespace AS_2025.Api.Team.List;
+﻿
+namespace AS_2025.Api.Team.List;
 
 public record ListTeamsResponse
 {

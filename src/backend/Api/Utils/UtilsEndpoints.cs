@@ -20,7 +20,7 @@ public static class UtilsEndpoints
             var teamsTask = context.Teams.AsNoTracking().ToListAsync(cancellationToken);
             var employeesTask = context.Employees.AsNoTracking().ToListAsync(cancellationToken);
 
-            await Task.WhenAll(departmentsTask, teamsTask, employeesTask);
+            await System.Threading.Tasks.Task.WhenAll(departmentsTask, teamsTask, employeesTask);
 
             return new
             {

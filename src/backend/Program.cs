@@ -6,9 +6,12 @@ using AS_2025.Repository;
 using AS_2025.Schema;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using AS_2025.Api.Client;
 using AS_2025.Api.Department;
 using AS_2025.Api.Employee;
 using AS_2025.Api.Menu;
+using AS_2025.Api.Project;
+using AS_2025.Api.Task;
 using AS_2025.Api.Team;
 using AS_2025.Api.Utils;
 using AS_2025.ApplicationServices;
@@ -87,6 +90,9 @@ app.MapDepartmentEndpoints();
 app.MapEmployeeEndpoints();
 app.MapTeamEndpoints();
 app.MapUtilsEndpoints();
+app.MapClientEndpoints();
+app.MapTaskEndpoints();
+app.MapProjectEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")
