@@ -70,7 +70,10 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost", policy =>
     {
-        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}", "https://103.90.72.212:5004")
+        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendOriginPort}")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });

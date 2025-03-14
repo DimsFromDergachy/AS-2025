@@ -104,8 +104,8 @@ services:
         condition: service_healthy
       minio:
         condition: service_healthy
-      mongodb:
-        condition: service_healthy
+      # mongodb:
+      #   condition: service_healthy
     ports:
       - "${BE_APPLICATION_PORT}:443"
     environment:
@@ -114,6 +114,7 @@ services:
       Application__HostedServices__EnabledMap__ImportData: true
       Application__Data__Root: './data/2025'
       Application__FrontendLocalhostPort: ${FE_LOCALHOST_PORT}
+      Application__FrontendOriginPort: ${FE_APPLICATION_PORT}
       ASPNETCORE_URLS: 'https://+:443;http://+:8080'
       ASPNETCORE_Kestrel__Certificates__Default__Password: '${CERTIFICATE_PASSWORD}'
       ASPNETCORE_Kestrel__Certificates__Default__Path: '${CERTIFICATE_FILE}'
