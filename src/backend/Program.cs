@@ -1,4 +1,3 @@
-using AS_2025.Api.Trait;
 using AS_2025.Common;
 using AS_2025.Database;
 using AS_2025.Identity;
@@ -7,8 +6,21 @@ using AS_2025.Repository;
 using AS_2025.Schema;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using AS_2025.Api.Client;
+using AS_2025.Api.Department;
+using AS_2025.Api.Employee;
+using AS_2025.Api.Menu;
+using AS_2025.Api.Project;
+using AS_2025.Api.TableControlsPresentation;
+using AS_2025.Api.Task;
+using AS_2025.Api.Team;
+using AS_2025.Api.Utils;
+using AS_2025.ApplicationServices;
+using AS_2025.Exceptions;
 using AS_2025.HostedServices;
 using AS_2025.Import;
+using AS_2025.ReferenceItem;
+using AS_2025.Tags;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -32,12 +44,15 @@ builder.Configuration.GetSection(ApplicationOptions.SectionKey).Bind(application
 
 builder.Services.AddOptions(applicationOptions);
 builder.Services.AddDatabase(applicationOptions);
+builder.Services.AddApplicationServices();
 builder.Services.AddHostedServices();
 builder.Services.AddDataImportServices();
 builder.Services.AddRepositories();
 builder.Services.AddSchemaBuilders();
+builder.Services.AddReferenceItems();
+builder.Services.AddTags();
 
-builder.Services.AddExceptionHandler<ExceptionHandler>();
+builder.Services.AddExceptionHandler<ApplicationExceptionHandler>();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
@@ -46,6 +61,22 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.IncludeFields = true;
+});
+
+builder.Services.AddProblemDetails();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendOriginPort}")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
 });
 
 var app = builder.Build();
@@ -58,12 +89,25 @@ app.UseResponseCompression();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapTraitEndpoints();
+//app.MapTraitEndpoints();
+app.MapMenuEndpoints();
+app.MapDepartmentEndpoints();
+app.MapEmployeeEndpoints();
+app.MapTeamEndpoints();
+app.MapUtilsEndpoints();
+app.MapClientEndpoints();
+app.MapTaskEndpoints();
+app.MapProjectEndpoints();
+app.MapTableControlsPresentationEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")
     .MapIdentityApi<ApplicationUser>();
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
+
+app.UseCors("AllowLocalhost");
 
 app.Run();

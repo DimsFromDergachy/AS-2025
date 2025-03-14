@@ -34,6 +34,6 @@ public static class TraitEndpoints
             return result.ToMinimalApiResult();
         });
 
-        group.MapGet("/list/schema", ([FromServices] IListSchemaModelBuilder<ListTraitsItem> schemaModelBuilder) => schemaModelBuilder.Build());
+        group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListTraitsItem>());
     }
 }

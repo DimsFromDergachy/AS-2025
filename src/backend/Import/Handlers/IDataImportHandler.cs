@@ -1,6 +1,6 @@
 ﻿namespace AS_2025.Import.Handlers;
 
-public interface IDataImportHandler<in T>
+public interface IDataImportHandler<T>
 {
-    Task HandleAsync(IEnumerable<T> data, CancellationToken  cancellationToken);
+    Task HandleAsync(List<T> data, CancellationToken  cancellationToken);
 }

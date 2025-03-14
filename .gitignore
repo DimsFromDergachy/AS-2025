@@ -309,7 +309,7 @@ __pycache__/
 
 # misc
 .DS_Store
-*.pem
+#*.pem
 
 # debug
 npm-debug.log*
@@ -325,3 +325,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+/src/BoilerplateGenerator/generated/**
