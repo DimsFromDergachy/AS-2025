@@ -13,7 +13,7 @@ public static class ClientEndpoints
     public static void MapClientEndpoints(this IEndpointRouteBuilder builder)
     {
         var group = builder.MapGroup("api/client")
-            .WithTags("Client");
+            .WithTags("Client").WithOrder(1);
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListClientsRequest? request) =>
         {

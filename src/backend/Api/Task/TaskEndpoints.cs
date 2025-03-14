@@ -13,7 +13,7 @@ public static class TaskEndpoints
     public static void MapTaskEndpoints(this IEndpointRouteBuilder builder)
     {
         var group = builder.MapGroup("api/task")
-            .WithTags("Task");
+            .WithTags("Task").WithOrder(6);
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListTasksRequest? request) =>
         {

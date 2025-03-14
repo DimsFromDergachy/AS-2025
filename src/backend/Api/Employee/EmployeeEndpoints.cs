@@ -1,5 +1,4 @@
 ﻿using Ardalis.Result.AspNetCore;
-using AS_2025.Api.Department.ReferenceList;
 using AS_2025.Api.Employee.List;
 using AS_2025.Api.Employee.ReferenceList;
 using AS_2025.Schema.List;
@@ -14,7 +13,7 @@ public static class EmployeeEndpoints
     public static void MapEmployeeEndpoints(this IEndpointRouteBuilder builder)
     {
         var group = builder.MapGroup("api/employee")
-            .WithTags("Employee");
+            .WithTags("Employee").WithOrder(3);
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListEmployeesRequest? request) =>
         {

@@ -13,7 +13,7 @@ public static class TeamEndpoints
     public static void MapTeamEndpoints(this IEndpointRouteBuilder builder)
     {
         var group = builder.MapGroup("api/team")
-            .WithTags("Team");
+            .WithTags("Team").WithOrder(7);
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListTeamsRequest? request) =>
         {
