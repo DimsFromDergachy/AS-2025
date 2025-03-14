@@ -11,6 +11,7 @@ using AS_2025.Api.Department;
 using AS_2025.Api.Employee;
 using AS_2025.Api.Menu;
 using AS_2025.Api.Project;
+using AS_2025.Api.TableControlsPresentation;
 using AS_2025.Api.Task;
 using AS_2025.Api.Team;
 using AS_2025.Api.Utils;
@@ -60,6 +61,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.IncludeFields = true;
 });
 
 builder.Services.AddProblemDetails();
@@ -93,6 +95,7 @@ app.MapUtilsEndpoints();
 app.MapClientEndpoints();
 app.MapTaskEndpoints();
 app.MapProjectEndpoints();
+app.MapTableControlsPresentationEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")

@@ -4,6 +4,7 @@ public enum ListColumnDisplayType
 {
     None,
     String,
+    Text,
     Integer,
     Double,
     Date,

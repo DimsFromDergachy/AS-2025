@@ -250,7 +250,7 @@ public static partial class Mapper
 
 try
 {
-    new Generator().Generate(templates, new List<string> { "Client", "Project", "Task", "Team" });
+    new Generator().Generate(templates, new List<string> { "TableControlsPresentation" });
 }
 catch (Exception ex)
 {

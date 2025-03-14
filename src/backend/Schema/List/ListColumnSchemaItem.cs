@@ -25,6 +25,8 @@ public class ListColumnSchemaItem
 
     public string TagReferenceEnum { get; init; }
 
+    public string TagField { get; init; }
+
     public static ListColumnSchemaItem From(ListColumnSchemaAttribute attribute, string key)
     {
         return new ListColumnSchemaItem
@@ -40,6 +42,7 @@ public class ListColumnSchemaItem
             Sortable = attribute.Sortable,
             Searchable = attribute.Searchable,
             TagReferenceEnum = attribute.TagReferenceEnum,
+            TagField = attribute.TagField,
         };
     }
 }

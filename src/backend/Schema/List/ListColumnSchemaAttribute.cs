@@ -24,4 +24,6 @@ public class ListColumnSchemaAttribute : Attribute
     public bool Searchable { get; init; }
 
     public string TagReferenceEnum { get; init; }
+
+    public string TagField { get; init; }
 }
