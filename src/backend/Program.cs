@@ -68,18 +68,28 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost", policy =>
+    options.AddPolicy("AllowOnRemoteVM", policy =>
     {
-        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendOriginPort}")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins($"https://103.90.72.212:5004");
     });
 });
 
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowOnRemoteVM", policy =>
+//     {
+//         // policy.WithOrigins($"http://localhost:{applicationOptions.FrontendOriginPort}")
+//         //     .AllowAnyHeader()
+//         //     .AllowAnyMethod();
+//         // policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}")
+//         //     .AllowAnyHeader()
+//         //     .AllowAnyMethod();
+//     });
+// });
+
 var app = builder.Build();
+
+app.UseCors("AllowOnRemoteVM");
 
 app.MapOpenApi();
 app.MapScalarApiReference();
@@ -107,7 +117,5 @@ app.MapGroup("api/identity")
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
-
-app.UseCors("AllowLocalhost");
 
 app.Run();

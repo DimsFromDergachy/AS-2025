@@ -69,13 +69,6 @@ jobs:
           # Ensure certificate directory exists
           mkdir -p src/https
 
-          # Generate certificate if it doesn't exist
-          # if [ ! -f src/https/certificate.pfx ]; then
-          #   openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=localhost'
-          #   openssl pkcs12 -export -out src/https/certificate.pfx -inkey key.pem -in cert.pem -password pass:BLA_BLA_BLA
-          #   rm key.pem cert.pem
-          # fi
-
           # Rebuild and restart containers
           docker compose down
           docker compose up --build -d
