@@ -6,7 +6,6 @@ export const apiClient = axios.create({
   baseURL: 'https://103.90.72.212:5002/api',
   timeout: 10000,
   headers: {
-    Authorization: `Bearer ${authService.restore()}`,
     'Content-Type': 'application/json',
   },
 });
@@ -14,6 +13,10 @@ export const apiClient = axios.create({
 // Перехватчик для запросов
 apiClient.interceptors.request.use(config => {
   globalStore.loading.set(true);
+  const token = authService.restore();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
   return config;
 });
 
