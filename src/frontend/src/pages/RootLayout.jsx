@@ -46,6 +46,7 @@ export default function RootLayout() {
   const { loading } = globalStore;
 
   const [_, pageKey] = pathname.split('/');
+  console.log("🚀 * RootLayout.jsx:49 * RootLayout * pageKey:", pageKey);
 
   const { colorBgContainer, borderRadiusLG } = token;
 
@@ -192,6 +193,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!authorized) navigate('/login');
+    else if (!pageKey) navigate('/dashboard');
     else {
       apiClient('/utils/tagged-enums').then(res => {
         globalStore.taggedEnums.set(res);
