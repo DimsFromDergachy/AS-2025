@@ -70,11 +70,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOnRemoteVM", policy =>
     {
-        policy.WithOrigins(
-                $"https://{applicationOptions.HostName}:{applicationOptions.FrontendOriginPort}",
-                $"http://localhost:5173")
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        policy.WithOrigins($"https://{applicationOptions.HostName}:{applicationOptions.FrontendOriginPort}")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
     });
 });
 
