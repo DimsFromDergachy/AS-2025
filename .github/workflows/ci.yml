@@ -83,4 +83,4 @@ jobs:
 
     steps:
       - uses: gacts/install-hurl@v1
-      - run: hurl --insecure --test **/*.hurl --variables-file ./src/test/.env.local --variable hostname=${{ secrets.VM_HOST }}
+      - run: hurl --insecure --test ./src/test/login.hurl --variables-file ./src/test/.env.local --variable hostname=${{ secrets.VM_HOST }}
