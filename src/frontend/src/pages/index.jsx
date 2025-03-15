@@ -164,6 +164,72 @@ export const routes = [
         //   },
         // ],
       },
+      {
+        path: 'projects',
+        Component: lazy(() => import('./Projects')),
+        handle: {
+          crumb: () => ({
+            page: 'projects',
+            title: 'Projects',
+          }),
+        },
+        // children: [
+        //   {
+        //     path: ':developerId',
+        //     Component: lazy(() => import('./Developer')),
+        //     handle: {
+        //       crumb: () => ({
+        //         title: 'developerId',
+        //       }),
+        //     },
+        //   },
+        // ],
+      },
+
+      {
+        path: 'tasks',
+        Component: lazy(() => import('./Tasks')),
+        handle: {
+          crumb: () => ({
+            page: 'tasks',
+            title: 'Tasks',
+          }),
+        },
+        // children: [
+        //   {
+        //     path: ':developerId',
+        //     Component: lazy(() => import('./Developer')),
+        //     handle: {
+        //       crumb: () => ({
+        //         title: 'developerId',
+        //       }),
+        //     },
+        //   },
+        // ],
+      },
+
+      {
+        path: 'customers',
+        Component: lazy(() => import('./Customers')),
+        handle: {
+          crumb: () => ({
+            page: 'customers',
+            title: 'Customers',
+          }),
+        },
+        // children: [
+        //   {
+        //     path: ':developerId',
+        //     Component: lazy(() => import('./Developer')),
+        //     handle: {
+        //       crumb: () => ({
+        //         title: 'developerId',
+        //       }),
+        //     },
+        //   },
+        // ],
+      },
+
 
 
 

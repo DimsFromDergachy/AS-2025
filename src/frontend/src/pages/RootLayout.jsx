@@ -12,6 +12,9 @@ import {
   UserOutlined,
   TableOutlined,
   DatabaseOutlined,
+  SmileOutlined,
+  CarryOutOutlined,
+  ProjectOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import { apiClient } from 'src/api/client';
@@ -131,6 +134,33 @@ export default function RootLayout() {
           navigate('/employees');
         },
       },
+      {
+        key: 'projects',
+        icon: <ProjectOutlined />,
+        label: 'Проекты',
+        onClick: () => {
+          navigate('/projects');
+        },
+      },
+
+      {
+        key: 'tasks',
+        icon: <CarryOutOutlined />,
+        label: 'Задачи',
+        onClick: () => {
+          navigate('/tasks');
+        },
+      },
+
+      {
+        key: 'customers',
+        icon: <SmileOutlined />,
+        label: 'Клиенты',
+        onClick: () => {
+          navigate('/customers');
+        },
+      },
+
     ],
     [navigate]
   );
