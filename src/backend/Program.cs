@@ -74,7 +74,7 @@ builder.Services.AddCors(options =>
     });
     options.AddPolicy("AllowDebugFrontend", policy =>
     {
-        policy.WithOrigins($"http://localhost:5173", $"https://localhost:5004")
+        policy.WithOrigins($"http://localhost:5173", $"https://103.90.72.212:5004")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
