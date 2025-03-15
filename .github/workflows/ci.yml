@@ -65,7 +65,9 @@ jobs:
 
           # Pull latest code (if git repo exists)
           if [ -d .git ]; then
-            git pull
+            git fetch origin
+            git reset origin/master --hard
+            git clean -dfx
           else
             # First-time clone
             git clone https://github.com/${{ github.repository }} .
