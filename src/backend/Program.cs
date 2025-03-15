@@ -72,11 +72,16 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins($"https://{applicationOptions.HostName}:{applicationOptions.FrontendOriginPort}");
     });
+    options.AddPolicy("AllowDebugFrontend", policy =>
+    {
+        policy.WithOrigins($"http://localhost:5173");
+    });
 });
 
 var app = builder.Build();
 
 app.UseCors("AllowOnRemoteVM");
+app.UseCors("AllowDebugFrontend");
 
 app.MapOpenApi();
 app.MapScalarApiReference();
