@@ -1,20 +1,21 @@
 ﻿using AS_2025.Algos.Common;
 using AS_2025.Algos.TasksSchedule.Models;
+using AS_2025.Domain.Entities;
 
 namespace AS_2025.Algos.TasksSchedule;
 
-public record SimulatedAnnealingSchedulerSolution(double BestScore, IReadOnlyCollection<ProjectInWork> ProjectsInWork);
+public record SimulatedAnnealingSchedulerSolution(double BestScore, IReadOnlyCollection<ProjectInWorkResponse> ProjectsInWork);
 
 public class SimulatedAnnealingScheduler
 {
-    private readonly List<Team> _teams;
-    private readonly List<Project> _projects;
+    private readonly List<TeamRequest> _teams;
+    private readonly List<ProjectRequest> _projects;
     private readonly int _quarterDays; // длительность квартала (например, 90 дней)
     private readonly AnnealingParameters _parameters;
 
     private readonly Random rnd = new Random();
 
-    public SimulatedAnnealingScheduler(List<Team> teams, List<Project> projects, int quarterDays, AnnealingParameters parameters)
+    public SimulatedAnnealingScheduler(List<TeamRequest> teams, List<ProjectRequest> projects, int quarterDays, AnnealingParameters parameters)
     {
         _teams = teams;
         _projects = projects;
@@ -60,31 +61,43 @@ public class SimulatedAnnealingScheduler
     // Оценка = сумма (q_i + c_i) для всех проектов, завершённых до конца квартала.
     private double Evaluate(ScheduleSolution sol)
     {
-        double score = 0;
+        // Собираем идентификаторы проектов, которые успевают завершиться в срок
+        HashSet<int> completedProjects = new HashSet<int>();
+
         foreach (var team in _teams)
         {
             int currentTime = 0;
-            // Если для команды назначены проекты
             if (sol.TeamSchedules.ContainsKey(team.Id))
             {
                 foreach (var proj in sol.TeamSchedules[team.Id])
                 {
-                    // Время на «вникание» (3 дня) + выполнение (округляем вверх)
+                    // Время на "вникание" (3 дня) + выполнение (округляем вверх)
                     int duration = 3 + (int)Math.Ceiling((double)proj.T / team.Efficiency);
                     currentTime += duration;
                     if (currentTime <= _quarterDays)
                     {
-                        // Если проект успевают выполнить – прибавляем бонус
-                        score += proj.Q + proj.C;
+                        // Проект успевают выполнить, запоминаем его ID
+                        completedProjects.Add(proj.Id);
                     }
                     else
                     {
-                        // Если проект не укладывается – дальнейшие проекты той же команды также не выполнятся
+                        // Если проект не укладывается, дальнейшие проекты той же команды не выполнятся
                         break;
                     }
                 }
             }
         }
+
+        double score = 0;
+        // Для каждого проекта: если завершён – прибавляем q_i, иначе вычитаем c_i
+        foreach (var proj in _projects)
+        {
+            if (completedProjects.Contains(proj.Id))
+                score += proj.Q;
+            else
+                score -= proj.C;
+        }
+
         return score;
     }
 
@@ -102,11 +115,11 @@ public class SimulatedAnnealingScheduler
                 if (neighbor.Unscheduled.Count > 0)
                 {
                     int projIndex = rnd.Next(neighbor.Unscheduled.Count);
-                    Project proj = neighbor.Unscheduled[projIndex];
+                    ProjectRequest proj = neighbor.Unscheduled[projIndex];
                     // Выбираем случайную команду
                     int teamIndex = rnd.Next(_teams.Count);
                     int teamId = _teams[teamIndex].Id;
-                    List<Project> teamSchedule = neighbor.TeamSchedules[teamId];
+                    List<ProjectRequest> teamSchedule = neighbor.TeamSchedules[teamId];
                     // Случайная позиция вставки (от 0 до teamSchedule.Count включительно)
                     int pos = rnd.Next(teamSchedule.Count + 1);
                     teamSchedule.Insert(pos, proj);
@@ -120,9 +133,9 @@ public class SimulatedAnnealingScheduler
                     if (teamsWithProjects.Count > 0)
                     {
                         int teamId = teamsWithProjects[rnd.Next(teamsWithProjects.Count)];
-                        List<Project> teamSchedule = neighbor.TeamSchedules[teamId];
+                        List<ProjectRequest> teamSchedule = neighbor.TeamSchedules[teamId];
                         int pos = rnd.Next(teamSchedule.Count);
-                        Project proj = teamSchedule[pos];
+                        ProjectRequest proj = teamSchedule[pos];
                         teamSchedule.RemoveAt(pos);
                         neighbor.Unscheduled.Add(proj);
                     }
@@ -134,7 +147,7 @@ public class SimulatedAnnealingScheduler
                     if (teamsWithMultiple.Count > 0)
                     {
                         int teamId = teamsWithMultiple[rnd.Next(teamsWithMultiple.Count)];
-                        List<Project> teamSchedule = neighbor.TeamSchedules[teamId];
+                        List<ProjectRequest> teamSchedule = neighbor.TeamSchedules[teamId];
                         int pos1 = rnd.Next(teamSchedule.Count);
                         int pos2 = rnd.Next(teamSchedule.Count);
                         // Меняем, если индексы различны
@@ -153,9 +166,9 @@ public class SimulatedAnnealingScheduler
                     if (teamsWithProjects.Count > 0)
                     {
                         int fromTeamId = teamsWithProjects[rnd.Next(teamsWithProjects.Count)];
-                        List<Project> fromSchedule = neighbor.TeamSchedules[fromTeamId];
+                        List<ProjectRequest> fromSchedule = neighbor.TeamSchedules[fromTeamId];
                         int pos = rnd.Next(fromSchedule.Count);
-                        Project proj = fromSchedule[pos];
+                        ProjectRequest proj = fromSchedule[pos];
                         fromSchedule.RemoveAt(pos);
                         // Выбираем другую команду (или ту же, если других нет)
                         int toTeamId = fromTeamId;
@@ -166,7 +179,7 @@ public class SimulatedAnnealingScheduler
                                 toTeamId = _teams[rnd.Next(_teams.Count)].Id;
                             } while (toTeamId == fromTeamId);
                         }
-                        List<Project> toSchedule = neighbor.TeamSchedules[toTeamId];
+                        List<ProjectRequest> toSchedule = neighbor.TeamSchedules[toTeamId];
                         int insertPos = rnd.Next(toSchedule.Count + 1);
                         toSchedule.Insert(insertPos, proj);
                     }
@@ -180,7 +193,7 @@ public class SimulatedAnnealingScheduler
     // Преобразование решения в итоговый список назначений с вычислением start/end для каждого проекта, укладывающегося в квартал
     private SimulatedAnnealingSchedulerSolution ConvertToResult(double bestScore, ScheduleSolution solution)
     {
-        var projectsInWork = new List<ProjectInWork>();
+        var projectsInWork = new List<ProjectInWorkResponse>();
 
         foreach (var team in _teams)
         {
@@ -194,7 +207,7 @@ public class SimulatedAnnealingScheduler
                     int endTime = currentTime + duration;
                     if (endTime <= _quarterDays)
                     {
-                        projectsInWork.Add(new ProjectInWork(proj.Id, team.Id, startTime, endTime));
+                        projectsInWork.Add(new ProjectInWorkResponse(proj.Id, team.Id, startTime, endTime));
                         currentTime = endTime;
                     }
                     else

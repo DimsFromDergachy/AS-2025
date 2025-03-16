@@ -9,14 +9,14 @@ public class SchedulerHandler : IRequestHandler<SchedulerRequest, Result<Schedul
 {
     public Task<Result<SchedulerResponse>> Handle(SchedulerRequest request, CancellationToken cancellationToken)
     {
-        var inputTeams = new List<AS_2025.Algos.TasksSchedule.Models.Team>
+        var inputTeams = new List<AS_2025.Algos.TasksSchedule.Models.TeamRequest>
         {
             new(1, 2),
             new(2, 3),
             new(3, 1)
         };
 
-        var inputProjects = new List<AS_2025.Algos.TasksSchedule.Models.Project>
+        var inputProjects = new List<AS_2025.Algos.TasksSchedule.Models.ProjectRequest>
         {
             new(101, 10, 5000, 1000),
             new(102, 20, 8000, 1500),
