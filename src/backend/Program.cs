@@ -6,6 +6,7 @@ using AS_2025.Repository;
 using AS_2025.Schema;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using AS_2025.Api.Algos;
 using AS_2025.Api.Client;
 using AS_2025.Api.Department;
 using AS_2025.Api.Employee;
@@ -112,6 +113,7 @@ app.MapClientEndpoints();
 app.MapTaskEndpoints();
 app.MapProjectEndpoints();
 app.MapTableControlsPresentationEndpoints();
+app.MapAlgosEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")
