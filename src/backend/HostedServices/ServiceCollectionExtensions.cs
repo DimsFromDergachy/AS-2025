@@ -7,7 +7,8 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<ApplicationDbInitializerHostedService>();
         services.AddHostedService<ImportDataHostedService>();
         services.AddSingleton<ImportDataHostedService>(); // to call from utils endpoint
-            
+        services.AddHostedService<IdentityInitializerHostedService>();
+
         return services;
     }
 }

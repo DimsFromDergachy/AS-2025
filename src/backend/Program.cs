@@ -21,6 +21,7 @@ using AS_2025.HostedServices;
 using AS_2025.Import;
 using AS_2025.ReferenceItem;
 using AS_2025.Tags;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -30,8 +31,20 @@ builder.Services.AddOpenApi();
 builder.Services.AddAuthorization();
 
 builder.Services
-    .AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddIdentityCore<ApplicationUser>(options =>
+    {
+        options.Password.RequireDigit = false;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequiredLength = 6;
+
+        options.SignIn.RequireConfirmedEmail = false;
+    })
+    .AddRoles<ApplicationUserRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>();
 
 builder.Services.AddCompressionSetup();
 

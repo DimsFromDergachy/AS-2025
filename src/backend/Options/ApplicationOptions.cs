@@ -11,5 +11,6 @@ public record ApplicationOptions
     public DataOptions Data { get; init; } = new();
 
     public int FrontendOriginPort { get; init; }
+
     public string HostName { get; init; } = string.Empty;
 }
