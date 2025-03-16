@@ -111,8 +111,8 @@ services:
     environment:
       Application__Database__ConnectionString: 'Host=postgres;Port=${POSTGRES_PORT};CommandTimeout=300;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};'
       Application__HostedServices__EnabledMap__ApplicationDbInitializer: false
-      Application__HostedServices__EnabledMap__ImportData: false
-      Application__HostedServices__EnabledMap__IdentityInitializer: true
+      Application__HostedServices__EnabledMap__ImportData: true
+      Application__HostedServices__EnabledMap__IdentityInitializer: false
       Application__Data__Root: './data/2025'
       Application__Data__DataType: 'Json'
       Application__FrontendOriginPort: ${FE_APPLICATION_PORT}
