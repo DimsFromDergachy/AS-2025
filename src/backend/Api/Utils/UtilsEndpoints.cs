@@ -11,8 +11,7 @@ public static class UtilsEndpoints
 {
     public static void MapUtilsEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/utils")
-            .WithTags("Utils").WithOrder(8);
+        var group = builder.MapGroup("api/utils").WithTags("Utils");
 
         group.MapGet("/app-state", async ([FromServices] IContext context, CancellationToken cancellationToken) =>
         {

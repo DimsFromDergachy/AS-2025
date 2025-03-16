@@ -36,8 +36,4 @@
     <Folder Include="Database\Migrations\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\algo\algo.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -12,8 +12,7 @@ public static class ProjectEndpoints
 {
     public static void MapProjectEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/project")
-            .WithTags("Project").WithOrder(5);
+        var group = builder.MapGroup("api/project").WithTags("Project");
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListProjectsRequest? request) =>
         {

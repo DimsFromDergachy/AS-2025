@@ -12,8 +12,7 @@ public static class DepartmentEndpoints
 {
     public static void MapDepartmentEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/department")
-            .WithTags("Department").WithOrder(2);
+        var group = builder.MapGroup("api/department").WithTags("Department");
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListDepartmentsRequest? request) =>
         {

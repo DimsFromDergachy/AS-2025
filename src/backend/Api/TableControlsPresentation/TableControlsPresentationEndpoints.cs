@@ -11,8 +11,7 @@ public static class TableControlsPresentationEndpoints
 {
     public static void MapTableControlsPresentationEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/tableControlsPresentation")
-            .WithTags("TableControlsPresentation");
+        var group = builder.MapGroup("api/tableControlsPresentation").WithTags("TableControlsPresentation");
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListTableControlsPresentationsRequest? request) =>
         {

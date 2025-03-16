@@ -13,8 +13,7 @@ public static class TraitEndpoints
 {
     public static void MapTraitEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/trait")
-            .WithTags("Trait");
+        var group = builder.MapGroup("api/trait").WithTags("Trait");
 
         group.MapPost("/", async (IMediator mediator, CreateTraitRequest request) =>
         {

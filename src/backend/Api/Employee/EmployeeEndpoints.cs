@@ -12,8 +12,7 @@ public static class EmployeeEndpoints
 {
     public static void MapEmployeeEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/employee")
-            .WithTags("Employee").WithOrder(3);
+        var group = builder.MapGroup("api/employee").WithTags("Employee");
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListEmployeesRequest? request) =>
         {

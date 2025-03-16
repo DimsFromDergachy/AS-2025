@@ -6,8 +6,7 @@ public static class MenuEndpoints
 {
     public static void MapMenuEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/menu")
-            .WithTags("Menu").WithOrder(4);
+        var group = builder.MapGroup("api/menu").WithTags("Menu");
 
         group.MapGet("/list", () => System.Threading.Tasks.Task.FromResult(new ListMenuResponse
         {
