@@ -11,10 +11,10 @@ public class IdentityInitializerHostedService : IHostedService
 
     private readonly IReadOnlyCollection<UserInfo> _users = new[]
     {
-        new UserInfo("admin@test.com", "admin", DefaultPassword, new[] { UserRole.Administrator }),
-        new UserInfo("manager1@test.com", "manager1", DefaultPassword, new[] { UserRole.Manager }),
-        new UserInfo("user1@test.com", "user1", DefaultPassword, new[] { UserRole.User }),
-        new UserInfo("user2@test.com", "user2", DefaultPassword, new[] { UserRole.User })
+        new UserInfo("admin@test.com", "admin@test.com", DefaultPassword, new[] { UserRole.Administrator }),
+        new UserInfo("manager1@test.com", "manager1@test.com", DefaultPassword, new[] { UserRole.Manager }),
+        new UserInfo("user1@test.com", "user1@test.com", DefaultPassword, new[] { UserRole.User }),
+        new UserInfo("user2@test.com", "user2@test.com", DefaultPassword, new[] { UserRole.User })
     };
 
     private readonly IServiceProvider _serviceProvider;
