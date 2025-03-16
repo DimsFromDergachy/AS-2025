@@ -1,3 +1,3 @@
-﻿namespace AS_2025.Algo.Backpack;
+﻿namespace AS_2025.Algos.Backpack;
 
 public record BackpackSolution(int BestValue, IReadOnlyCollection<Item> SelectedItems);

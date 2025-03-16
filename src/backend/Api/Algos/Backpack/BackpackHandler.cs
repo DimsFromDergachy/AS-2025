@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result;
-using AS_2025.Algo.Backpack;
-using AS_2025.Algo.Common;
+using AS_2025.Algos.Backpack;
+using AS_2025.Algos.Common;
 using MediatR;
 
 namespace AS_2025.Api.Algos.Backpack;

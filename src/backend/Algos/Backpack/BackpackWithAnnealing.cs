@@ -1,6 +1,6 @@
-﻿using AS_2025.Algo.Common;
+﻿using AS_2025.Algos.Common;
 
-namespace AS_2025.Algo.Backpack;
+namespace AS_2025.Algos.Backpack;
 
 public class BackpackWithAnnealing
 {

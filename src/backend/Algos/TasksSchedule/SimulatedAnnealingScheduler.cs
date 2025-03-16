@@ -1,7 +1,7 @@
-﻿using AS_2025.Algo.Common;
-using AS_2025.Algo.TasksSchedule.Models;
+﻿using AS_2025.Algos.Common;
+using AS_2025.Algos.TasksSchedule.Models;
 
-namespace AS_2025.Algo.TasksSchedule;
+namespace AS_2025.Algos.TasksSchedule;
 
 public record SimulatedAnnealingSchedulerSolution(double BestScore, IReadOnlyCollection<ProjectInWork> ProjectsInWork);
 

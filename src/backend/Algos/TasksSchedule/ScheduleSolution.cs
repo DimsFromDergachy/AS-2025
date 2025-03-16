@@ -1,6 +1,6 @@
-﻿using AS_2025.Algo.TasksSchedule.Models;
+﻿using AS_2025.Algos.TasksSchedule.Models;
 
-namespace AS_2025.Algo.TasksSchedule;
+namespace AS_2025.Algos.TasksSchedule;
 
 public class ScheduleSolution
 {
