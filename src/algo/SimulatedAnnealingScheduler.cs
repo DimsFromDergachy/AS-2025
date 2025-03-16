@@ -10,20 +10,29 @@ namespace algo
     public class SimulatedAnnealingScheduler
     {
         // Параметры алгоритма
-        private readonly double initialTemperature = 1000.0;
-        private readonly double coolingRate = 0.995;
-        private readonly int iterationsPerTemp = 100;
-        private readonly int quarterDays; // длительность квартала (например, 90 дней)
-        private readonly Random rnd = new Random();
+        private double initialTemperature = 1000.0;
+        private double coolingRate = 0.995;
+        private int iterationsPerTemp = 100;
+        private int quarterDays; // длительность квартала (например, 90 дней)
+        private Random rnd = new Random();
 
         private List<Team> Teams;
         private List<Project> Projects;
 
-        public SimulatedAnnealingScheduler(List<Team> teams, List<Project> projects, int quarterDays)
+        public SimulatedAnnealingScheduler(
+            List<Team> teams, 
+            List<Project> projects, 
+            int quarterDays = 90,
+            double initialTemperature = 1000.0,
+            double coolingRate = 0.995,
+            int iterationsPerTemp = 100)
         {
             Teams = teams;
             Projects = projects;
             this.quarterDays = quarterDays;
+            this.initialTemperature = initialTemperature;
+            this.coolingRate = coolingRate;
+            this.iterationsPerTemp = iterationsPerTemp;
         }
 
         // Основной метод – симулированный отжиг
@@ -64,31 +73,43 @@ namespace algo
         // Оценка = сумма (q_i + c_i) для всех проектов, завершённых до конца квартала.
         private double Evaluate(ScheduleSolution sol)
         {
-            double score = 0;
+            // Собираем идентификаторы проектов, которые успевают завершиться в срок
+            HashSet<int> completedProjects = new HashSet<int>();
+
             foreach (var team in Teams)
             {
                 int currentTime = 0;
-                // Если для команды назначены проекты
                 if (sol.TeamSchedules.ContainsKey(team.Id))
                 {
                     foreach (var proj in sol.TeamSchedules[team.Id])
                     {
-                        // Время на «вникание» (3 дня) + выполнение (округляем вверх)
+                        // Время на "вникание" (3 дня) + выполнение (округляем вверх)
                         int duration = 3 + (int)Math.Ceiling((double)proj.T / team.Efficiency);
                         currentTime += duration;
                         if (currentTime <= quarterDays)
                         {
-                            // Если проект успевают выполнить – прибавляем бонус
-                            score += (proj.Q + proj.C);
+                            // Проект успевают выполнить, запоминаем его ID
+                            completedProjects.Add(proj.Id);
                         }
                         else
                         {
-                            // Если проект не укладывается – дальнейшие проекты той же команды также не выполнятся
+                            // Если проект не укладывается, дальнейшие проекты той же команды не выполнятся
                             break;
                         }
                     }
                 }
             }
+
+            double score = 0;
+            // Для каждого проекта: если завершён – прибавляем q_i, иначе вычитаем c_i
+            foreach (var proj in Projects)
+            {
+                if (completedProjects.Contains(proj.Id))
+                    score += proj.Q;
+                else
+                    score -= proj.C;
+            }
+
             return score;
         }
 

@@ -9,7 +9,7 @@ namespace algo
 {
     public class AnnealingBase
     {
-        static void Evaluate()
+        static List<int> Evaluate()
         {
             // Пример набора предметов (вес, стоимость)
             List<Item> items = new List<Item>
@@ -77,15 +77,15 @@ namespace algo
                 temperature *= coolingRate;
             }
 
-            // Вывод результатов
-            Console.WriteLine("Лучшее найденное значение: " + bestValue);
-            Console.Write("Выбранные предметы (индексы): ");
+            List<int> result = new List<int>();
+
             for (int i = 0; i < numItems; i++)
             {
                 if (bestSolution[i])
-                    Console.Write(i + " ");
+                    result.Add(i);
             }
-            Console.WriteLine();
+
+            return result;
         }
 
 
