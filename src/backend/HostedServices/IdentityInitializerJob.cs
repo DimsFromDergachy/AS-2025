@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace AS_2025.HostedServices;
 
-public class IdentityInitializerHostedService : IHostedService
+public class IdentityInitializerJob : IChainedHostedServiceJob
 {
     private const string DefaultPassword = "Password123";
 
@@ -18,17 +18,19 @@ public class IdentityInitializerHostedService : IHostedService
     };
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<ApplicationDbInitializerHostedService> _logger;
+    private readonly ILogger<IdentityInitializerJob> _logger;
 
-    public IdentityInitializerHostedService(
+    public int Order => 1;
+
+    public IdentityInitializerJob(
         IServiceProvider serviceProvider,
-        ILogger<ApplicationDbInitializerHostedService> logger)
+        ILogger<IdentityInitializerJob> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async Task RunAsync(CancellationToken cancellationToken)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
 
@@ -72,11 +74,6 @@ public class IdentityInitializerHostedService : IHostedService
                 await userManager.AddToRolesAsync(identityUser, userInfo.Roles.Select(x => x.ToString()));
             }
         }
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 
     private record UserInfo(string Email, string Username, string Password, IReadOnlyCollection<UserRole> Roles);

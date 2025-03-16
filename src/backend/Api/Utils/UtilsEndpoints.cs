@@ -13,25 +13,16 @@ public static class UtilsEndpoints
     {
         var group = builder.MapGroup("api/utils").WithTags("Utils");
 
-        group.MapGet("/app-state", async ([FromServices] IContext context, CancellationToken cancellationToken) =>
+        group.MapGet("/app-state", async ([FromServices] IContext context, CancellationToken cancellationToken) => new
         {
-            var departmentsTask = context.Departments.AsNoTracking().ToListAsync(cancellationToken);
-            var teamsTask = context.Teams.AsNoTracking().ToListAsync(cancellationToken);
-            var employeesTask = context.Employees.AsNoTracking().ToListAsync(cancellationToken);
-
-            await System.Threading.Tasks.Task.WhenAll(departmentsTask, teamsTask, employeesTask);
-
-            return new
-            {
-                Departments = departmentsTask.Result,
-                Teams = teamsTask.Result,
-                Employees = employeesTask.Result
-            };
+            Departments = await context.Departments.AsNoTracking().ToListAsync(cancellationToken),
+            Teams = await context.Teams.AsNoTracking().ToListAsync(cancellationToken),
+            Employees = await context.Employees.AsNoTracking().ToListAsync(cancellationToken)
         });
 
-        group.MapPost("/data-rescan", async ([FromServices] ImportDataHostedService importDataHostedService, CancellationToken cancellationToken) =>
+        group.MapPost("/data-rescan", async ([FromServices] ImportDataJob importDataJob, CancellationToken cancellationToken) =>
         {
-            await importDataHostedService.StartAsync(cancellationToken);
+            await importDataJob.RunAsync(cancellationToken);
         });
 
         group.MapGet("/reference-enums", ([FromServices] ReferenceEnumListBuilder referenceEnumListBuilder) =>

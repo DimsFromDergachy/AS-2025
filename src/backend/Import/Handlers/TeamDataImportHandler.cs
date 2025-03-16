@@ -6,12 +6,14 @@ namespace AS_2025.Import.Handlers;
 
 public class TeamDataImportHandler : BaseDataImportHandler, IDataImportHandler<Team>
 {
-    public TeamDataImportHandler(IContext context) : base(context)
+    public TeamDataImportHandler(IContext context, ImportDataContext importDataContext) : base(context, importDataContext)
     {
     }
 
     public async Task HandleAsync(List<Team> data, CancellationToken cancellationToken)
     {
+        ImportDataContext.WithTeams(data);
+
         var teamsImported = data.Select(x => new Domain.Entities.Team()
         {
             ExternalId = x.Id,

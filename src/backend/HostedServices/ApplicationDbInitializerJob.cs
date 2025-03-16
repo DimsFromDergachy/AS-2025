@@ -5,20 +5,22 @@ using Microsoft.Extensions.Options;
 
 namespace AS_2025.HostedServices;
 
-public class ApplicationDbInitializerHostedService : IHostedService
+public class ApplicationDbInitializerJob : IChainedHostedServiceJob
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly ILogger<ApplicationDbInitializerHostedService> _logger;
+    private readonly ILogger<ApplicationDbInitializerJob> _logger;
 
-    public ApplicationDbInitializerHostedService(
+    public int Order => 0;
+
+    public ApplicationDbInitializerJob(
         IServiceProvider serviceProvider,
-        ILogger<ApplicationDbInitializerHostedService> logger)
+        ILogger<ApplicationDbInitializerJob> logger)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    public async Task RunAsync(CancellationToken cancellationToken)
     {
         await using var scope = _serviceProvider.CreateAsyncScope();
 
@@ -38,10 +40,5 @@ public class ApplicationDbInitializerHostedService : IHostedService
         await context.Database.MigrateAsync(cancellationToken: cancellationToken);
 
         _logger.LogInformation("Migrations applied successfully");
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 }

@@ -1,0 +1,72 @@
+[
+  {
+    "id": "1",
+    "name": "CFTeam1",
+    "type": "CrossFunctional",
+    "departmentId": "1",
+    "teamLeadId": null
+  },
+  {
+    "id": "2",
+    "name": "CFTeam2",
+    "type": "CrossFunctional",
+    "departmentId": "1",
+    "teamLeadId": "4"
+  },
+  {
+    "id": "3",
+    "name": "CFTeam3",
+    "type": "CrossFunctional",
+    "departmentId": "2",
+    "teamLeadId": null
+  },
+  {
+    "id": "4",
+    "name": "CFTeam4",
+    "type": "CrossFunctional",
+    "departmentId": "2",
+    "teamLeadId": null
+  },
+  {
+    "id": "5",
+    "name": "CFTeam5",
+    "type": "CrossFunctional",
+    "departmentId": "2",
+    "teamLeadId": null
+  },
+  {
+    "id": "6",
+    "name": "CFTeam6",
+    "type": "CrossFunctional",
+    "departmentId": "3",
+    "teamLeadId": null
+  },
+  {
+    "id": "7",
+    "name": "CFTeam7",
+    "type": "CrossFunctional",
+    "departmentId": "3",
+    "teamLeadId": "11"
+  },
+  {
+    "id": "8",
+    "name": "CFTeam8",
+    "type": "CrossFunctional",
+    "departmentId": "3",
+    "teamLeadId": null
+  },
+  {
+    "id": "9",
+    "name": "CFTeam9",
+    "type": "CrossFunctional",
+    "departmentId": "4",
+    "teamLeadId": "15"
+  },
+  {
+    "id": "10",
+    "name": "CFTeam10",
+    "type": "CrossFunctional",
+    "departmentId": "5",
+    "teamLeadId": "20"
+  }
+]

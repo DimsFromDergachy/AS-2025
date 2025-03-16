@@ -4,10 +4,12 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddHostedServices(this IServiceCollection services)
     {
-        services.AddHostedService<ApplicationDbInitializerHostedService>();
-        services.AddHostedService<ImportDataHostedService>();
-        services.AddSingleton<ImportDataHostedService>(); // to call from utils endpoint
-        services.AddHostedService<IdentityInitializerHostedService>();
+        services.AddTransient<IChainedHostedServiceJob, ApplicationDbInitializerJob>();
+        services.AddTransient<IChainedHostedServiceJob, IdentityInitializerJob>();
+        services.AddTransient<IChainedHostedServiceJob, ImportDataJob>();
+        services.AddTransient<ImportDataJob>(); // for utils endpoint
+
+        services.AddHostedService<ChainedHostedService>();
 
         return services;
     }

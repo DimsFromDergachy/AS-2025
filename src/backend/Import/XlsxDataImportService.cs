@@ -3,7 +3,7 @@ using Ganss.Excel;
 
 namespace AS_2025.Import;
 
-public class XlsxDataImportService<T>
+public class XlsxDataImportService<T> : IXlsxDataImportService
 {
     private readonly IDataImportHandler<T> _handler;
 

@@ -6,12 +6,14 @@ namespace AS_2025.Import.Handlers;
 
 public class EmployeeDataImportHandler : BaseDataImportHandler, IDataImportHandler<Employee>
 {
-    public EmployeeDataImportHandler(IContext context) : base(context)
+    public EmployeeDataImportHandler(IContext context, ImportDataContext importDataContext) : base(context, importDataContext)
     {
     }
 
     public async Task HandleAsync(List<Employee> data, CancellationToken cancellationToken)
     {
+        ImportDataContext.WithEmployees(data);
+
         var employeesImported = data.Select(x => new Domain.Entities.Employee()
         {
             ExternalId = x.Id,

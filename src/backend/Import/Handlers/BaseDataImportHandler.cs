@@ -6,10 +6,12 @@ namespace AS_2025.Import.Handlers;
 public abstract class BaseDataImportHandler
 {
     internal IContext Context;
+    internal ImportDataContext ImportDataContext;
 
-    protected BaseDataImportHandler(IContext context)
+    protected BaseDataImportHandler(IContext context, ImportDataContext importDataContext)
     {
-        this.Context = context;
+        Context = context;
+        ImportDataContext = importDataContext;
     }
 
     protected bool TryGetDepartment(string externalId, [NotNullWhen(true)] out Domain.Entities.Department? department)
