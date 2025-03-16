@@ -33,13 +33,14 @@ builder.Services.AddAuthorization();
 builder.Services
     .AddIdentityCore<ApplicationUser>(options =>
     {
-        options.Password.RequireDigit = false;
-        options.Password.RequireLowercase = false;
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
         options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequireUppercase = false;
+        options.Password.RequireUppercase = true;
         options.Password.RequiredLength = 6;
 
         options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedAccount = false;
     })
     .AddRoles<ApplicationUserRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()

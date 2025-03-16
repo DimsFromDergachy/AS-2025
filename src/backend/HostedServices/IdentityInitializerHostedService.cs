@@ -7,9 +7,9 @@ namespace AS_2025.HostedServices;
 
 public class IdentityInitializerHostedService : IHostedService
 {
-    private const string DefaultPassword = "password";
+    private const string DefaultPassword = "Password123";
 
-    private readonly IReadOnlyCollection<UserInfo> _data = new[]
+    private readonly IReadOnlyCollection<UserInfo> _users = new[]
     {
         new UserInfo("admin@test.com", "admin", DefaultPassword, new[] { UserRole.Administrator }),
         new UserInfo("manager1@test.com", "manager1", DefaultPassword, new[] { UserRole.Manager }),
@@ -40,8 +40,9 @@ public class IdentityInitializerHostedService : IHostedService
 
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationUserRole>>();
+        var signInManager = scope.ServiceProvider.GetRequiredService<SignInManager<ApplicationUser>>();
 
-        var roles = _data.SelectMany(x => x.Roles).Distinct();
+        var roles = _users.SelectMany(x => x.Roles).Distinct();
         foreach (var userRole in roles)
         {
             if (!await roleManager.RoleExistsAsync(userRole.ToString()))
@@ -50,12 +51,12 @@ public class IdentityInitializerHostedService : IHostedService
             }
         }
 
-        foreach (var userInfo in _data)
+        foreach (var userInfo in _users)
         {
             var user = await userManager.FindByEmailAsync(userInfo.Email);
             if (user is not null)
             {
-                continue;
+                await userManager.DeleteAsync(user);
             }
 
             var identityUser = new ApplicationUser
