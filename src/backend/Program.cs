@@ -6,6 +6,7 @@ using AS_2025.Repository;
 using AS_2025.Schema;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using AS_2025.Api.Algos;
 using AS_2025.Api.Client;
 using AS_2025.Api.Department;
 using AS_2025.Api.Employee;
@@ -21,6 +22,7 @@ using AS_2025.HostedServices;
 using AS_2025.Import;
 using AS_2025.ReferenceItem;
 using AS_2025.Tags;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -30,8 +32,21 @@ builder.Services.AddOpenApi();
 builder.Services.AddAuthorization();
 
 builder.Services
-    .AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddIdentityCore<ApplicationUser>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 6;
+
+        options.SignIn.RequireConfirmedEmail = false;
+        options.SignIn.RequireConfirmedAccount = false;
+    })
+    .AddRoles<ApplicationUserRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>();
 
 builder.Services.AddCompressionSetup();
 
@@ -68,18 +83,17 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost", policy =>
+    options.AddPolicy("AllowOnRemoteVM", policy =>
     {
-        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendOriginPort}")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-        policy.WithOrigins($"http://localhost:{applicationOptions.FrontendLocalhostPort}")
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+        policy.WithOrigins($"https://{applicationOptions.HostName}:{applicationOptions.FrontendOriginPort}")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
     });
 });
 
 var app = builder.Build();
+
+app.UseCors("AllowOnRemoteVM");
 
 app.MapOpenApi();
 app.MapScalarApiReference();
@@ -99,6 +113,7 @@ app.MapClientEndpoints();
 app.MapTaskEndpoints();
 app.MapProjectEndpoints();
 app.MapTableControlsPresentationEndpoints();
+app.MapAlgosEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")
@@ -107,7 +122,5 @@ app.MapGroup("api/identity")
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
-
-app.UseCors("AllowLocalhost");
 
 app.Run();

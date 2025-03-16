@@ -41,7 +41,7 @@ public record ListTableControlsPresentationsItem
     [ListColumnSchema(DisplayType = ListColumnDisplayType.Tags, Order = 10, Title = "Tags", TagReferenceEnum = nameof(EmployeeLevel))]
     public List<EmployeeLevel> Tags { get; init; }
 
-    [ListColumnSchema(DisplayType = ListColumnDisplayType.Tags, Order = 11, Title = "ComplexTags", TagReferenceEnum = nameof(EmployeeLevel), TagField = "type")]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Tags, Order = 11, Title = "ComplexTags", TagReferenceEnum = nameof(EmployeeLevel), TagField = "tag")]
     public List<ComplexTag> ComplexTags { get; init; }
 
     [ListColumnSchema(DisplayType = ListColumnDisplayType.Tag, Order = 12, Title = "Tag", TagReferenceEnum = nameof(TaskPriority))]

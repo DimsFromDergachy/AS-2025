@@ -16,15 +16,14 @@ export default function AntTable(props) {
   const { columns, dataSource } = props;
 
   const globalStore = useGlobalStore();
-  const { taggedEnums } = globalStore;
-
   const [currentColumns, setCurrentColumns] = useState([])
   const [currentData, setCurrentData] = useState([])
 
   useEffect(() => {
     if (columns) {
+      const taggedEnums = globalStore.taggedEnums.get();
       setCurrentColumns(columns.filter(col => col.visibilityType === 'Visible').map((col) => {
-        const { urlPattern, displayPattern } = col;
+        const { urlPattern, displayPattern, tagReferenceEnum } = col;
 
         return {
           ...col,
@@ -47,15 +46,14 @@ export default function AntTable(props) {
               case 'Tags':
                 return <div className="flex flex-wrap gap-1">
                   {value.map(tag => {
-                    return typeof tag === 'string' ? (
-                      <Tag key={tag} color="#1677ff">{tag}</Tag>
-                    ) : (
-                      <Tag key={tag.tag} color="#1677ff">{tag.tag}</Tag>
-                    )
+                    const { style } = taggedEnums[tagReferenceEnum]?.find(el => el.key === (tag.tag || tag)) || {};
+                    return <Tag key={tag.tag || tag} color={style || "geekblue"}>{tag.tag || tag}</Tag>
                   })}
                 </div>
-              case 'Tag':
-                return <Tag key={value} color="#1677ff">{value}</Tag>
+              case 'Tag': {
+                const { style } = taggedEnums[tagReferenceEnum]?.find(el => el.key === value) || {};
+                return <Tag key={value} color={style || "geekblue"}>{value}</Tag>
+              }
               case 'Date':
                 return <span>{value ? new Date(value).toLocaleDateString() : 'Нет данных'}</span>
               case 'Checkbox':
@@ -67,7 +65,7 @@ export default function AntTable(props) {
                   strokeColor={value >= 80 ? '#52c41a' : '#1890ff'}
                 />
               case 'Link':
-                return <a href={urlPattern ? getValueFromPattern(urlPattern, record) : value}>{value}</a>
+                return <a href={urlPattern ? getValueFromPattern(urlPattern, record) : value} target={urlPattern ? '_self' : '_blank'}>{value}</a>
         
               default:
                 return displayPattern ? getValueFromPattern(displayPattern, record) : value
@@ -83,6 +81,6 @@ export default function AntTable(props) {
   }, [dataSource])
 
   return (
-    <Table size='small' {...props} columns={currentColumns} dataSource={currentData}/>
+    <Table size='small' {...props} columns={currentColumns} dataSource={currentData} scroll={{ x: 1800 }}/>
   )
 }

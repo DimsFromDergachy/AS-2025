@@ -1,19 +1,11 @@
-# GET https://{{hostname}}:5004/login
-# [Options]
-# insecure: true # TODO: Self signed certificate
-# HTTP 200
+POST https://{{hostname}}:5004/api/identity/login
+    {"email":"WRONG_USER","password":"{{password}}"}
+    HTTP 401
 
-POST https://{{hostname}}:5002/api/identity/login
-# # Access-Control-Request-Headers: authorization,content-type
-# # Access-Control-Request-Method: POST
-# # Host: {{hostname}}:5002
-# # Origin: https://{{hostname}}:5004
-# # Referer: https://{{hostname}}:5004/
-# # Sec-Fetch-Mode: cors
-# # Sec-Fetch-Dest: empty
-# # Sec-Fetch-Site: same-site
-[Options]
-insecure: true # TODO: Self signed certificate
-{}
+POST https://{{hostname}}:5004/api/identity/login
+    {"email":"{{username}}","password":"WRONG_PASSWORD"}
+    HTTP 401
 
-HTTP 204
+POST https://{{hostname}}:5004/api/identity/login
+    {"email":"{{username}}","password":"{{password}}"}
+    HTTP 200

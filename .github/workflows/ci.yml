@@ -4,6 +4,11 @@ on:
   push:
     branches: [ master ]
 
+env:
+  BE_APPLICATION_PORT: 5002
+  FE_APPLICATION_PORT: 5004
+  BACKEND_PATH: https://${{ secrets.VM_HOST }}:5002
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,6 +47,12 @@ jobs:
     - name: Adding Known Hosts
       run: ssh-keyscan -H ${{ secrets.VM_HOST }} >> ~/.ssh/known_hosts
 
+    - name: 'Update env file'
+      run: |
+        echo HOSTNAME=${{ secrets.VM_HOST }} >> ./.env
+        echo FE_APPLICATION_PORT=$FE_APPLICATION_PORT >> ./.env
+        echo BE_APPLICATION_PORT=$BE_APPLICATION_PORT >> ./.env
+
     - name: Deploy to VM
       run: |
         # Deploy script
@@ -54,7 +65,9 @@ jobs:
 
           # Pull latest code (if git repo exists)
           if [ -d .git ]; then
-            git pull
+            git fetch origin
+            git reset origin/master --hard
+            git clean -dfx
           else
             # First-time clone
             git clone https://github.com/${{ github.repository }} .
@@ -69,14 +82,16 @@ jobs:
           # Ensure certificate directory exists
           mkdir -p src/https
 
-          # Generate certificate if it doesn't exist
-          # if [ ! -f src/https/certificate.pfx ]; then
-          #   openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365 -nodes -subj '/CN=localhost'
-          #   openssl pkcs12 -export -out src/https/certificate.pfx -inkey key.pem -in cert.pem -password pass:BLA_BLA_BLA
-          #   rm key.pem cert.pem
-          # fi
-
           # Rebuild and restart containers
           docker compose down
           docker compose up --build -d
         "
+
+  # integration:
+  #   needs: deploy
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - uses: gacts/install-hurl@v1
+  #     # NO HURL FILE => need download from repo
+  #     - run: hurl --insecure --test ./src/test/login.hurl --variables-file ./src/test/.env.local --variable hostname=${{ secrets.VM_HOST }}

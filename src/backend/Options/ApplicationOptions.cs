@@ -10,6 +10,7 @@ public record ApplicationOptions
 
     public DataOptions Data { get; init; } = new();
 
-    public int FrontendOriginPort { get; init; } = 5004;
-    public int FrontendLocalhostPort { get; init; } = 5173;
+    public int FrontendOriginPort { get; init; }
+
+    public string HostName { get; init; } = string.Empty;
 }

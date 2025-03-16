@@ -12,6 +12,9 @@ import {
   UserOutlined,
   TableOutlined,
   DatabaseOutlined,
+  SmileOutlined,
+  CarryOutOutlined,
+  ProjectOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, theme } from 'antd';
 import { apiClient } from 'src/api/client';
@@ -43,6 +46,7 @@ export default function RootLayout() {
   const { loading } = globalStore;
 
   const [_, pageKey] = pathname.split('/');
+  console.log("🚀 * RootLayout.jsx:49 * RootLayout * pageKey:", pageKey);
 
   const { colorBgContainer, borderRadiusLG } = token;
 
@@ -131,6 +135,33 @@ export default function RootLayout() {
           navigate('/employees');
         },
       },
+      {
+        key: 'projects',
+        icon: <ProjectOutlined />,
+        label: 'Проекты',
+        onClick: () => {
+          navigate('/projects');
+        },
+      },
+
+      {
+        key: 'tasks',
+        icon: <CarryOutOutlined />,
+        label: 'Задачи',
+        onClick: () => {
+          navigate('/tasks');
+        },
+      },
+
+      {
+        key: 'customers',
+        icon: <SmileOutlined />,
+        label: 'Клиенты',
+        onClick: () => {
+          navigate('/customers');
+        },
+      },
+
     ],
     [navigate]
   );
@@ -162,6 +193,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!authorized) navigate('/login');
+    else if (!pageKey) navigate('/dashboard');
     else {
       apiClient('/utils/tagged-enums').then(res => {
         globalStore.taggedEnums.set(res);

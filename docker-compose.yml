@@ -110,11 +110,12 @@ services:
       - "${BE_APPLICATION_PORT}:443"
     environment:
       Application__Database__ConnectionString: 'Host=postgres;Port=${POSTGRES_PORT};CommandTimeout=300;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};'
-      Application__HostedServices__EnabledMap__ApplicationDbInitializer: true
-      Application__HostedServices__EnabledMap__ImportData: true
+      Application__HostedServices__EnabledMap__ApplicationDbInitializer: false
+      Application__HostedServices__EnabledMap__ImportData: false
+      Application__HostedServices__EnabledMap__IdentityInitializer: true
       Application__Data__Root: './data/2025'
-      Application__FrontendLocalhostPort: ${FE_LOCALHOST_PORT}
       Application__FrontendOriginPort: ${FE_APPLICATION_PORT}
+      Application__HostName: ${HOSTNAME}
       ASPNETCORE_URLS: 'https://+:443;http://+:8080'
       ASPNETCORE_Kestrel__Certificates__Default__Password: '${CERTIFICATE_PASSWORD}'
       ASPNETCORE_Kestrel__Certificates__Default__Path: '${CERTIFICATE_FILE}'

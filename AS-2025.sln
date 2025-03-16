@@ -10,7 +10,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{723CD42A-07C
 		.dockerignore = .dockerignore
 		.env = .env
 		.gitignore = .gitignore
+		.github\workflows\ci.yml = .github\workflows\ci.yml
+		docs\deploy.md = docs\deploy.md
 		docker-compose.yml = docker-compose.yml
+		docs\install_docker.sh = docs\install_docker.sh
+		readme.md = readme.md
+		docs\toolbox.md = docs\toolbox.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "algo", "src\algo\algo.csproj", "{EFE550C7-F2FC-4E3A-914A-019793AEAA02}"
