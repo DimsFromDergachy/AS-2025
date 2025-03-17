@@ -19,6 +19,10 @@ public class TeamService
     public async Task<IReadOnlyCollection<Team>> ListAsync(ListTeamsFilter filter, CancellationToken cancellationToken)
     {
         return await _context.Teams
+            .Include(x => x.Department)
+            .Include(x => x.TeamLead)
+            .Include(x => x.Members)
+            .Include(x => x.AssignedProjects)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
@@ -26,10 +30,6 @@ public class TeamService
     public Task DeleteAsync(DeleteTeamRequest request, CancellationToken cancellationToken)
     {
         return _context.Teams
-            .Include(x => x.Department)
-            .Include(x => x.TeamLead)
-            .Include(x => x.Members)
-            .Include(x => x.AssignedProjects)
             .Where(x => x.Id == request.Id).ExecuteDeleteAsync(cancellationToken);
     }
 }

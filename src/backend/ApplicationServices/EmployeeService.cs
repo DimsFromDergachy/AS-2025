@@ -19,6 +19,8 @@ public class EmployeeService
     public async Task<IReadOnlyCollection<Employee>> ListAsync(ListEmployeesFilter filter, CancellationToken cancellationToken)
     {
         return await _context.Employees
+            .Include(x => x.Manager)
+            .Include(x => x.Team)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
@@ -26,8 +28,6 @@ public class EmployeeService
     public Task DeleteAsync(DeleteEmployeeRequest request, CancellationToken cancellationToken)
     {
         return _context.Employees
-            .Include(x => x.Manager)
-            .Include(x => x.Team)
             .Where(x => x.Id == request.Id).ExecuteDeleteAsync(cancellationToken);
     }
 }

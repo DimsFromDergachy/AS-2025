@@ -19,6 +19,9 @@ public class DepartmentService
     public async Task<IReadOnlyCollection<Department>> ListAsync(ListDepartmentsFilter filter, CancellationToken cancellationToken)
     {
         return await _context.Departments
+            .Include(x => x.Head)
+            .Include(x => x.Teams)
+            .Include(x => x.Employees)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }
@@ -26,9 +29,6 @@ public class DepartmentService
     public Task DeleteAsync(DeleteDepartmentRequest request, CancellationToken cancellationToken)
     {
         return _context.Departments
-            .Include(x => x.Head)
-            .Include(x => x.Teams)
-            .Include(x => x.Employees)
             .Where(x => x.Id == request.Id).ExecuteDeleteAsync(cancellationToken);
     }
 }
