@@ -19,7 +19,7 @@ public static class DepartmentEndpoints
         {
             var result = await mediator.Send(request ?? new ListDepartmentsRequest());
             return result.ToMinimalApiResult();
-        }).RequireAuthorization(AuthorizationPolicy.User);
+        }).RequireAuthorization(AuthorizationPolicy.RoleIsUser);
 
         group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListDepartmentsItem>());
 

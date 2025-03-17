@@ -1,6 +1,4 @@
-﻿using AS_2025.Tags;
-
-namespace AS_2025.Schema.List;
+﻿namespace AS_2025.Schema.List;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class ListColumnSchemaAttribute : Attribute

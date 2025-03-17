@@ -2,9 +2,13 @@
 
 public static class AuthorizationPolicy
 {
-    public const string Administrator = "administrator";
+    public const string Anonymous = "anonymous";
 
-    public const string Manager = "manager";
+    public const string Authenticated = "authenticated";
 
-    public const string User = "user";
+    public const string RoleIsAdministrator = "roleIsAdministrator";
+
+    public const string RoleIsManager = "roleIsManager";
+
+    public const string RoleIsUser = "roleIsUser";
 }

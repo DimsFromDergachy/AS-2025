@@ -2,5 +2,11 @@
 
 public record ListSchemaModel
 {
-    public IReadOnlyList<ListColumnSchemaItem> Columns { get; init; } = new List<ListColumnSchemaItem>();
+    public string Title { get; init; } = string.Empty;
+
+    public ListColumnSchemaItem[] Columns { get; init; } = Array.Empty<ListColumnSchemaItem>();
+
+    public ListAction[] ColumnActions { get; init; } = new[] { ListAction.View, ListAction.Edit, ListAction.Delete };
+
+    public ListAction[] CommonActions { get; init; } = new[] { ListAction.Search, ListAction.Create };
 }

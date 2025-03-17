@@ -49,9 +49,11 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(AuthorizationPolicy.Administrator, policy => policy.RequireRole(UserRole.Administrator));
-    options.AddPolicy(AuthorizationPolicy.Manager, policy => policy.RequireRole(UserRole.Manager));
-    options.AddPolicy(AuthorizationPolicy.User, policy => policy.RequireRole(UserRole.User));
+    options.AddPolicy(AuthorizationPolicy.Anonymous, policy => policy.Requirements.Add(new AnonymousAuthorizationPolicy()));
+    options.AddPolicy(AuthorizationPolicy.Authenticated, policy => policy.RequireRole(UserRole.Administrator));
+    options.AddPolicy(AuthorizationPolicy.RoleIsAdministrator, policy => policy.RequireRole(UserRole.Administrator));
+    options.AddPolicy(AuthorizationPolicy.RoleIsManager, policy => policy.RequireRole(UserRole.Manager));
+    options.AddPolicy(AuthorizationPolicy.RoleIsUser, policy => policy.RequireRole(UserRole.User));
 });
 
 builder.Services.AddCompressionSetup();

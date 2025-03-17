@@ -21,9 +21,14 @@ public class ListSchemaModelBuilder
             columns.Add(ListColumnSchemaItem.From(attribute, property.Name.ToCamelCase()));
         }
 
+        var listSchemaAttribute = typeof(T).GetCustomAttribute<ListSchemaAttribute>();
+
         return new ListSchemaModel
         {
-            Columns = columns
+            Title = listSchemaAttribute?.Title ?? string.Empty,
+            Columns = columns.ToArray(),
+            ColumnActions = listSchemaAttribute?.ColumnActions ?? new [] { ListAction.None },
+            CommonActions = listSchemaAttribute?.CommonActions ?? new [] { ListAction.None }
         };
     }
 }

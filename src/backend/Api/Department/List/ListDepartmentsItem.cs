@@ -2,6 +2,7 @@
 
 namespace AS_2025.Api.Department.List;
 
+[ListSchema(Title = "Departments", ColumnActions = new [] { ListAction.View, ListAction.Edit, ListAction.Delete }, CommonActions = new [] { ListAction.Search, ListAction.Create })]
 public record ListDepartmentsItem
 {
     [ListColumnSchema(VisibilityType = ListColumnVisibilityType.Hidden, DisplayType = ListColumnDisplayType.None)]
