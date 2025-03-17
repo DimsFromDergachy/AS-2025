@@ -20,16 +20,17 @@ public class BackpackHandler : IRequestHandler<BackpackRequest, Result<BackpackR
 
         var parameters = new AnnealingParameters(request.Temperature, request.CoolingRate, request.IterationsPerTemp);
         var backpackWithAnnealing = new BackpackWithAnnealing(request.Capacity, inputItems, parameters);
-        var (bestValue, selectedItems) = backpackWithAnnealing.Solve();
+        throw new NotImplementedException("Юля, нужно исправить код");
+        // var (bestValue, selectedItems) = backpackWithAnnealing.Solve();
 
-        var response = new BackpackResponse()
-        {
-            InputItems = inputItems,
-            Parameters = parameters,
-            BestValue = bestValue,
-            SelectedItems = selectedItems
-        };
+        // var response = new BackpackResponse()
+        // {
+        //     InputItems = inputItems,
+        //     Parameters = parameters,
+        //     BestValue = bestValue,
+        //     SelectedItems = selectedItems
+        // };
 
-        return System.Threading.Tasks.Task.FromResult(new Result<BackpackResponse>(response));
+        // return System.Threading.Tasks.Task.FromResult(new Result<BackpackResponse>(response));
     }
 }
