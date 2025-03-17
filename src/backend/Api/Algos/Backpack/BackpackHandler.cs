@@ -30,6 +30,6 @@ public class BackpackHandler : IRequestHandler<BackpackRequest, Result<BackpackR
             SelectedItems = algoResult.Solution
         };
 
-        return System.Threading.Tasks.Task.FromResult(new Result<BackpackResponse>(response));
+        // return System.Threading.Tasks.Task.FromResult(new Result<BackpackResponse>(response));
     }
 }

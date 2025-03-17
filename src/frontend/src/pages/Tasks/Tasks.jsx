@@ -7,10 +7,12 @@ import {
 } from '@ant-design/icons';
 
 import { apiClient } from 'src/api/client';
+import { filterByFields } from 'src/helpers/functions';
 
 const Tasks = () => {
-  const [data, setData] = useState(null);
-  const [columns, setColumns] = useState(null);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
@@ -22,6 +24,10 @@ const Tasks = () => {
       setColumns(columns);
     })
   }, []);
+
+  useEffect(() => {
+    setFilteredData(filterByFields(data, searchText, ['name']));
+  }, [searchText, data]);
 
   return (
     <div>
@@ -46,7 +52,7 @@ const Tasks = () => {
 
       <AntTable
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         pagination={{
           pageSize: 10,
           showTotal: total => `Всего записей: ${total}`,

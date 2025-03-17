@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Input, Space, Button } from 'antd';
 import AntTable from 'src/shared/AntTable';
-import { 
+import {
   SearchOutlined,
   UserOutlined,
   TeamOutlined,
   EditOutlined,
   DeleteOutlined,
-  PlusOutlined
+  PlusOutlined,
 } from '@ant-design/icons';
 
 import { apiClient } from 'src/api/client';
+import { filterByFields } from 'src/helpers/functions';
 
 const Departments = () => {
-  const [data, setData] = useState(null);
-  const [columns, setColumns] = useState(null);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
@@ -24,8 +26,12 @@ const Departments = () => {
     });
     apiClient.get('/department/list/schema').then(({ columns }) => {
       setColumns(columns);
-    })
+    });
   }, []);
+
+  useEffect(() => {
+    setFilteredData(filterByFields(data, searchText, ['name']));
+  }, [searchText, data]);
 
   return (
     <div>
@@ -38,8 +44,8 @@ const Departments = () => {
             onSearch={setSearchText}
             className="w-full sm:w-64"
           />
-          <Button 
-            type="primary" 
+          <Button
+            type="primary"
             icon={<PlusOutlined />}
             className="bg-blue-500 hover:bg-blue-600"
           >
@@ -50,7 +56,7 @@ const Departments = () => {
 
       <AntTable
         columns={columns}
-        dataSource={data}
+        dataSource={filteredData}
         pagination={{
           pageSize: 10,
           showTotal: total => `Всего записей: ${total}`,

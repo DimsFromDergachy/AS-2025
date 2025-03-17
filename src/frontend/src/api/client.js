@@ -27,8 +27,10 @@ apiClient.interceptors.response.use(
     return response.data;
   },
   error => {
-    const [message = error.message] = Object.values(error.response?.data?.errors || {});
-    globalStore.loading.set(false);
+    const [message = error.message] = Object.values(
+      error.response?.data?.errors || {}
+    );
+    globalStore.merge({ loading: false, serverError: { message } });
     return Promise.reject(new Error(message));
   }
 );
