@@ -3,7 +3,10 @@ import { devtools } from '@hookstate/devtools';
 
 export const globalStore = hookstate({
   loading: false,
-  error: false,
+  serverError: {
+    message: '',
+  },
+  mobile: false,
   menuPermissions: {},
   rolePermissions: {},
   modal: {

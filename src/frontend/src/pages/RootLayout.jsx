@@ -1,183 +1,35 @@
-import React, { useState, useMemo, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from 'src/shared/Auth/AuthContext';
-import { Button, Spin, Radio } from 'antd';
+import { Button, App } from 'antd';
 import { Suspense } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
-import {
-  AppstoreOutlined,
-  ContactsOutlined,
-  PartitionOutlined,
-  TeamOutlined,
-  LogoutOutlined,
-  UserOutlined,
-  TableOutlined,
-  DatabaseOutlined,
-  SmileOutlined,
-  CarryOutOutlined,
-  ProjectOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu, theme } from 'antd';
+import { Layout, theme } from 'antd';
 import { apiClient } from 'src/api/client';
 import { useGlobalStore } from 'src/stores/globalStore';
+import SideMenu from 'src/layouts/SideMenu/SideMenu';
 import Loader from 'src/widgets/Loader';
 
 const { Header, Content, Footer, Sider } = Layout;
-
-// const items = [
-//   AppstoreOutlined,
-//   PartitionOutlined,
-//   ContactsOutlined,
-//   TeamOutlined,
-// ].map((icon, index) => ({
-//   key: String(index + 1),
-//   icon: React.createElement(icon),
-//   label: `nav ${index + 1}`,
-// }));
 
 export default function RootLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { token } = theme.useToken();
-  const { authorized, logout } = useContext(AuthContext);
+  const { authorized } = useContext(AuthContext);
+  const { message } = App.useApp();
   const [collapsed, setCollapsed] = useState(true);
-  const [breakpointBroken, setBreakpointBroken] = useState(false);
 
   const globalStore = useGlobalStore();
-  const { loading } = globalStore;
+  const loading = globalStore.loading.get();
+  const error = globalStore.serverError.get({ noproxy: true });
+  const mobile = globalStore.mobile.get();
 
   const [_, pageKey] = pathname.split('/');
-  console.log("🚀 * RootLayout.jsx:49 * RootLayout * pageKey:", pageKey);
 
   const { colorBgContainer, borderRadiusLG } = token;
 
-  const items = useMemo(
-    () => [
-      {
-        key: 'dashboard',
-        icon: <AppstoreOutlined />,
-        label: 'Стартовая панель',
-        onClick: () => {
-          navigate('/dashboard');
-        },
-      },
-      {
-        key: 'projects-static',
-        icon: <PartitionOutlined />,
-        label: 'Проекты(static)',
-        onClick: () => {
-          navigate('/projects-static');
-        },
-      },
-      {
-        key: 'customers-static',
-        icon: <ContactsOutlined />,
-        label: 'Заказчики(static)',
-        onClick: () => {
-          navigate('/customers-static');
-        },
-      },
-      {
-        key: 'teams-static',
-        icon: <TeamOutlined />,
-        label: 'Команды(static)',
-        onClick: () => {
-          navigate('/teams-static');
-        },
-      },
-      // {
-      //   key: 'projects',
-      //   icon: <PartitionOutlined />,
-      //   label: 'Проекты',
-      //   onClick: () => {
-      //     navigate('/projects');
-      //   },
-      // },
-      // {
-      //   key: 'customers',
-      //   icon: <ContactsOutlined />,
-      //   label: 'Заказчики',
-      //   onClick: () => {
-      //     navigate('/customers');
-      //   },
-      // },
-      {
-        key: 'superTable',
-        icon: <TableOutlined />,
-        label: 'Просто таблица',
-        onClick: () => {
-          navigate('/superTable');
-        },
-      },
-
-      {
-        key: 'departments',
-        icon: <DatabaseOutlined />,
-        label: 'Отделы',
-        onClick: () => {
-          navigate('/departments');
-        },
-      },
-
-
-      {
-        key: 'teams',
-        icon: <TeamOutlined />,
-        label: 'Команды',
-        onClick: () => {
-          navigate('/teams');
-        },
-      },
-      {
-        key: 'employees',
-        icon: <UserOutlined />,
-        label: 'Сотрудники',
-        onClick: () => {
-          navigate('/employees');
-        },
-      },
-      {
-        key: 'projects',
-        icon: <ProjectOutlined />,
-        label: 'Проекты',
-        onClick: () => {
-          navigate('/projects');
-        },
-      },
-
-      {
-        key: 'tasks',
-        icon: <CarryOutOutlined />,
-        label: 'Задачи',
-        onClick: () => {
-          navigate('/tasks');
-        },
-      },
-
-      {
-        key: 'customers',
-        icon: <SmileOutlined />,
-        label: 'Клиенты',
-        onClick: () => {
-          navigate('/customers');
-        },
-      },
-
-    ],
-    [navigate]
-  );
-
-  const options = useMemo(
-    () =>
-      items.map(item => ({
-        label: item.icon,
-        value: item.key,
-      })),
-    [items]
-  );
-
-  // Обработчик брейкпоинтов для адаптивности
   const handleBreakpoint = broken => {
-    setBreakpointBroken(broken);
+    globalStore.mobile.set(broken);
     if (broken) setCollapsed(true);
   };
 
@@ -185,10 +37,6 @@ export default function RootLayout() {
     if (type === 'clickTrigger') {
       setCollapsed(collapsed);
     }
-  };
-
-  const handleChange = e => {
-    navigate(`/${e.target.value}`);
   };
 
   useEffect(() => {
@@ -201,52 +49,31 @@ export default function RootLayout() {
     }
   }, [navigate, authorized]);
 
+  useEffect(() => {
+    if (error.message) {
+      message.error(error.message);
+      globalStore.serverError.set({message: ''});
+    }
+  }, [message, error]);
+
   return (
     authorized && (
       <Suspense fallback={<Loader />}>
-        <Layout hasSider className="min-h-screen max-h-screen">
-          {/* Адаптивный сайдбар */}
+        <Layout hasSider className="min-h-screen max-h-dvh">
           <Sider
             collapsible
             collapsed={collapsed}
-            collapsedWidth={breakpointBroken ? 0 : 60}
+            collapsedWidth={mobile ? 0 : 60}
             breakpoint="md"
             onBreakpoint={handleBreakpoint}
             onCollapse={handleCollapse}
-            className="h-screen sticky top-0 left-0 overflow-y-auto shadow-lg transition-all"
-            // trigger={null}
+            className={`${mobile ? 'absolute z-100' : 'sticky'} h-screen top-0 left-0 shadow-lg transition-all`}
+            zeroWidthTriggerStyle={{ top: '12px' }}
           >
-            <div className="h-8 bg-gray-800 m-4 rounded" />
-            <div className="h-[calc(100%-5rem)] flex flex-col justify-between">
-              <Menu
-                theme="dark"
-                mode="inline"
-                defaultSelectedKeys={[pageKey]}
-                items={items}
-                className="[&_.ant-menu-item]:!mt-0"
-              />
-
-              <Menu
-                theme="dark"
-                mode="inline"
-                selectable={false}
-                items={[
-                  {
-                    key: 'logout',
-                    icon: <LogoutOutlined />,
-                    label: 'Выход',
-                    onClick: () => {
-                      logout();
-                    },
-                  },
-                ]}
-                className="[&_.ant-menu-item]:!mt-0"
-              />
-            </div>
+            <SideMenu setCollapsed={setCollapsed}/>
           </Sider>
 
           <Layout className="bg-gray-50">
-            {/* Хедер с кнопкой меню */}
             <Header
               className="sticky top-0 z-10 p-0 shadow-sm flex items-center"
               style={{
@@ -270,7 +97,7 @@ export default function RootLayout() {
             </Content>
 
             {/* Футер */}
-            {breakpointBroken && (
+            {/* {breakpointBroken && (
               <Footer className="p-2 m-0">
                 <Radio.Group
                   block
@@ -282,8 +109,8 @@ export default function RootLayout() {
                   onChange={handleChange}
                 />
               </Footer>
-            )}
-            {loading.get() && <Loader />}
+            )} */}
+            {loading && <Loader />}
           </Layout>
         </Layout>
       </Suspense>
