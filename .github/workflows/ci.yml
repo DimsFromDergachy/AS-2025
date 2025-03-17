@@ -12,11 +12,11 @@ env:
   TG_CHAT: -100${{ secrets.TG_CHAT_ID }}
   TG_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
   TG_SUCCESS_MESSAGE: |
-    CI: Success
-    By: ${{ github.actor }}
+    🚀 New Version Published!!!
+    💯 GG ${{ github.actor }}!
   TG_FAILURE_MESSAGE: |
-    CI: Fail
-    By: ${{ github.actor}}
+    ❌ Fail to publish ...
+    🥺 ${{ github.actor }} - R U OK?
 
 jobs:
   build:
