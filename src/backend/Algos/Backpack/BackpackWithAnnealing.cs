@@ -1,4 +1,5 @@
 ﻿using AS_2025.Algos.Common;
+using AS_2025.Algos.TasksSchedule.Models;
 
 namespace AS_2025.Algos.Backpack;
 
@@ -15,7 +16,7 @@ public class BackpackWithAnnealing
         _parameters = parameters;
     }
 
-    public BackpackSolution Solve()
+    public SolutionResponse<Item> Solve()
     {
         var items = _items.Select(i => i with { }).ToList();
         var numItems = _items.Count;
@@ -81,7 +82,7 @@ public class BackpackWithAnnealing
             selectedItems.Add(_items.ElementAt(i));
         }
 
-        return new BackpackSolution(bestValue, selectedItems);
+        return new SolutionResponse<Item>(selectedItems, bestValue);
     }
 
     /*static void Evaluate()
