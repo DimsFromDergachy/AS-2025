@@ -1,10 +1,7 @@
 ﻿using AS_2025.Algos.Common;
 using AS_2025.Algos.TasksSchedule.Models;
-using AS_2025.Domain.Entities;
 
 namespace AS_2025.Algos.TasksSchedule;
-
-public record SimulatedAnnealingSchedulerSolution(double BestScore, IReadOnlyCollection<ProjectInWorkResponse> ProjectsInWork);
 
 public class SimulatedAnnealingScheduler
 {
@@ -24,7 +21,7 @@ public class SimulatedAnnealingScheduler
     }
 
     // Основной метод – симулированный отжиг
-    public SimulatedAnnealingSchedulerSolution Solve()
+    public SolutionResponse<ProjectInWorkResponse> Solve()
     {
         // Инициализируем начальное решение: ни один проект не назначен
         ScheduleSolution currentSolution = new ScheduleSolution(_teams, _projects);
@@ -191,7 +188,7 @@ public class SimulatedAnnealingScheduler
     }
 
     // Преобразование решения в итоговый список назначений с вычислением start/end для каждого проекта, укладывающегося в квартал
-    private SimulatedAnnealingSchedulerSolution ConvertToResult(double bestScore, ScheduleSolution solution)
+    private SolutionResponse<ProjectInWorkResponse> ConvertToResult(double bestScore, ScheduleSolution solution)
     {
         var projectsInWork = new List<ProjectInWorkResponse>();
 
@@ -219,6 +216,6 @@ public class SimulatedAnnealingScheduler
             }
         }
 
-        return new SimulatedAnnealingSchedulerSolution(bestScore, projectsInWork);
+        return new SolutionResponse<ProjectInWorkResponse>(projectsInWork, bestScore);
     }
 }

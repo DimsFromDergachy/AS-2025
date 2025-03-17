@@ -27,15 +27,15 @@ public class SchedulerHandler : IRequestHandler<SchedulerRequest, Result<Schedul
 
         var parameters = new AnnealingParameters(request.Temperature, request.CoolingRate, request.IterationsPerTemp);
         var simulatedAnnealingScheduler = new SimulatedAnnealingScheduler(inputTeams,  inputProjects, request.QuarterDays, parameters);
-        var (bestScore, projectsInWork) = simulatedAnnealingScheduler.Solve();
+        var algoResult = simulatedAnnealingScheduler.Solve();
 
         var response = new SchedulerResponse()
         {
             InputTeams = inputTeams,
             InputProjects = inputProjects,
             Parameters = parameters,
-            BestScore = bestScore,
-            ProjectsInWork = projectsInWork
+            BestScore = algoResult.Score,
+            ProjectsInWork = algoResult.Solution
         };
 
         return System.Threading.Tasks.Task.FromResult(new Result<SchedulerResponse>(response));
