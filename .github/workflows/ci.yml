@@ -16,7 +16,7 @@ env:
     By: ${{ github.actor }}
   TG_FAILURE_MESSAGE: |
     CI: Fail
-    By: ${{ github.actor_id}}
+    By: ${{ github.actor}}
 
 jobs:
   build:
@@ -38,6 +38,13 @@ jobs:
       
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
+
+    - name: Send FAILURE message
+      if: ${{ failure() }}
+      run: |
+        curl --header 'Content-Type: application/json' \
+             --data '{"chat_id":"${{ env.TG_CHAT }}","text":"${{ env.TG_FAILURE_MESSAGE }}"}' \
+             'https://api.telegram.org/bot${{ env.TG_TOKEN }}/sendMessage'
 
   deploy:
     needs: build
@@ -96,24 +103,23 @@ jobs:
           docker compose up --build -d
         "
 
+    - name: Send FAILURE message
+      if: ${{ failure() }}
+      run: |
+        curl --header 'Content-Type: application/json' \
+             --data '{"chat_id":"${{ env.TG_CHAT }}","text":"${{ env.TG_FAILURE_MESSAGE }}"}' \
+             'https://api.telegram.org/bot${{ env.TG_TOKEN }}/sendMessage'
+
   notify:
     needs: deploy
     runs-on: ubuntu-latest
-
     steps:
-      - name: Send SUCCESS message
-        if: ${{ success() }}
-        run: |
-          curl --header 'Content-Type: application/json' \
-               --data '{"chat_id":"${TG_CHAT}","text":"${TG_SUCCESS_MESSAGE }}"}' \
-               'https://api.telegram.org/bot${TG_TOKEN}/sendMessage'
-
-      - name: Send FAILURE message
-        if: ${{ failure() }}
-        run: |
-          curl --header 'Content-Type: application/json' \
-               --data '{"chat_id":"${TG_CHAT}","text":"${TG_FAILURE_MESSAGE }}"}' \
-               'https://api.telegram.org/bot${TG_TOKEN}/sendMessage'
+    - name: Send SUCCESS message
+      if: ${{ failure() }}
+      run: |
+        curl --header 'Content-Type: application/json' \
+             --data '{"chat_id":"${{ env.TG_CHAT }}","text":"${{ env.TG_SUCCESS_MESSAGE }}"}' \
+             'https://api.telegram.org/bot${{ env.TG_TOKEN }}/sendMessage'
 
   # integration:
   #   needs: deploy
