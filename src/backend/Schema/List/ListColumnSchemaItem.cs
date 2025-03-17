@@ -27,6 +27,8 @@ public class ListColumnSchemaItem
 
     public string TagField { get; init; }
 
+    public NumberFormat? NumberFormat { get; init; }
+
     public static ListColumnSchemaItem From(ListColumnSchemaAttribute attribute, string key)
     {
         return new ListColumnSchemaItem
@@ -43,6 +45,7 @@ public class ListColumnSchemaItem
             Searchable = attribute.Searchable,
             TagReferenceEnum = attribute.TagReferenceEnum,
             TagField = attribute.TagField,
+            NumberFormat = NumberFormat.From(attribute)
         };
     }
 }

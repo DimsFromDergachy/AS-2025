@@ -17,7 +17,7 @@ public class ListTableControlsPresentationsHandler : IRequestHandler<ListTableCo
         faker.RuleFor(x => x.StringPattern, f => f.Random.String2(8, 15));
         faker.RuleFor(x => x.Text, f => f.Random.Words(f.Random.Int(15, 25)));
         faker.RuleFor(x => x.Integer, f => f.Random.Int());
-        faker.RuleFor(x => x.Double, f => f.Random.Double());
+        faker.RuleFor(x => x.Decimal, f => f.Random.Double());
         faker.RuleFor(x => x.Date, f => f.Date.PastDateOnly());
         faker.RuleFor(x => x.Checkbox, f => f.Random.Bool());
         faker.RuleFor(x => x.Link, f => $"https://google.com/?q={f.Company.CompanyName()}");

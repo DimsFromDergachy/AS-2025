@@ -7,9 +7,9 @@ public class ListColumnSchemaAttribute : Attribute
 
     public int Order { get; init; }
 
-    public ListColumnVisibilityType VisibilityType { get; init; }
+    public ListColumnVisibilityType VisibilityType { get; init; } = ListColumnVisibilityType.Visible;
 
-    public ListColumnDisplayType DisplayType { get; init; }
+    public ListColumnDisplayType DisplayType { get; init; } = ListColumnDisplayType.String;
 
     public string DisplayPattern { get; init; }
 
@@ -24,4 +24,8 @@ public class ListColumnSchemaAttribute : Attribute
     public string TagReferenceEnum { get; init; }
 
     public string TagField { get; init; }
+
+    public bool NumberFormatUseGrouping { get; init; } = true;
+
+    public int NumberFormatMaximumFractionDigits { get; init; } = 20;
 }

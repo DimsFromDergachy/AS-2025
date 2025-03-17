@@ -6,7 +6,7 @@ public enum ListColumnDisplayType
     String,
     Text,
     Integer,
-    Double,
+    Decimal,
     Date,
     Checkbox,
     Link,

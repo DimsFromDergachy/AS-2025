@@ -23,8 +23,8 @@ public record ListTableControlsPresentationsItem
     [ListColumnSchema(DisplayType = ListColumnDisplayType.Integer, Order = 4, Title = "Integer")]
     public int Integer { get; init; }
 
-    [ListColumnSchema(DisplayType = ListColumnDisplayType.Double, Order = 5, Title = "Double")]
-    public double Double { get; init; }
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Decimal, Order = 5, Title = "Decimal", NumberFormatUseGrouping = true, NumberFormatMaximumFractionDigits = 2)]
+    public double Decimal { get; init; }
 
     [ListColumnSchema(DisplayType = ListColumnDisplayType.Date, Order = 6, Title = "Date")]
     public DateOnly Date { get; init; }
