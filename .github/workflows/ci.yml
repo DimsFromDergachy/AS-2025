@@ -31,7 +31,7 @@ jobs:
         dotnet-version: 9.0.x
         
     - name: Restore dependencies
-      run: dotnet_wrong_command restore
+      run: dotnet restore
       
     - name: Build
       run: dotnet build --no-restore --configuration Release
