@@ -12,8 +12,8 @@ env:
   TG_CHAT: -100${{ secrets.TG_CHAT_ID }}
   TG_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
   TG_SUCCESS_MESSAGE: |
-    🚀 New Version Published!!!
-    💯 GG ${{ github.actor }}!
+    ✅ Has been published
+    😎 ${{ github.actor }} - GG!
   TG_FAILURE_MESSAGE: |
     ❌ Fail to publish ...
     🥺 ${{ github.actor }} - R U OK?
