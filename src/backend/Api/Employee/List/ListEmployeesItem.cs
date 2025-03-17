@@ -15,7 +15,7 @@ public record ListEmployeesItem
     [ListColumnSchema(DisplayType = ListColumnDisplayType.String, Title = "Name", Order = 0)]
     public string FullName { get; init; }
 
-    [ListColumnSchema(DisplayType = ListColumnDisplayType.String, Title = "Type", Order = 1)]
+    [ListColumnSchema(DisplayType = ListColumnDisplayType.Tag, Title = "Type", Order = 1, TagReferenceEnum = nameof(EmployeeType))]
     public string Type { get; init; }
 
     [ListColumnSchema(DisplayType = ListColumnDisplayType.Tag, Title = "Level", Order = 2, TagReferenceEnum = nameof(EmployeeLevel))]
