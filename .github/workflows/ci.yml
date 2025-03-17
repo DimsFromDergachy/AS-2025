@@ -115,7 +115,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Send SUCCESS message
-      if: ${{ failure() }}
       run: |
         curl --header 'Content-Type: application/json' \
              --data '{"chat_id":"${{ env.TG_CHAT }}","text":"${{ env.TG_SUCCESS_MESSAGE }}"}' \
