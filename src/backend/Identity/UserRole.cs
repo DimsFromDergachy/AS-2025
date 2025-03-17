@@ -1,8 +1,10 @@
 ﻿namespace AS_2025.Identity;
 
-public enum UserRole
+public static class UserRole
 {
-    Administrator,
-    Manager,
-    User
+    public static string Administrator = "Administrator";
+
+    public static string Manager = "Manager";
+
+    public static string User = "User";
 }

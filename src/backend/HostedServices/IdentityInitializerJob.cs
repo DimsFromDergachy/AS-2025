@@ -76,5 +76,5 @@ public class IdentityInitializerJob : IChainedHostedServiceJob
         }
     }
 
-    private record UserInfo(string Email, string Username, string Password, IReadOnlyCollection<UserRole> Roles);
+    private record UserInfo(string Email, string Username, string Password, IReadOnlyCollection<string> Roles);
 }

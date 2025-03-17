@@ -29,8 +29,6 @@ builder.Configuration.AddJsonFile("appsettings.Local.json", true);
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddAuthorization();
-
 builder.Services
     .AddIdentityCore<ApplicationUser>(options =>
     {
@@ -47,6 +45,14 @@ builder.Services
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddIdentityApiEndpoints<ApplicationUser>();
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(AuthorizationPolicy.Administrator, policy => policy.RequireRole(UserRole.Administrator));
+    options.AddPolicy(AuthorizationPolicy.Manager, policy => policy.RequireRole(UserRole.Manager));
+    options.AddPolicy(AuthorizationPolicy.User, policy => policy.RequireRole(UserRole.User));
+});
 
 builder.Services.AddCompressionSetup();
 

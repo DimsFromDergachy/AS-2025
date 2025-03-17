@@ -1,6 +1,7 @@
 ﻿using Ardalis.Result.AspNetCore;
 using AS_2025.Api.Department.List;
 using AS_2025.Api.Department.ReferenceList;
+using AS_2025.Identity;
 using AS_2025.Schema.List;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ public static class DepartmentEndpoints
         {
             var result = await mediator.Send(request ?? new ListDepartmentsRequest());
             return result.ToMinimalApiResult();
-        });
+        }).RequireAuthorization(AuthorizationPolicy.User);
 
         group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListDepartmentsItem>());
 
