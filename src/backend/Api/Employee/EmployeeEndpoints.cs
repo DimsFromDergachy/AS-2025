@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result.AspNetCore;
+using AS_2025.Api.Employee.Delete;
 using AS_2025.Api.Employee.List;
 using AS_2025.Api.Employee.ReferenceList;
 using AS_2025.Schema.List;
@@ -12,7 +13,8 @@ public static class EmployeeEndpoints
 {
     public static void MapEmployeeEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/employee").WithTags("Employee");
+        var group = builder.MapGroup("api/employee")
+            .WithTags("Employee");
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListEmployeesRequest? request) =>
         {
@@ -25,6 +27,12 @@ public static class EmployeeEndpoints
         group.MapGet("/reference-list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ReferenceListEmployeesRequest? request) =>
         {
             var result = await mediator.Send(request ?? new ReferenceListEmployeesRequest());
+            return result.ToMinimalApiResult();
+        });
+
+        group.MapDelete("/{id:guid}", async (IMediator mediator, [FromRoute] Guid id, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] DeleteEmployeeRequest? request) =>
+        {
+            var result = await mediator.Send((request ?? new DeleteEmployeeRequest()) with { Id = id });
             return result.ToMinimalApiResult();
         });
     }

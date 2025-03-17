@@ -1,0 +1,1 @@
+﻿internal record GenerateInfo(string ModelName, IReadOnlyCollection<Feature> Features);

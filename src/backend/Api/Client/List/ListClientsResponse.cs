@@ -1,5 +1,4 @@
-﻿
-namespace AS_2025.Api.Client.List;
+﻿namespace AS_2025.Api.Client.List;
 
 public record ListClientsResponse
 {

@@ -1,5 +1,4 @@
-﻿
-namespace AS_2025.Api.Project.List;
+﻿namespace AS_2025.Api.Project.List;
 
 public record ListProjectsResponse
 {

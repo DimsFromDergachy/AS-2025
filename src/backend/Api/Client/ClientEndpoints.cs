@@ -1,4 +1,5 @@
 ﻿using Ardalis.Result.AspNetCore;
+using AS_2025.Api.Client.Delete;
 using AS_2025.Api.Client.List;
 using AS_2025.Api.Client.ReferenceList;
 using AS_2025.Schema.List;
@@ -12,7 +13,8 @@ public static class ClientEndpoints
 {
     public static void MapClientEndpoints(this IEndpointRouteBuilder builder)
     {
-        var group = builder.MapGroup("api/client").WithTags("Client");
+        var group = builder.MapGroup("api/client")
+            .WithTags("Client");
 
         group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListClientsRequest? request) =>
         {
@@ -25,6 +27,12 @@ public static class ClientEndpoints
         group.MapGet("/reference-list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ReferenceListClientsRequest? request) =>
         {
             var result = await mediator.Send(request ?? new ReferenceListClientsRequest());
+            return result.ToMinimalApiResult();
+        });
+
+        group.MapDelete("/{id:guid}", async (IMediator mediator, [FromRoute] Guid id, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] DeleteClientRequest? request) =>
+        {
+            var result = await mediator.Send((request ?? new DeleteClientRequest()) with { Id = id });
             return result.ToMinimalApiResult();
         });
     }

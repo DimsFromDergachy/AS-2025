@@ -9,16 +9,21 @@ public class ReferenceListTeamsHandler : IRequestHandler<ReferenceListTeamsReque
 {
     private readonly TeamService _service;
     private readonly ReferenceListBuilder _referenceListBuilder;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ReferenceListTeamsHandler(TeamService service, ReferenceListBuilder referenceListBuilder)
+    public ReferenceListTeamsHandler(
+        TeamService service, 
+        ReferenceListBuilder referenceListBuilder,
+        IHttpContextAccessor httpContextAccessor)
     {
         _service = service;
         _referenceListBuilder = referenceListBuilder;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<Result<ReferenceListResponse>> Handle(ReferenceListTeamsRequest request, CancellationToken cancellationToken)
     {
-        var items = (await _service.ListAsync(cancellationToken)).ToList();
+        var items = (await _service.ListAsync(request.Filter, cancellationToken)).ToList();
         return new ReferenceListResponse
         {
             Items = _referenceListBuilder.Build(items)

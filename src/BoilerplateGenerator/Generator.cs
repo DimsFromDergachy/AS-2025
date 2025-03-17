@@ -5,7 +5,7 @@ using Scriban.Runtime;
 
 namespace AS_2025;
 
-public class Generator
+internal class Generator
 {
     private readonly string _fileSystemRoot;
 
@@ -19,27 +19,35 @@ public class Generator
         }
     }
 
-    public void Generate(Dictionary<string, string> templates, List<string> modelNames)
+    public void Generate(Dictionary<Feature, Dictionary<string, string>> templates, List<GenerateInfo> generateInfos)
     {
         Console.WriteLine("[Generator.Generate] STARTED");
 
-        foreach (var modelName in modelNames)
+        foreach (var generateInfo in generateInfos)
         {
-            Console.WriteLine($"[Generator.Generate] for model: {modelName}");
+            Console.WriteLine($"[Generator.Generate] for model: {generateInfo.ModelName}");
 
-            foreach (var (path, templateContent) in templates)
+            foreach (var feature in generateInfo.Features)
             {
-                var processedPath = ProcessPathPlaceholders(path, modelName);
-
-                var modelData = new Dictionary<string, object>
+                if (!templates.ContainsKey(feature))
                 {
-                    { "modelName", modelName.ToCamelCase() },
-                    { "ModelName", modelName }
-                };
+                    continue;
+                }
 
-                var absolutePath = Path.Combine(_fileSystemRoot, processedPath);
+                foreach (var (path, templateContent) in templates[feature])
+                {
+                    var processedPath = ProcessPathPlaceholders(path, generateInfo.ModelName);
 
-                GenerateFile(templateContent, modelData, absolutePath);
+                    var modelData = new Dictionary<string, object>
+                    {
+                        { "modelName", generateInfo.ModelName.ToCamelCase() },
+                        { "ModelName", generateInfo.ModelName }
+                    };
+
+                    var absolutePath = Path.Combine(_fileSystemRoot, processedPath);
+
+                    GenerateFile(templateContent, modelData, absolutePath);
+                }
             }
         }
 

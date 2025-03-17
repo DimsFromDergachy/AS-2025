@@ -1,5 +1,4 @@
-﻿
-namespace AS_2025.Api.Task.List;
+﻿namespace AS_2025.Api.Task.List;
 
 public record ListTasksResponse
 {
