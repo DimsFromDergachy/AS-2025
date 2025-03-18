@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
-  DatePicker,
-  Input,
   Progress,
-  Select,
   Space,
   Table,
   Tag,
+  Typography
 } from 'antd';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -16,10 +14,13 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { CheckCircleFilled } from '@ant-design/icons';
 import { useGlobalStore } from 'src/stores/globalStore';
 import FilterPopup from './FilterPopup';
+import AntIcon from '../AntIcon';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(isBetween);
+
+const { Text } = Typography;
 
 const fullWidthColumns = ['Tags', 'Tag', 'Percent'];
 
@@ -30,7 +31,7 @@ function getValueFromPattern(urlPattern, item) {
 }
 
 export default function AntTable(props) {
-  const { columns, dataSource } = props;
+  const { columns, dataSource, availableActions } = props;
 
   const globalStore = useGlobalStore();
   const [currentColumns, setCurrentColumns] = useState([]);
@@ -238,6 +239,10 @@ export default function AntTable(props) {
                           : 'Нет данных'}
                       </span>
                     );
+                  case 'Decimal': {
+                    const { numberFormat } = col;
+                    return <Text title={value}>{Intl.NumberFormat('ru', numberFormat).format(value)}</Text>;
+                    }
                   case 'Checkbox':
                     return value ? (
                       <CheckCircleFilled
@@ -267,7 +272,24 @@ export default function AntTable(props) {
                         {value}
                       </a>
                     );
-
+                  
+                  case 'Actions': {
+                    const { actions = {} } = col;
+                    return (
+                      <Space>
+                        {availableActions.map((action, i) => (
+                          <Button
+                            className={actions[action]?.className || ''}
+                            key={i}
+                            type="link"
+                            size="small"
+                            icon={<AntIcon name={actions[action]?.iconName} />}
+                            onClick={() => actions[action]?.onClick(record.id)}
+                          />
+                        ))}
+                      </Space>
+                    );
+                  }
                   default:
                     return displayPattern
                       ? getValueFromPattern(displayPattern, record)
@@ -279,7 +301,7 @@ export default function AntTable(props) {
           })
       );
     }
-  }, [columns]);
+  }, [columns, availableActions]);
 
   useEffect(() => {
     setCurrentData(dataSource);
