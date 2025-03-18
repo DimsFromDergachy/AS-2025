@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from 'src/shared/Auth/AuthContext';
-import { Button, App } from 'antd';
+import { App } from 'antd';
 import { Suspense } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { Layout, theme } from 'antd';
@@ -9,7 +9,7 @@ import { useGlobalStore } from 'src/stores/globalStore';
 import SideMenu from 'src/layouts/SideMenu/SideMenu';
 import Loader from 'src/widgets/Loader';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 export default function RootLayout() {
   const navigate = useNavigate();
@@ -23,6 +23,7 @@ export default function RootLayout() {
   const loading = globalStore.loading.get();
   const error = globalStore.serverError.get({ noproxy: true });
   const mobile = globalStore.mobile.get();
+  const enums = globalStore.enums.get();
 
   const [_, pageKey] = pathname.split('/');
 
@@ -43,16 +44,20 @@ export default function RootLayout() {
     if (!authorized) navigate('/login');
     else if (!pageKey) navigate('/dashboard');
     else {
-      apiClient('/utils/tagged-enums').then(res => {
-        globalStore.taggedEnums.set(res);
-      });
+      const taggedEnumsReq = apiClient('/utils/tagged-enums');
+      const referenceEnumsReq = apiClient('/utils/reference-enums');
+      Promise.all([taggedEnumsReq, referenceEnumsReq]).then(
+        ([taggedEnums, referenceEnums]) => {
+          globalStore.enums.set({ taggedEnums, referenceEnums });
+        }
+      );
     }
   }, [navigate, authorized]);
 
   useEffect(() => {
     if (error.message) {
       message.error(error.message);
-      globalStore.serverError.set({message: ''});
+      globalStore.serverError.set({ message: '' });
     }
   }, [message, error]);
 
@@ -70,7 +75,7 @@ export default function RootLayout() {
             className={`${mobile ? 'absolute z-100' : 'sticky'} h-screen top-0 left-0 shadow-lg transition-all`}
             zeroWidthTriggerStyle={{ top: '12px' }}
           >
-            <SideMenu setCollapsed={setCollapsed}/>
+            <SideMenu setCollapsed={setCollapsed} />
           </Sider>
 
           <Layout className="bg-gray-50">
@@ -92,24 +97,10 @@ export default function RootLayout() {
                   borderRadius: borderRadiusLG,
                 }}
               >
-                <Outlet />
+                {enums && <Outlet />}
               </div>
             </Content>
 
-            {/* Футер */}
-            {/* {breakpointBroken && (
-              <Footer className="p-2 m-0">
-                <Radio.Group
-                  block
-                  size="large"
-                  options={options}
-                  defaultValue={pageKey}
-                  optionType="button"
-                  buttonStyle="solid"
-                  onChange={handleChange}
-                />
-              </Footer>
-            )} */}
             {loading && <Loader />}
           </Layout>
         </Layout>

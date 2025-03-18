@@ -47,3 +47,13 @@
     }
   }
 }
+
+.ant-modal-confirm .ant-modal-confirm-btns {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.ant-modal-confirm-content {
+  padding-top: 8px;
+  margin-left: -34px;
+}
