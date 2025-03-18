@@ -4,19 +4,7 @@ import { Menu } from 'antd';
 import { useLocation, useNavigate } from 'react-router';
 import { useGlobalStore } from 'src/stores/globalStore';
 
-import {
-  AppstoreOutlined,
-  ContactsOutlined,
-  PartitionOutlined,
-  TeamOutlined,
-  LogoutOutlined,
-  UserOutlined,
-  TableOutlined,
-  DatabaseOutlined,
-  SmileOutlined,
-  CarryOutOutlined,
-  ProjectOutlined,
-} from '@ant-design/icons';
+import AntIcon from 'src/shared/AntIcon';
 
 export default function SideMenu({ setCollapsed }) {
   const navigate = useNavigate();
@@ -32,22 +20,22 @@ export default function SideMenu({ setCollapsed }) {
     () => [
       {
         key: 'dashboard',
-        icon: <AppstoreOutlined />,
+        icon: <AntIcon name="AppstoreOutlined" />,
         label: 'Стартовая панель',
       },
       {
         key: 'projects-static',
-        icon: <PartitionOutlined />,
+        icon: <AntIcon name="ProjectOutlined" />,
         label: 'Проекты(static)',
       },
       {
         key: 'customers-static',
-        icon: <ContactsOutlined />,
+        icon: <AntIcon name="ContactsOutlined" />,
         label: 'Заказчики(static)',
       },
       {
         key: 'teams-static',
-        icon: <TeamOutlined />,
+        icon: <AntIcon name="TeamOutlined" />,
         label: 'Команды(static)',
       },
       // {
@@ -62,41 +50,41 @@ export default function SideMenu({ setCollapsed }) {
       // },
       {
         key: 'superTable',
-        icon: <TableOutlined />,
+        icon: <AntIcon name="TableOutlined" />,
         label: 'Просто таблица',
       },
 
       {
-        key: 'departments',
-        icon: <DatabaseOutlined />,
+        key: 'department',
+        icon: <AntIcon name="DatabaseOutlined" />,
         label: 'Отделы',
       },
 
       {
-        key: 'teams',
-        icon: <TeamOutlined />,
+        key: 'team',
+        icon: <AntIcon name="TeamOutlined" />,
         label: 'Команды',
       },
       {
-        key: 'employees',
-        icon: <UserOutlined />,
+        key: 'employee',
+        icon: <AntIcon name="UserOutlined" />,
         label: 'Сотрудники',
       },
       {
-        key: 'projects',
-        icon: <ProjectOutlined />,
+        key: 'project',
+        icon: <AntIcon name="ProjectOutlined" />,
         label: 'Проекты',
       },
 
       {
-        key: 'tasks',
-        icon: <CarryOutOutlined />,
+        key: 'task',
+        icon: <AntIcon name="CarryOutOutlined" />,
         label: 'Задачи',
       },
 
       {
-        key: 'customers',
-        icon: <SmileOutlined />,
+        key: 'customer',
+        icon: <AntIcon name="SmileOutlined" />,
         label: 'Клиенты',
       },
     ],
@@ -128,7 +116,7 @@ export default function SideMenu({ setCollapsed }) {
             items={[
               {
                 key: 'logout',
-                icon: <LogoutOutlined />,
+                icon: <AntIcon name="LogoutOutlined" />,
                 label: 'Выход',
                 onClick: () => logout(),
               },

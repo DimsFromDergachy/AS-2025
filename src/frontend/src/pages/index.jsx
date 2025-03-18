@@ -1,6 +1,15 @@
 import { lazy } from 'react';
 import RootLayout from './RootLayout';
 
+const tabularPages = [
+  'department',
+  'team',
+  'employee',
+  'project',
+  'task',
+  'customer',
+];
+
 export const routes = [
   {
     path: 'login',
@@ -52,8 +61,6 @@ export const routes = [
         },
       },
 
-
-
       // {
       //   path: 'projects',
       //   Component: lazy(() => import('./Projects')),
@@ -75,164 +82,30 @@ export const routes = [
       //   //     },
       //   //   ],
       // },
-      // {
-      //   path: 'customers',
-      //   Component: lazy(() => import('./Customers')),
-      //   handle: {
-      //     crumb: () => ({
-      //       page: 'customers',
-      //       title: 'Customers',
-      //     }),
-      //   },
-      //   // children: [
-      //   //   {
-      //   //     path: ':customerId',
-      //   //     Component: lazy(() => import('./Customer')),
-      //   //     handle: {
-      //   //       crumb: () => ({
-      //   //         title: 'customerId',
-      //   //       }),
-      //   //     },
-      //   //   },
-      //   // ],
-      // },
       {
         path: 'superTable',
         Component: lazy(() => import('./SuperTable')),
       },    
-      {
-        path: 'departments',
-        Component: lazy(() => import('./Departments')),
+
+      ...tabularPages.map((page) => ({
+        path: page,
+        Component: lazy(() => 
+          import('./TablePage').then(
+            // eslint-disable-next-line no-unused-vars
+            ({ default: TablePageComponent }) => ({
+              default: (props) => (
+                <TablePageComponent {...props} tableKey={page} />
+              )
+            })
+          )
+        ),
         handle: {
           crumb: () => ({
-            page: 'departments',
-            title: 'Departments',
+            page,
+            title: `${page.charAt(0).toUpperCase() + page.slice(1)}`,
           }),
         },
-        // children: [
-        //   {
-        //     path: ':developerId',
-        //     Component: lazy(() => import('./Developer')),
-        //     handle: {
-        //       crumb: () => ({
-        //         title: 'developerId',
-        //       }),
-        //     },
-        //   },
-        // ],
-      },
-
-      {
-        path: 'teams',
-        Component: lazy(() => import('./Teams')),
-        handle: {
-          crumb: () => ({
-            page: 'teams',
-            title: 'Teams',
-          }),
-        },
-        // children: [
-        //   {
-        //     path: ':developerId',
-        //     Component: lazy(() => import('./Developer')),
-        //     handle: {
-        //       crumb: () => ({
-        //         title: 'developerId',
-        //       }),
-        //     },
-        //   },
-        // ],
-      },
-      {
-        path: 'employees',
-        Component: lazy(() => import('./Employees')),
-        handle: {
-          crumb: () => ({
-            page: 'employees',
-            title: 'Employees',
-          }),
-        },
-        // children: [
-        //   {
-        //     path: ':developerId',
-        //     Component: lazy(() => import('./Developer')),
-        //     handle: {
-        //       crumb: () => ({
-        //         title: 'developerId',
-        //       }),
-        //     },
-        //   },
-        // ],
-      },
-      {
-        path: 'projects',
-        Component: lazy(() => import('./Projects')),
-        handle: {
-          crumb: () => ({
-            page: 'projects',
-            title: 'Projects',
-          }),
-        },
-        // children: [
-        //   {
-        //     path: ':developerId',
-        //     Component: lazy(() => import('./Developer')),
-        //     handle: {
-        //       crumb: () => ({
-        //         title: 'developerId',
-        //       }),
-        //     },
-        //   },
-        // ],
-      },
-
-      {
-        path: 'tasks',
-        Component: lazy(() => import('./Tasks')),
-        handle: {
-          crumb: () => ({
-            page: 'tasks',
-            title: 'Tasks',
-          }),
-        },
-        // children: [
-        //   {
-        //     path: ':developerId',
-        //     Component: lazy(() => import('./Developer')),
-        //     handle: {
-        //       crumb: () => ({
-        //         title: 'developerId',
-        //       }),
-        //     },
-        //   },
-        // ],
-      },
-
-      {
-        path: 'customers',
-        Component: lazy(() => import('./Customers')),
-        handle: {
-          crumb: () => ({
-            page: 'customers',
-            title: 'Customers',
-          }),
-        },
-        // children: [
-        //   {
-        //     path: ':developerId',
-        //     Component: lazy(() => import('./Developer')),
-        //     handle: {
-        //       crumb: () => ({
-        //         title: 'developerId',
-        //       }),
-        //     },
-        //   },
-        // ],
-      },
-
-
-
-
+      })),
     ],
   },
 ];
