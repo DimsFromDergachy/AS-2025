@@ -1,7 +1,7 @@
 import React, { lazy } from 'react';
 import { Spin } from 'antd';
 
-const iconComponents = {
+const antIcons = {
   AppstoreOutlined: lazy(() => import('@ant-design/icons/AppstoreOutlined')),
   ContactsOutlined: lazy(() => import('@ant-design/icons/ContactsOutlined')),
   PartitionOutlined: lazy(() => import('@ant-design/icons/PartitionOutlined')),
@@ -20,8 +20,12 @@ const iconComponents = {
 };
 
 const AntIcon = ({ name, ...props }) => {
-  const IconComponent = iconComponents[name];
-  
+  const normalizedName = name.replace('-', '').toLowerCase();
+  const [, IconComponent] =
+    Object.entries(antIcons).find(([key]) =>
+      key.toLowerCase().includes(normalizedName)
+    ) || [];
+
   return IconComponent ? (
     <React.Suspense fallback={<Spin size="small" />}>
       <IconComponent {...props} />

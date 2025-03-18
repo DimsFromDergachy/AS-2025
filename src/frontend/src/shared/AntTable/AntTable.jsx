@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Button,
-  Progress,
-  Space,
-  Table,
-  Tag,
-  Typography
-} from 'antd';
+import { Button, Progress, Space, Table, Tag, Typography } from 'antd';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -174,7 +167,7 @@ export default function AntTable(props) {
 
   useEffect(() => {
     if (columns) {
-      const taggedEnums = globalStore.taggedEnums.get();
+      const taggedEnums = globalStore.enums.taggedEnums.get();
       setCurrentColumns(
         columns
           .filter(col => col.visibilityType === 'Visible')
@@ -232,24 +225,25 @@ export default function AntTable(props) {
                     );
                   }
                   case 'Date':
-                    return (
-                      <span>
-                        {value
-                          ? new Date(value).toLocaleDateString()
-                          : 'Нет данных'}
-                      </span>
-                    );
-                  case 'Decimal': {
+                    return value && new Date(value).toLocaleDateString();
+                  case 'Decimal':
+                  case 'Integer': {
                     const { numberFormat } = col;
-                    return <Text title={value}>{Intl.NumberFormat('ru', numberFormat).format(value)}</Text>;
-                    }
-                  case 'Checkbox':
-                    return value ? (
-                      <CheckCircleFilled
-                        style={{ color: 'green', fontSize: '18px' }}
-                      />
+                    return numberFormat ? (
+                      <Text title={value}>
+                        {Intl.NumberFormat('ru', numberFormat).format(value)}
+                      </Text>
                     ) : (
-                      ''
+                      value
+                    );
+                  }
+                  case 'Checkbox':
+                    return (
+                      value && (
+                        <CheckCircleFilled
+                          style={{ color: 'green', fontSize: '18px' }}
+                        />
+                      )
                     );
                   case 'Percent':
                     return (
@@ -272,7 +266,7 @@ export default function AntTable(props) {
                         {value}
                       </a>
                     );
-                  
+
                   case 'Actions': {
                     const { actions = {} } = col;
                     return (

@@ -1,16 +1,7 @@
 import { lazy } from 'react';
 import RootLayout from './RootLayout';
 
-const tabularPages = [
-  'department',
-  'team',
-  'employee',
-  'project',
-  'task',
-  'customer',
-];
-
-export const routes = [
+export const getRoutes = (modelPages) => [
   {
     path: 'login',
     Component: lazy(() => import('./Login')),
@@ -87,11 +78,10 @@ export const routes = [
         Component: lazy(() => import('./SuperTable')),
       },    
 
-      ...tabularPages.map((page) => ({
+      ...modelPages.map((page) => ({
         path: page,
         Component: lazy(() => 
           import('./TablePage').then(
-            // eslint-disable-next-line no-unused-vars
             ({ default: TablePageComponent }) => ({
               default: (props) => (
                 <TablePageComponent {...props} tableKey={page} />

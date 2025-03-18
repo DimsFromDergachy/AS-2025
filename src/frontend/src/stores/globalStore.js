@@ -6,7 +6,9 @@ export const globalStore = hookstate({
   serverError: {
     message: '',
   },
+  enums: null,
   mobile: false,
+  menuItems: [],
   menuPermissions: {},
   rolePermissions: {},
   modal: {

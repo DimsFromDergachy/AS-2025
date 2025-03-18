@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Input, Button } from 'antd';
+import { Input, Button, App } from 'antd';
 import AntTable from 'src/shared/AntTable';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -7,6 +7,7 @@ import { apiClient } from 'src/api/client';
 import { filterByFields } from 'src/helpers/functions';
 
 const TablePage = ({ tableKey }) => {
+  const { modal } = App.useApp();
   const [schema, setSchema] = useState({});
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -44,9 +45,25 @@ const TablePage = ({ tableKey }) => {
           className: 'text-red-500 hover:text-red-700',
           iconName: 'DeleteOutlined',
           onClick: id => {
-            apiClient.delete(`/${tableKey}/${id}`).then(() => {
-              setData(prev => prev.filter(item => item.id !== id));
-            });
+            modal
+              .confirm({
+                title: 'Удаление',
+                content: 'Вы действительно хотите удалить элемент?',
+                okText: 'Да',
+                cancelText: 'Нет',
+                footer: (_, { OkBtn, CancelBtn }) => (
+                  <>
+                    <OkBtn />
+                    <CancelBtn />
+                  </>
+                ),
+              })
+              .then(confirmed => {
+                confirmed &&
+                  apiClient.delete(`/${tableKey}/${id}`).then(() => {
+                    setData(prev => prev.filter(item => item.id !== id));
+                  });
+              });
           },
         },
       },
