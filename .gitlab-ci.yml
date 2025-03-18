@@ -1,0 +1,105 @@
+﻿variables:
+  BE_APPLICATION_PORT: 5002
+  FE_APPLICATION_PORT: 5004
+  BACKEND_PATH: "https://$VM_HOST:5002"
+  TG_CHAT: "-100$TG_CHAT_ID"
+  TG_SUCCESS_MESSAGE: |
+    ✅ Has been published [from GitLab]
+    📝 Commit: $CI_COMMIT_TITLE
+    👨‍💻 Author: $CI_COMMIT_AUTHOR
+    🔗 Commit URL: $CI_PROJECT_URL/commit/$CI_COMMIT_SHA
+    😎 $GITLAB_USER_NAME - GG!
+  TG_FAILURE_MESSAGE: |
+    ❌ Fail to publish [from GitLab] ...
+    📝 Commit: $CI_COMMIT_TITLE
+    👨‍💻 Author: $CI_COMMIT_AUTHOR
+    🔗 Commit URL: $CI_PROJECT_URL/commit/$CI_COMMIT_SHA
+    🥺 $GITLAB_USER_NAME - R U OK?
+
+stages:
+  - build
+  - deploy
+  - notify
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:9.0
+  script:
+    - dotnet restore
+    - dotnet build --no-restore --configuration Release
+    - dotnet test --no-build --configuration Release --verbosity normal
+  after_script:
+    - |
+      if [ $CI_JOB_STATUS != "success" ]; then
+        curl --header 'Content-Type: application/json' \
+             --data '{"chat_id":"'$TG_CHAT'","text":"'"$TG_FAILURE_MESSAGE"'"}' \
+             'https://api.telegram.org/bot'$TG_BOT_TOKEN'/sendMessage'
+      fi
+
+deploy:
+  stage: deploy
+  image: ubuntu:24.04
+  needs: [build]
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -H $VM_HOST >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - |
+      echo HOSTNAME=$VM_HOST >> ./.env
+      echo FE_APPLICATION_PORT=$FE_APPLICATION_PORT >> ./.env
+      echo BE_APPLICATION_PORT=$BE_APPLICATION_PORT >> ./.env
+  script:
+    - |
+      ssh $VM_USER@$VM_HOST "
+        # Create directory if it doesn't exist
+        mkdir -p $VM_PATH
+        # Go to project directory
+        cd $VM_PATH
+        # Pull latest code (if git repo exists)
+        if [ -d .git ]; then
+          git fetch origin
+          git reset origin/master --hard
+          git clean -dfx
+        else
+          # First-time clone
+          git clone https://gitlab.com/$CI_PROJECT_PATH .
+        fi
+        # Copy over the .env file if it doesn't exist
+        # This assumes you've already set up the .env file on the VM
+        if [ ! -f .env ]; then
+          echo 'Please set up your .env file manually on first deployment'
+        fi
+        # Ensure certificate directory exists
+        mkdir -p src/https
+        # Rebuild and restart containers
+        docker compose down
+        docker compose up --build -d
+      "
+  after_script:
+    - |
+      if [ $CI_JOB_STATUS != "success" ]; then
+        curl --header 'Content-Type: application/json' \
+             --data '{"chat_id":"'$TG_CHAT'","text":"'"$TG_FAILURE_MESSAGE"'"}' \
+             'https://api.telegram.org/bot'$TG_BOT_TOKEN'/sendMessage'
+      fi
+
+notify:
+  stage: notify
+  needs: [deploy]
+  script:
+    - |
+      curl --header 'Content-Type: application/json' \
+           --data '{"chat_id":"'$TG_CHAT'","text":"'"$TG_SUCCESS_MESSAGE"'"}' \
+           'https://api.telegram.org/bot'$TG_BOT_TOKEN'/sendMessage'
+
+# integration:
+#   stage: notify
+#   needs: [deploy]
+#   script:
+#     - apt-get update && apt-get install -y curl
+#     - curl -LO https://github.com/Orange-OpenSource/hurl/releases/download/latest/hurl_latest_amd64.deb && dpkg -i hurl_latest_amd64.deb
+#     - hurl --insecure --test ./src/test/login.hurl --variables-file ./src/test/.env.local --variable hostname=$VM_HOST
