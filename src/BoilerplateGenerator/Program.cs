@@ -267,6 +267,12 @@ public record ReferenceList{{ ModelName }}sRequest : IRequest<Result<ReferenceLi
 
 #endregion
 
+#region CREATE REPR
+
+// TODO
+
+#endregion
+
 #region REGISTER ENDPOINTS
 
 // ReSharper disable once UseRawString

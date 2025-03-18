@@ -1,6 +1,8 @@
-﻿using AS_2025.Api.Department.Delete;
+﻿using AS_2025.Api.Department.Create;
+using AS_2025.Api.Department.Delete;
 using AS_2025.ApplicationServices.Filters;
 using AS_2025.Common;
+using AS_2025.Domain.Common;
 using AS_2025.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Task = System.Threading.Tasks.Task;
@@ -14,6 +16,26 @@ public class DepartmentService
     public DepartmentService(IContext context)
     {
         _context = context;
+    }
+
+    public async Task<Department> CreateAsync(CreateDepartmentRequest request, CancellationToken cancellationToken)
+    {
+        var department = new Department()
+        {
+            Name = request.Name
+        };
+
+        if (request.HeadId is not null)
+        {
+            var head = await _context.Employees
+                .FirstOrDefaultAsync(x => x.Id == request.HeadId && x.Type == EmployeeType.DepartmentHead, cancellationToken);
+            department.Head = head;
+        }
+
+        await _context.Departments.AddAsync(department, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return department;
     }
 
     public async Task<IReadOnlyCollection<Department>> ListAsync(ListDepartmentsFilter filter, CancellationToken cancellationToken)

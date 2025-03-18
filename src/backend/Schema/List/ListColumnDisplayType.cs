@@ -11,6 +11,6 @@ public enum ListColumnDisplayType
     Checkbox,
     Link,
     Percent,
-    Tags,
-    Tag
+    Tag,
+    Tags
 }

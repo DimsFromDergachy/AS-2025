@@ -1,7 +1,9 @@
 ﻿using Ardalis.Result.AspNetCore;
+using AS_2025.Api.Department.Create;
 using AS_2025.Api.Department.Delete;
 using AS_2025.Api.Department.List;
 using AS_2025.Api.Department.ReferenceList;
+using AS_2025.Schema.Form;
 using AS_2025.Schema.List;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +37,13 @@ public static class DepartmentEndpoints
             var result = await mediator.Send((request ?? new DeleteDepartmentRequest()) with { Id = id });
             return result.ToMinimalApiResult();
         });
+
+        group.MapPost("/", async (IMediator mediator, [FromBody] CreateDepartmentRequest request) =>
+        {
+            var result = await mediator.Send(request);
+            return result.ToMinimalApiResult();
+        });
+
+        group.MapGet("/schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<CreateDepartmentRequest>());
     }
 }

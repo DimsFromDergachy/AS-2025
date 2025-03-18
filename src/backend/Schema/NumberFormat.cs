@@ -1,4 +1,5 @@
-﻿using AS_2025.Schema.List;
+﻿using AS_2025.Schema.Form;
+using AS_2025.Schema.List;
 
 namespace AS_2025.Schema;
 
@@ -71,6 +72,20 @@ public record NumberFormat
     public static NumberFormat? From(ListColumnSchemaAttribute attribute)
     {
         if (attribute.DisplayType is not (ListColumnDisplayType.Integer or ListColumnDisplayType.Decimal))
+        {
+            return null;
+        }
+
+        return new NumberFormat
+        {
+            UseGrouping = attribute.NumberFormatUseGrouping,
+            MaximumFractionDigits = attribute.NumberFormatMaximumFractionDigits
+        };
+    }
+
+    public static NumberFormat? From(FormInputSchemaAttribute attribute)
+    {
+        if (attribute.DisplayType is not (FormInputDisplayType.Integer or FormInputDisplayType.Decimal))
         {
             return null;
         }

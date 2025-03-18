@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Database\Migrations\" />
-    <Folder Include="Schema\Form\" />
   </ItemGroup>
 
 </Project>

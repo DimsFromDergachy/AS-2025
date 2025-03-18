@@ -16,13 +16,19 @@ public class EmployeeService
         _context = context;
     }
 
-    public async Task<IReadOnlyCollection<Employee>> ListAsync(ListEmployeesFilter filter, CancellationToken cancellationToken)
+    public async Task<IReadOnlyCollection<Employee>> ListAsync(ListEmployeesFilter? filter, CancellationToken cancellationToken)
     {
-        return await _context.Employees
+        var queryable = _context.Employees
             .Include(x => x.Manager)
             .Include(x => x.Team)
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .AsNoTracking();
+
+        if (filter?.Type is not null)
+        {
+            queryable = queryable.Where(x => x.Type == filter.Type);
+        }
+
+        return await queryable.ToListAsync(cancellationToken);
     }
 
     public Task DeleteAsync(DeleteEmployeeRequest request, CancellationToken cancellationToken)

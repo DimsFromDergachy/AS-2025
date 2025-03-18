@@ -13,17 +13,17 @@ public static class MenuEndpoints
         {
             Items = new List<MenuItem>
             {
-                MenuItem.ClientPage("Стартовая панель", "appstore", "dashboard"),
-                MenuItem.ClientPage("Проекты (static)", "project", "projects-static"),
-                MenuItem.ClientPage("Заказчики (static)", "contacts", "customers-static"),
-                MenuItem.ClientPage("Команды (static)", "team", "teams-static"),
-                MenuItem.ModelPage("Презентация таблиц", "table", "tableControlsPresentation"),
-                MenuItem.ModelPage("Отделы", "database", "department"),
-                MenuItem.ModelPage("Команды", "team", "team"),
-                MenuItem.ModelPage("Сотрудники", "user", "employee"),
-                MenuItem.ModelPage("Проекты", "project", "project"),
-                MenuItem.ModelPage("Задачи", "carry-out", "task"),
-                MenuItem.ModelPage("Клиенты", "smile", "client"),
+                MenuItem.ClientPage("Стартовая панель", "appstore", "dashboard", "/dashboard"),
+                MenuItem.ClientPage("Проекты (static)", "project", "projects-static", "/client-static/projects"),
+                MenuItem.ClientPage("Заказчики (static)", "contacts", "customers-static", "/client-static/customers"),
+                MenuItem.ClientPage("Команды (static)", "team", "teams-static", "/client-static/teams"),
+                MenuItem.ModelPage("Презентация таблиц", "table", "tableControlsPresentation", "/table-controls-presentation"),
+                MenuItem.ModelPage("Отделы", "database", "department", "/departments"),
+                MenuItem.ModelPage("Команды", "team", "team", "/teams"),
+                MenuItem.ModelPage("Сотрудники", "user", "employee", "/employees"),
+                MenuItem.ModelPage("Проекты", "project", "project", "/projects"),
+                MenuItem.ModelPage("Задачи", "carry-out", "task", "/tasks"),
+                MenuItem.ModelPage("Клиенты", "smile", "client", "/clients"),
             }
         }));
     }

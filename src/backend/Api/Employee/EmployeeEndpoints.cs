@@ -16,17 +16,17 @@ public static class EmployeeEndpoints
         var group = builder.MapGroup("api/employee")
             .WithTags("Employee");
 
-        group.MapGet("/list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ListEmployeesRequest? request) =>
+        group.MapGet("/list", async (IMediator mediator, [FromQuery] ListEmployeesRequest? query) =>
         {
-            var result = await mediator.Send(request ?? new ListEmployeesRequest());
+            var result = await mediator.Send(query ?? new ListEmployeesRequest());
             return result.ToMinimalApiResult();
         });
 
         group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListEmployeesItem>());
 
-        group.MapGet("/reference-list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ReferenceListEmployeesRequest? request) =>
+        group.MapGet("/reference-list", async (IMediator mediator, [FromQuery] ReferenceListEmployeesRequest? query) =>
         {
-            var result = await mediator.Send(request ?? new ReferenceListEmployeesRequest());
+            var result = await mediator.Send(query ?? new ReferenceListEmployeesRequest());
             return result.ToMinimalApiResult();
         });
 

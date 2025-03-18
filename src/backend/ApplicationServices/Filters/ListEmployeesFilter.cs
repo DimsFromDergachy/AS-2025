@@ -1,3 +1,5 @@
-﻿namespace AS_2025.ApplicationServices.Filters;
+﻿using AS_2025.Domain.Common;
 
-public record ListEmployeesFilter();
+namespace AS_2025.ApplicationServices.Filters;
+
+public record ListEmployeesFilter(EmployeeType? Type);
