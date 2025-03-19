@@ -9,6 +9,7 @@ public enum FormInputDisplayType
     Decimal,
     Date,
     Checkbox,
+    Percent,
     Reference,
     References
 }

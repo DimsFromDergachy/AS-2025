@@ -1,5 +1,7 @@
 ﻿using Ardalis.Result.AspNetCore;
+using AS_2025.Api.TableControlsPresentation.Create;
 using AS_2025.Api.TableControlsPresentation.List;
+using AS_2025.Schema.Form;
 using AS_2025.Schema.List;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -20,5 +22,7 @@ public static class TableControlsPresentationEndpoints
         });
 
         group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListTableControlsPresentationsItem>());
+
+        group.MapGet("/schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<CreateTableControlsPresentationsItem>());
     }
 }

@@ -3,6 +3,17 @@ using AS_2025.Schema.List;
 
 namespace AS_2025.Api.TableControlsPresentation.List;
 
+[ListSchema(
+    Title = "Table demo", 
+    ColumnActions = new[]
+    {
+        ListAction.View, 
+        ListAction.Delete
+    }, CommonActions = new []
+    {
+        ListAction.Create,
+        ListAction.Search
+    })]
 public record ListTableControlsPresentationsItem
 {
     [ListColumnSchema(VisibilityType = ListColumnVisibilityType.Hidden, DisplayType = ListColumnDisplayType.None)]

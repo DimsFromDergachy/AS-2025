@@ -44,6 +44,6 @@ public static class DepartmentEndpoints
             return result.ToMinimalApiResult();
         });
 
-        group.MapGet("/schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<CreateDepartmentRequest>());
+        group.MapGet("/create-schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<CreateDepartmentRequest>());
     }
 }
