@@ -23,6 +23,6 @@ public static class TableControlsPresentationEndpoints
 
         group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListTableControlsPresentationsItem>());
 
-        group.MapGet("/schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<CreateTableControlsPresentationsItem>());
+        group.MapGet("/create-schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<CreateTableControlsPresentationsItem>());
     }
 }
