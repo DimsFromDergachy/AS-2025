@@ -10,6 +10,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ImportDataJob>(); // for utils endpoint
 
         services.AddHostedService<ChainedHostedService>();
+        services.AddHostedService<ApiEventProcessorBackgroundService>();
 
         return services;
     }

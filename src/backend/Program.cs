@@ -17,12 +17,15 @@ using AS_2025.Api.Task;
 using AS_2025.Api.Team;
 using AS_2025.Api.Utils;
 using AS_2025.ApplicationServices;
+using AS_2025.Channels;
 using AS_2025.Exceptions;
 using AS_2025.HostedServices;
+using AS_2025.Hubs;
 using AS_2025.Import;
 using AS_2025.ReferenceItem;
 using AS_2025.Tags;
 using Microsoft.AspNetCore.Identity;
+using AS_2025.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -99,6 +102,10 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddSignalR();
+builder.Services.AddChannels();
+builder.Services.AddMiddlewares();
+
 var app = builder.Build();
 
 app.UseCors("AllowOnRemoteVM");
@@ -130,5 +137,8 @@ app.MapGroup("api/identity")
 app.UseHttpsRedirection();
 
 app.UseExceptionHandler();
+
+app.UseMiddlewares();
+app.MapHubs();
 
 app.Run();
