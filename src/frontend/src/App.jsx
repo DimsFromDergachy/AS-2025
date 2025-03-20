@@ -11,15 +11,20 @@ import { globalStore } from './stores/globalStore';
 
 function App() {
   const [router, setRouter] = useState(null);
+  console.log("🚀 * App.jsx:14 * App * router:", router);
 
   useEffect(() => {
     apiClient.get('/menu/list').then(({ items }) => {
+      console.log("🚀 * App.jsx:17 * apiClient.get * items:", items);
       globalStore.menuItems.set(items);
       const modelPages = items.reduce(
         (acc, el) => (el.modelKey ? [...acc, el.modelKey] : acc),
         []
       );
-      setRouter(createBrowserRouter(getRoutes(modelPages)));
+      const routes = getRoutes(modelPages);
+      console.log("🚀 * App.jsx:24 * apiClient.get * modelPages:", modelPages);
+      console.log("🚀 * App.jsx:23 * apiClient.get * routes:", routes);
+      setRouter(createBrowserRouter(routes));
     });
   }, []);
 
