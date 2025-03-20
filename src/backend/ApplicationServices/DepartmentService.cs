@@ -20,10 +20,8 @@ public class DepartmentService
 
     public async Task<Department> CreateAsync(CreateDepartmentRequest request, CancellationToken cancellationToken)
     {
-        var department = new Department()
-        {
-            Name = request.Name
-        };
+        var department = Department.Create();
+        department.Name = request.Name;
 
         if (request.HeadId is not null)
         {

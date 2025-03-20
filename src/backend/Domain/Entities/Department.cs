@@ -27,4 +27,14 @@ public record Department : Entity<Guid>, IIdentifiableEntity<string>
 
         return this;
     }
+
+    public static Department Create()
+    {
+        var guid = Guid.CreateVersion7();
+        return new Department()
+        {
+            Id = guid,
+            ExternalId = guid.ToString()
+        };
+    }
 }
