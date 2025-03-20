@@ -11,7 +11,7 @@ import { globalStore } from './stores/globalStore';
 
 function App() {
   const [router, setRouter] = useState(null);
-  console.log("🚀 * App.jsx:14 * App * router:", router);
+  console.log("🚀 * App.jsx:14 * App test2 * router:", router);
 
   useEffect(() => {
     apiClient.get('/menu/list').then(({ items }) => {
