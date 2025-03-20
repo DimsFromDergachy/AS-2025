@@ -278,7 +278,7 @@ export default function AntTable(props) {
                             type="link"
                             size="small"
                             icon={<AntIcon name={actions[action]?.iconName} />}
-                            onClick={() => actions[action]?.onClick(record.id)}
+                            onClick={() => actions[action]?.onClick(record)}
                           />
                         ))}
                       </Space>

@@ -91,7 +91,7 @@ export default function RootLayout() {
             {/* Основной контент */}
             <Content className="m-2 overflow-hidden">
               <div
-                className="h-full overflow-auto py-6 px-2"
+                className="h-full overflow-auto py-4 px-2"
                 style={{
                   background: colorBgContainer,
                   borderRadius: borderRadiusLG,

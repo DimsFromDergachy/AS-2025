@@ -20,7 +20,7 @@ export default function SideMenu({ setCollapsed }) {
   const items = useMemo(
     () =>
       menuItems.map(item => ({
-        ...item,
+        label: item.label,
         key: item.pageKey || item.modelKey,
         icon: <AntIcon name={item.icon} />,
       })),
