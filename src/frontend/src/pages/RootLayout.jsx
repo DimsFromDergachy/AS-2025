@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { HubConnectionBuilder } from '@microsoft/signalr';
 import { AuthContext } from 'src/shared/Auth/AuthContext';
 import { App } from 'antd';
 import { Suspense } from 'react';
@@ -10,6 +11,21 @@ import SideMenu from 'src/layouts/SideMenu/SideMenu';
 import Loader from 'src/widgets/Loader';
 
 const { Header, Content, Sider } = Layout;
+
+const connectToHub = () => {
+  const connection = new HubConnectionBuilder()
+    .withUrl('/api-events')
+    .withAutomaticReconnect()
+    .build();
+
+  connection.on('ApiCallEvent', apiEvent => {
+    console.log(
+      `API Event: ${apiEvent.method} ${apiEvent.path} at ${apiEvent.timestamp}`
+    );
+  });
+
+  connection.start().catch(err => console.error(err));
+};
 
 export default function RootLayout() {
   const navigate = useNavigate();
@@ -39,6 +55,10 @@ export default function RootLayout() {
       setCollapsed(collapsed);
     }
   };
+
+  useEffect(() => {
+    connectToHub();
+  }, []);
 
   useEffect(() => {
     if (!authorized) navigate('/login');

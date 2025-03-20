@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Progress, Space, Table, Tag, Typography } from 'antd';
+import {
+  Button,
+  Popconfirm,
+  Progress,
+  Space,
+  Table,
+  Tag,
+  Typography,
+} from 'antd';
 import dayjs from 'dayjs';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
@@ -271,16 +279,39 @@ export default function AntTable(props) {
                     const { actions = {} } = col;
                     return (
                       <Space>
-                        {availableActions.map((action, i) => (
-                          <Button
-                            className={actions[action]?.className || ''}
-                            key={i}
-                            type="link"
-                            size="small"
-                            icon={<AntIcon name={actions[action]?.iconName} />}
-                            onClick={() => actions[action]?.onClick(record)}
-                          />
-                        ))}
+                        {availableActions.map((type, i) => {
+                          const action = actions[type];
+                          if (!action) return null;
+                          const button = (
+                            <Button
+                              className={action.className || ''}
+                              key={i}
+                              type="link"
+                              size="small"
+                              icon={
+                                <AntIcon name={action.iconName} />
+                              }
+                              onClick={() => !action.confirmable && action.onClick(record)}
+                            />
+                          );
+
+                          return action.confirmable ? (
+                            <Popconfirm
+                              destroyTooltipOnHide
+                              key={i}
+                              okText="Да"
+                              cancelText="Нет"
+                              okButtonProps={{ danger: true }}
+                              title={action.confirmTitle}
+                              description={action.confirmDescription}
+                              onConfirm={() => action.onClick(record)}
+                            >
+                              {button}
+                            </Popconfirm>
+                          ) : (
+                            button
+                          );
+                        })}
                       </Space>
                     );
                   }

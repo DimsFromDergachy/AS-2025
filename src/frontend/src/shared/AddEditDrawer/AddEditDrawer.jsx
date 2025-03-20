@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Button,
   Form,
-  Modal,
   Input,
   InputNumber,
   Select,
@@ -31,7 +30,7 @@ const Footer = ({ disabled, okButton, cancelButton }) => (
 
 const getFormControl = field => {
   const commonProps = {
-    key: field.key,
+    // key: field.key,
     allowClear: true,
     placeholder: field.placeholder,
     style: { width: '100%' },
@@ -108,7 +107,7 @@ const getInitValues = (formFields, item) => {
 };
 
 export default function AddEditDrawer(props) {
-  const { open, item, schema = [], editMode, onSubmit, setVisible } = props;
+  const { open, item, schema = [], editMode, onSubmit, onClose } = props;
 
   const { inputs: formFields } = schema;
 
@@ -128,7 +127,7 @@ export default function AddEditDrawer(props) {
   };
 
   const handleCancel = () => {
-    setVisible(false);
+    onClose(false);
   };
 
   useEffect(() => {
@@ -139,7 +138,7 @@ export default function AddEditDrawer(props) {
   }, [form, values]);
 
   useEffect(() => {
-    form.resetFields();
+    open && form.resetFields();
   }, [form, open]);
 
   // useEffect(() => {
@@ -151,7 +150,6 @@ export default function AddEditDrawer(props) {
   return (
     <Drawer
       forceRender
-      maskClosable={false}
       title={title}
       width={650}
       open={open}

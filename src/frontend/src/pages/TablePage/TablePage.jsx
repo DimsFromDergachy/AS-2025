@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Input, Button, App, Flex, Descriptions, Drawer } from 'antd';
+import { Input, Button, Flex, Descriptions, Drawer } from 'antd';
 import AntTable from 'src/shared/AntTable';
 import AddEditDrawer from 'src/shared/AddEditDrawer/AddEditDrawer';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
@@ -10,12 +10,13 @@ import { apiClient } from 'src/api/client';
 import { filterByFields } from 'src/helpers/functions';
 
 const TablePage = ({ tableKey }) => {
-  const { modal } = App.useApp();
   const [schema, setSchema] = useState({});
   const [formSchema, setFormSchema] = useState(null);
-  const [showForm, setShowForm] = useState(false);
-  const [editMode, setEditMode] = useState(false);
-  const [editItem, setEditItem] = useState(null);
+  const [formParams, setFormParams] = useState({
+    visible: false,
+    editMode: false,
+    item: null,
+  });
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState('');
@@ -52,34 +53,18 @@ const TablePage = ({ tableKey }) => {
         Edit: {
           iconName: 'EditOutlined',
           onClick: item => {
-            setShowForm(true);
-            setEditMode(true);
-            setEditItem(item);
+            setFormParams({ visible: true, editMode: true, item });
           },
         },
         Delete: {
           className: 'text-red-500 hover:text-red-700',
           iconName: 'DeleteOutlined',
+          confirmable: true,
+          confirmTitle: 'Удалить элемент?',
           onClick: ({ id }) => {
-            modal
-              .confirm({
-                title: 'Удаление',
-                content: 'Вы действительно хотите удалить элемент?',
-                okText: 'Да',
-                cancelText: 'Нет',
-                footer: (_, { OkBtn, CancelBtn }) => (
-                  <>
-                    <OkBtn />
-                    <CancelBtn />
-                  </>
-                ),
-              })
-              .then(confirmed => {
-                confirmed &&
-                  apiClient.delete(`/${tableKey}/${id}`).then(() => {
-                    setData(prev => prev.filter(item => item.id !== id));
-                  });
-              });
+            apiClient.delete(`/${tableKey}/${id}`).then(() => {
+              setData(prev => prev.filter(item => item.id !== id));
+            });
           },
         },
       },
@@ -155,9 +140,7 @@ const TablePage = ({ tableKey }) => {
               icon={<PlusOutlined />}
               disabled={!formSchema}
               onClick={() => {
-                setEditMode(false);
-                setShowForm(true);
-                setEditItem(null);
+                setFormParams({ visible: true, editMode: false });
               }}
             >
               Добавить
@@ -200,15 +183,15 @@ const TablePage = ({ tableKey }) => {
       </Flex>
       {formSchema && (
         <AddEditDrawer
-          open={showForm}
+          open={formParams.visible}
           schema={formSchema}
-          setVisible={setShowForm}
-          editMode={editMode}
-          item={editItem}
+          editMode={formParams.editMode}
+          item={formParams.item}
+          onClose={() => setFormParams(prev => ({ ...prev, visible: false }))}
           onSubmit={item => {
             apiClient.post(`/${tableKey}`, item).then(resItem => {
               setData(prev => [...prev, resItem]);
-              setShowForm(false);
+              setFormParams(prev => ({ ...prev, visible: false }));
             });
           }}
         />
