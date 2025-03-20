@@ -114,8 +114,10 @@ const TablePage = ({ tableKey }) => {
             if (referenceEnums[field.referenceName]) {
               field.options = referenceEnums[field.referenceName];
             } else {
+              const referenceRequest = field.referenceRequest || '';
+              const query = referenceRequest ? `?query=${referenceRequest}` : '';
               apiClient
-                .get(`/${field.referenceName}/reference-list`)
+                .get(`/${field.referenceName}/reference-list${query}`)
                 .then(({ items }) => {
                   field.options = items;
                 });
