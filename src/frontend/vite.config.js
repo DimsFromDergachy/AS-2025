@@ -14,6 +14,11 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
         },
+        '/api-events': {
+          target: 'ws://localhost:5174',
+          ws: true,
+          rewriteWsOrigin: true,
+        },
       },
     },
     plugins: [react(), tailwindcss()],
