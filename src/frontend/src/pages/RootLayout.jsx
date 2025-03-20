@@ -42,8 +42,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (!authorized) navigate('/login');
-    else if (!pageKey) navigate('/dashboard');
     else {
+      if (!pageKey) navigate('/dashboard');
       const taggedEnumsReq = apiClient('/utils/tagged-enums');
       const referenceEnumsReq = apiClient('/utils/reference-enums');
       Promise.all([taggedEnumsReq, referenceEnumsReq]).then(

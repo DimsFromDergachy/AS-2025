@@ -55,7 +55,6 @@ function FilterPopup(props, ref) {
   const initialValues = !isCheckbox ? selectedKeys.slice(1) : [];
   const [selectedOperator, setSelectedOperator] = useState(initialOperator);
   const [values, setValues] = useState(initialValues);
-  console.log('🚀 * FilterPopup.jsx:56 * FilterPopup * values:', values);
 
   // Обработчик применения фильтра
   const handleConfirm = () => {
