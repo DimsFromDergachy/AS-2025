@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnectionBuilder, HttpTransportType, LogLevel } from '@microsoft/signalr';
 import { AuthContext } from 'src/shared/Auth/AuthContext';
 import { App } from 'antd';
 import { Suspense } from 'react';
@@ -19,6 +19,7 @@ const connectToHub = () => {
       transport: HttpTransportType.WebSockets
     })
     .withAutomaticReconnect()
+    .configureLogging(LogLevel.Information)
     .build();
 
   connection.on('ApiCallEvent', apiEvent => {
