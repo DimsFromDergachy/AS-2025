@@ -14,7 +14,7 @@ const { Header, Content, Sider } = Layout;
 
 const connectToHub = () => {
   const connection = new HubConnectionBuilder()
-    .withUrl('https://103.90.72.212:5004/api-events')
+    .withUrl('/api-events')
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Information)
     .build();
