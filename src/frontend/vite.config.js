@@ -15,9 +15,10 @@ export default defineConfig(({ mode }) => {
           secure: false,
         },
         '/api-events': {
-          target: 'ws://localhost:5174',
+          target: env.BACKEND_PATH,
           ws: true,
           rewriteWsOrigin: true,
+          secure: false,
         },
       },
     },
