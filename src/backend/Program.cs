@@ -102,7 +102,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR(options =>
+{
+    options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
+    options.KeepAliveInterval = TimeSpan.FromMinutes(15);
+});
 builder.Services.AddChannels();
 builder.Services.AddMiddlewares();
 

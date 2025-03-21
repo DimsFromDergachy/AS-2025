@@ -14,7 +14,9 @@ const { Header, Content, Sider } = Layout;
 
 const connectToHub = () => {
   const connection = new HubConnectionBuilder()
-    .withUrl('/api-events')
+    .withUrl('/api-events', {
+      skipNegotiation: true
+    })
     .withAutomaticReconnect()
     .build();
 
