@@ -14,10 +14,7 @@ const { Header, Content, Sider } = Layout;
 
 const connectToHub = () => {
   const connection = new HubConnectionBuilder()
-    .withUrl('/api-events', {
-      skipNegotiation: true,
-      transport: HttpTransportType.WebSockets
-    })
+    .withUrl('/api-events')
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Information)
     .build();
