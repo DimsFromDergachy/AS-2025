@@ -106,6 +106,7 @@ builder.Services.AddSignalR(options =>
 {
     options.ClientTimeoutInterval = TimeSpan.FromMinutes(30);
     options.KeepAliveInterval = TimeSpan.FromMinutes(15);
+    options.EnableDetailedErrors = true;
 });
 builder.Services.AddChannels();
 builder.Services.AddMiddlewares();
