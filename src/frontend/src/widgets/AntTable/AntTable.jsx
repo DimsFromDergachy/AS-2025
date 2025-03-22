@@ -15,7 +15,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { CheckCircleFilled } from '@ant-design/icons';
 import { useGlobalStore } from 'src/stores/globalStore';
 import FilterPopup from './FilterPopup';
-import AntIcon from '../AntIcon';
+import AntIcon from '../../shared/AntIcon';
 
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);

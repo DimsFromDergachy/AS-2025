@@ -13,6 +13,9 @@ const antIcons = {
   SmileOutlined: lazy(() => import('@ant-design/icons/SmileOutlined')),
   CarryOutOutlined: lazy(() => import('@ant-design/icons/CarryOutOutlined')),
   ProjectOutlined: lazy(() => import('@ant-design/icons/ProjectOutlined')),
+  ExperimentOutlined: lazy(() => import('@ant-design/icons/ExperimentOutlined')),
+  ShoppingOutlined: lazy(() => import('@ant-design/icons/ShoppingOutlined')),
+  ScheduleOutlined: lazy(() => import('@ant-design/icons/ScheduleOutlined')),
 
   EyeOutlined: lazy(() => import('@ant-design/icons/EyeOutlined')),
   EditOutlined: lazy(() => import('@ant-design/icons/EditOutlined')),

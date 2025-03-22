@@ -96,6 +96,11 @@ export const getRoutes = (modelPages) => [
           }),
         },
       })),
+      {
+        path: 'algos/:algorithm',
+        Component: lazy(() => import('./Algos')),
+      },    
+
     ],
   },
 ];

@@ -6,7 +6,7 @@ let activeRequests = 0;
 
 export const apiClient = axios.create({
   baseURL: '/api',
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     'Content-Type': 'application/json',
   },

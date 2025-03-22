@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Input, Space, Button } from 'antd';
-import AntTable from 'src/shared/AntTable';
+import AntTable from 'src/widgets/AntTable';
 import { 
   SearchOutlined,
   UserOutlined,
