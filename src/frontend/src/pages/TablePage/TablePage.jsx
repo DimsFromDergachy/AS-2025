@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Input, Button, Flex, Descriptions, Drawer } from 'antd';
-import AntTable from 'src/shared/AntTable';
-import AddEditDrawer from 'src/shared/AddEditDrawer/AddEditDrawer';
+import AntTable from 'src/widgets/AntTable';
+import AddEditDrawer from 'src/widgets/AddEditDrawer/AddEditDrawer';
 import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
 
 import { useGlobalStore } from 'src/stores/globalStore';

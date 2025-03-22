@@ -8,24 +8,40 @@ import AntIcon from 'src/shared/AntIcon';
 
 export default function SideMenu({ setCollapsed }) {
   const navigate = useNavigate();
+  const globalStore = useGlobalStore();
   const { pathname } = useLocation();
   const { logout } = useContext(AuthContext);
-  const globalStore = useGlobalStore();
 
   const mobile = globalStore.mobile.get();
   const menuItems = globalStore.menuItems.get({ noproxy: true });
 
-  const [_, pageKey] = pathname.split('/');
+  const [_, pageKey, subPageKey] = pathname.split('/');
 
-  const items = useMemo(
-    () =>
-      menuItems.map(item => ({
-        label: item.label,
-        key: item.pageKey || item.modelKey,
-        icon: <AntIcon name={item.icon} />,
-      })),
-    [menuItems]
-  );
+  const items = useMemo(() => {
+    const res = menuItems.map(item => ({
+      label: item.label,
+      key: item.pageKey || item.modelKey,
+      icon: <AntIcon name={item.icon} />,
+    }));
+    res.push({
+      label: 'Алгоритмы',
+      key: 'algos',
+      icon: <AntIcon name="ExperimentOutlined" />,
+      children: [
+        {
+          label: 'Рюкзак',
+          key: 'backpack',
+          icon: <AntIcon name="ShoppingOutlined" />,
+        },
+        {
+          label: 'Планировщик',
+          key: 'scheduler',
+          icon: <AntIcon name="ScheduleOutlined" />,
+        },
+      ],
+    });
+    return res;
+  }, [menuItems]);
 
   return (
     <div className="SideMenu h-full flex flex-col">
@@ -35,11 +51,12 @@ export default function SideMenu({ setCollapsed }) {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={[pageKey]}
+            defaultSelectedKeys={[subPageKey, pageKey]}
             items={items}
-            onClick={({ key }) => {
+            onClick={({ keyPath }) => {
+              const path = keyPath.reverse().join('/');
               if (mobile) setCollapsed(true);
-              navigate(`/${key}`);
+              navigate(`/${path}`);
             }}
           />
         </div>

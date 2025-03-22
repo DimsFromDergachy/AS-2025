@@ -2,16 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Button,
   Form,
-  Input,
-  InputNumber,
-  Select,
   Space,
   Typography,
-  Checkbox,
-  DatePicker,
   Drawer,
 } from 'antd';
 import dayjs from 'dayjs';
+import FormFieldsGroup from 'src/widgets/FormFieldsGroup';
 
 const { Text } = Typography;
 
@@ -27,53 +23,6 @@ const Footer = ({ disabled, okButton, cancelButton }) => (
     </Button>
   </Space>
 );
-
-const getFormControl = field => {
-  const commonProps = {
-    // key: field.key,
-    allowClear: true,
-    placeholder: field.placeholder,
-    style: { width: '100%' },
-  };
-  switch (field.displayType) {
-    case 'Reference':
-    case 'References':
-      return (
-        <Select
-          {...commonProps}
-          options={field.options}
-          mode={field.displayType === 'References' && 'multiple'}
-          fieldNames={{ label: 'value', value: 'key' }}
-        />
-      );
-    case 'Text':
-      return (
-        <Input.TextArea
-          {...commonProps}
-          autoSize={{ minRows: 3, maxRows: 5 }}
-        />
-      );
-    case 'Date':
-      return <DatePicker {...commonProps} format="DD.MM.YYYY" />;
-    case 'Decimal':
-    case 'Integer':
-    case 'Percent': {
-      const percent = field.displayType === 'Percent';
-      return (
-        <InputNumber
-          {...commonProps}
-          addonAfter={percent && '%'}
-          min={percent && 0}
-          max={percent && 100}
-        />
-      );
-    }
-    case 'Checkbox':
-      return <Checkbox />;
-    default:
-      return <Input {...commonProps} />;
-  }
-};
 
 const getInitValues = (formFields, item) => {
   return formFields.reduce((acc, field) => {
@@ -194,33 +143,7 @@ export default function AddEditDrawer(props) {
               Значение
             </Text>
           </Form.Item>
-
-          {formFields.map(field => (
-            /* (!editMode || (editMode && field.editable)) &&  */ <Form.Item
-              key={field.key}
-              name={field.key}
-              valuePropName={
-                field.displayType === 'Checkbox' ? 'checked' : 'value'
-              }
-              label={field.label}
-              required={field.required}
-              rules={[
-                {
-                  required: field.required,
-                },
-                () => ({
-                  validator() {
-                    // if (fieldErrors && fieldErrors[field.key]) {
-                    //   return Promise.reject(fieldErrors[field.key][0]);
-                    // }
-                    return Promise.resolve();
-                  },
-                }),
-              ]}
-            >
-              {getFormControl(field)}
-            </Form.Item>
-          ))}
+          <FormFieldsGroup fields={formFields} />
         </Form>
         {/* <Text style={{ color: 'red' }}>{getErrorMessage(serverError, serverErrorType)}</Text> */}
       </div>
