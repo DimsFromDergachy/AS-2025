@@ -161,7 +161,7 @@ export default function Algos() {
                     <Descriptions
                       bordered
                       size="small"
-                      column={1}
+                      column={2}
                       items={val.map((item, index) => ({
                         key: index,
                         label: `Элемент ${index + 1}`,

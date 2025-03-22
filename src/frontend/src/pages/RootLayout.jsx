@@ -18,6 +18,8 @@ const connectToHub = () => {
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Information)
     .build();
+  
+  connection.serverTimeoutInMilliseconds = 600_000;
 
   connection.on('ApiCallEvent', apiEvent => {
     console.log(
