@@ -1,8 +1,10 @@
 ﻿using Ardalis.Result.AspNetCore;
 using AS_2025.Api.Department.Create;
 using AS_2025.Api.Department.Delete;
+using AS_2025.Api.Department.Export;
 using AS_2025.Api.Department.List;
 using AS_2025.Api.Department.ReferenceList;
+using AS_2025.Export;
 using AS_2025.Identity;
 using AS_2025.Schema.Form;
 using AS_2025.Schema.List;
@@ -26,6 +28,12 @@ public static class DepartmentEndpoints
         });
 
         group.MapGet("/list/schema", ([FromServices] ListSchemaModelBuilder listSchemaModelBuilder) => listSchemaModelBuilder.Build<ListDepartmentsItem>());
+
+        group.MapGet("/list/export/{exportType}", async (IMediator mediator, [FromRoute] ExportType exportType, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ExportDepartmentsRequest? request) =>
+        {
+            var result = await mediator.Send(request ?? new ExportDepartmentsRequest());
+            return Results.File(result.Value.Bytes, result.Value.ContentType, result.Value.FileName);
+        });
 
         group.MapGet("/reference-list", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ReferenceListDepartmentsRequest? request) =>
         {

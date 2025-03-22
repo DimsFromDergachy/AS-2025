@@ -1,7 +1,9 @@
 ﻿using AS_2025.Api.Department.Create;
 using AS_2025.Api.Department.Delete;
+using AS_2025.Api.Department.Export;
 using AS_2025.ApplicationServices.Filters;
 using AS_2025.Common;
+using AS_2025.Database;
 using AS_2025.Domain.Common;
 using AS_2025.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -38,10 +40,15 @@ public class DepartmentService
 
     public async Task<IReadOnlyCollection<Department>> ListAsync(ListDepartmentsFilter filter, CancellationToken cancellationToken)
     {
-        return await _context.Departments
-            .Include(x => x.Head)
-            .Include(x => x.Teams)
-            .Include(x => x.Employees)
+        return await _context.Departments.Full()
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyCollection<Department>> ExportListAsync(ExportDepartmentsRequest request,
+        CancellationToken cancellationToken)
+    {
+        return await _context.Departments.Full()
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

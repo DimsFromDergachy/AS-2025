@@ -19,6 +19,7 @@ using AS_2025.Api.Utils;
 using AS_2025.ApplicationServices;
 using AS_2025.Channels;
 using AS_2025.Exceptions;
+using AS_2025.Export;
 using AS_2025.HostedServices;
 using AS_2025.Hubs;
 using AS_2025.Import;
@@ -91,6 +92,8 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 });
 
 builder.Services.AddProblemDetails();
+
+builder.Services.AddExport();
 
 builder.Services.AddCors(options =>
 {
