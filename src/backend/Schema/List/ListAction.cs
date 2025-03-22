@@ -8,4 +8,5 @@ public enum ListAction
     Delete,
     Search,
     Create,
+    ExportXlsx,
 }
