@@ -12,10 +12,15 @@ export const apiClient = axios.create({
   },
 });
 
+apiClient.defaults.silent = false;
+apiClient.defaults.withHeaders = false;
+
 // Перехватчик для запросов
 apiClient.interceptors.request.use(config => {
-  activeRequests++;
-  globalStore.loading.set(true);
+  if (!config.silent) {
+    activeRequests++;
+    globalStore.loading.set(true);
+  }
   const token = authService.restore();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -34,11 +39,13 @@ const decrementRequests = () => {
 // Перехватчик для ответов
 apiClient.interceptors.response.use(
   response => {
-    decrementRequests();
-    return response.data;
+    const { withHeaders, silent } = response.config;
+    !silent && decrementRequests();
+    return withHeaders ? response : response.data;
   },
   error => {
-    decrementRequests();
+    const { silent } = error.config;
+    !silent && decrementRequests();
     const [message = error.message] = Object.values(
       error.response?.data?.errors || {}
     );

@@ -31,3 +31,24 @@ export const filterByFields = (data, searchText, fields, options = {}) => {
     return absolute ? fieldMatches.every(match => match) : fieldMatches.some(match => match);
   });
 };
+
+export const downloadFile = (response, defaultFileName) => {
+  const contentType = response.headers['content-type'] || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';              
+  const contentDisposition = response.headers['content-disposition'];
+  let fileName = `${defaultFileName}.xlsx`;
+  if (contentDisposition) {
+    const fileNameMatch = contentDisposition.match(/filename\*?=(?:UTF-8'')?([^;\n]+)/);
+    if (fileNameMatch && fileNameMatch.length > 1) {
+      fileName = decodeURIComponent(fileNameMatch[1].trim());
+    }
+  }
+  const blob = new Blob([response.data], { type: contentType });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+}

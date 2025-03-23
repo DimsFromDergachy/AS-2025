@@ -2,12 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Input, Button, Flex, Descriptions, Drawer } from 'antd';
 import AntTable from 'src/widgets/AntTable';
 import AddEditDrawer from 'src/widgets/AddEditDrawer/AddEditDrawer';
-import { SearchOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  SearchOutlined,
+  PlusOutlined,
+  DownloadOutlined,
+} from '@ant-design/icons';
 
 import { useGlobalStore } from 'src/stores/globalStore';
 
 import { apiClient } from 'src/api/client';
-import { filterByFields } from 'src/helpers/functions';
+import { downloadFile, filterByFields } from 'src/helpers/functions';
 
 const TablePage = ({ tableKey }) => {
   const [schema, setSchema] = useState({});
@@ -100,7 +104,9 @@ const TablePage = ({ tableKey }) => {
               field.options = referenceEnums[field.referenceName];
             } else {
               const referenceRequest = field.referenceRequest || '';
-              const query = referenceRequest ? `?query=${referenceRequest}` : '';
+              const query = referenceRequest
+                ? `?query=${referenceRequest}`
+                : '';
               apiClient
                 .get(`/${field.referenceName}/reference-list${query}`)
                 .then(({ items }) => {
@@ -124,7 +130,27 @@ const TablePage = ({ tableKey }) => {
   return (
     <div className="h-full flex flex-col">
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-2xl font-bold">{title}</h1>
+        <Flex>
+          <h1 className="text-2xl font-bold">{title}</h1>
+          {commonActions.includes('ExportXlsx') && (
+            <Button
+              className="ml-6"
+              icon={<DownloadOutlined className="text-lg" />}
+              onClick={async () => {
+                apiClient
+                  .get(`/${tableKey}/list/export/Excel`, {
+                    responseType: 'arraybuffer',
+                    withHeaders: true,
+                  })
+                  .then(response => {
+                    downloadFile(response, `${tableKey}.xlsx`);
+                  });
+              }}
+            >
+              Экспорт в Excel
+            </Button>
+          )}
+        </Flex>
         <div className="flex gap-2 w-full sm:w-auto">
           {commonActions.includes('Search') && !!fieldsToSearch.length && (
             <Input.Search

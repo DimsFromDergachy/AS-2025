@@ -22,7 +22,7 @@ const connectToHub = () => {
   connection.serverTimeoutInMilliseconds = 600_000;
 
   connection.on('ApiCallEvent', apiEvent => {
-    console.log(
+    apiEvent.method !== 'GET' && console.log(
       `API Event: ${apiEvent.method} ${apiEvent.path} at ${apiEvent.timestamp}`
     );
   });
