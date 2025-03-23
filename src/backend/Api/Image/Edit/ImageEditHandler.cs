@@ -24,11 +24,11 @@ public class ImageEditHandler : IRequestHandler<ImageEditRequest, Result<ImageEd
         await stream.CopyToAsync(target, cancellationToken);
         target.Position = 0;
 
-        var originalFileUrl = await _minioService.UploadAsync(request.File.FileName, target.ToArray(), request.File.ContentType, cancellationToken);
+        var originalFileInfo = await _minioService.UploadAsync(request.File.FileName, target.ToArray(), request.File.ContentType, cancellationToken);
 
         var modifiedContent = await _imageEditService.DrawTextAsync(target.ToArray(), request.X, request.Y, request.Text, cancellationToken);
-        var modifiedFileUrl = await _minioService.UploadAsync($"{request.File.FileName}.modified", modifiedContent, request.File.ContentType, cancellationToken);
+        var modifiedFileInfo = await _minioService.UploadAsync($"{request.File.FileName}.modified", modifiedContent, request.File.ContentType, cancellationToken);
 
-        return new Result<ImageEditResponse>(new ImageEditResponse(originalFileUrl, modifiedFileUrl));
+        return new Result<ImageEditResponse>(new ImageEditResponse(originalFileInfo.ObjectId, originalFileInfo.Url, modifiedFileInfo.ObjectId, modifiedFileInfo.Url));
     }
 }

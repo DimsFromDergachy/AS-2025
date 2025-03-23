@@ -12,6 +12,7 @@ using AS_2025.Api.Department;
 using AS_2025.Api.Employee;
 using AS_2025.Api.Image;
 using AS_2025.Api.Menu;
+using AS_2025.Api.Minio;
 using AS_2025.Api.Project;
 using AS_2025.Api.TableControlsPresentation;
 using AS_2025.Api.Task;
@@ -154,6 +155,7 @@ app.MapProjectEndpoints();
 app.MapTableControlsPresentationEndpoints();
 app.MapAlgosEndpoints();
 app.MapImageEndpoints();
+app.MapMinioEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")
