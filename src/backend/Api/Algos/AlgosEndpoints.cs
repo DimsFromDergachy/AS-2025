@@ -1,6 +1,7 @@
 ﻿using Ardalis.Result.AspNetCore;
 using AS_2025.Api.Algos.Backpack;
 using AS_2025.Api.Algos.Scheduler;
+using AS_2025.Schema.Form;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -19,10 +20,14 @@ public static class AlgosEndpoints
             return result.ToMinimalApiResult();
         });
 
+        group.MapGet("/backpack/schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<BackpackRequest>());
+
         group.MapPost("/scheduler", async (IMediator mediator, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] SchedulerRequest? request) =>
         {
             var result = await mediator.Send(request ?? new SchedulerRequest { QuarterDays = 90, Temperature = 1000d, CoolingRate = 0.995d, IterationsPerTemp = 100 });
             return result.ToMinimalApiResult();
         });
+
+        group.MapGet("/scheduler/schema", ([FromServices] FormSchemaModelBuilder formSchemaModelBuilder) => formSchemaModelBuilder.Build<SchedulerRequest>());
     }
 }

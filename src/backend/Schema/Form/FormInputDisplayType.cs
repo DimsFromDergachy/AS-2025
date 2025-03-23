@@ -10,6 +10,7 @@ public enum FormInputDisplayType
     Date,
     Checkbox,
     Percent,
+    Slider,
     Reference,
     References
 }

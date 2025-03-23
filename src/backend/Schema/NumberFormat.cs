@@ -69,6 +69,12 @@ public record NumberFormat
      * default: 21
      */
 
+    public double? Min { get; init; }
+
+    public double? Max { get; init; }
+
+    public double? Step { get; init; }
+
     public static NumberFormat? From(ListColumnSchemaAttribute attribute)
     {
         if (attribute.DisplayType is not (ListColumnDisplayType.Integer or ListColumnDisplayType.Decimal))
@@ -85,7 +91,7 @@ public record NumberFormat
 
     public static NumberFormat? From(FormInputSchemaAttribute attribute)
     {
-        if (attribute.DisplayType is not (FormInputDisplayType.Integer or FormInputDisplayType.Decimal))
+        if (attribute.DisplayType is not (FormInputDisplayType.Integer or FormInputDisplayType.Decimal or FormInputDisplayType.Slider))
         {
             return null;
         }
@@ -93,7 +99,10 @@ public record NumberFormat
         return new NumberFormat
         {
             UseGrouping = attribute.NumberFormatUseGrouping,
-            MaximumFractionDigits = attribute.NumberFormatMaximumFractionDigits
+            MaximumFractionDigits = attribute.NumberFormatMaximumFractionDigits,
+            Min = attribute.NumberMin,
+            Max = attribute.NumberMax,
+            Step = attribute.NumberStep
         };
     }
 }

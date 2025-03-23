@@ -24,4 +24,10 @@ public class FormInputSchemaAttribute : Attribute
     public bool NumberFormatUseGrouping { get; init; } = true;
 
     public int NumberFormatMaximumFractionDigits { get; init; } = 20;
+
+    public double NumberMin { get; init; }
+
+    public double NumberMax { get; init; }
+
+    public double NumberStep { get; init; }
 }
