@@ -116,7 +116,12 @@ services:
       Application__Data__Root: './data/2025'
       Application__Data__DataType: 'Json'
       Application__FrontendOriginPort: ${FE_APPLICATION_PORT}
-      Application__HostName: ${HOSTNAME}
+      Application__HostName: '${HOSTNAME}'
+      Application__Minio__Endpoint: 'minio'
+      Application__Minio__Port: ${MINIO_HOST_PORT}
+      Application__Minio__AccessKey: '${MINIO_ACCESS_KEY}'
+      Application__Minio__SecretKey: '${MINIO_SECRET_KEY}'
+      Application__Minio__Bucket: '${MINIO_BUCKET}'
       ASPNETCORE_URLS: 'https://+:443;http://+:8080'
       ASPNETCORE_Kestrel__Certificates__Default__Password: '${CERTIFICATE_PASSWORD}'
       ASPNETCORE_Kestrel__Certificates__Default__Path: '${CERTIFICATE_FILE}'
