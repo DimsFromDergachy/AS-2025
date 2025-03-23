@@ -138,6 +138,7 @@ services:
       Application__Minio__AccessKey: '${MINIO_ROOT_USER}'
       Application__Minio__SecretKey: '${MINIO_ROOT_PASSWORD}'
       Application__Minio__Bucket: '${MINIO_BUCKET}'
+      Application__Templates__Path: './.templates/'
       ASPNETCORE_URLS: 'https://+:443;http://+:8080'
       ASPNETCORE_Kestrel__Certificates__Default__Password: '${CERTIFICATE_PASSWORD}'
       ASPNETCORE_Kestrel__Certificates__Default__Path: '${CERTIFICATE_FILE}'

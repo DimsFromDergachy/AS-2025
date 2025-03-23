@@ -8,16 +8,20 @@ namespace AS_2025.Api.Department.Export;
 public class ExportDepartmentsHandler : IRequestHandler<ExportDepartmentsRequest, Result<ExportDepartmentsResponse>>
 {
     private const string SheetName = "Data";
+    private const string TemplateName = "departments";
 
     private readonly DepartmentService _departmentService;
     private readonly IXlsxDataExportService<Domain.Entities.Department> _xlsxDataExportService;
+    private readonly ITemplateHtmlDataExportService<Domain.Entities.Department> _templateHtmlDataExportService;
 
     public ExportDepartmentsHandler(
         DepartmentService departmentService, 
-        IXlsxDataExportService<Domain.Entities.Department> xlsxDataExportService)
+        IXlsxDataExportService<Domain.Entities.Department> xlsxDataExportService,
+        ITemplateHtmlDataExportService<Domain.Entities.Department> templateHtmlDataExportService)
     {
         _departmentService = departmentService;
         _xlsxDataExportService = xlsxDataExportService;
+        _templateHtmlDataExportService = templateHtmlDataExportService;
     }
 
     public async Task<Result<ExportDepartmentsResponse>> Handle(ExportDepartmentsRequest request, CancellationToken cancellationToken)
@@ -27,16 +31,24 @@ public class ExportDepartmentsHandler : IRequestHandler<ExportDepartmentsRequest
         switch (request.ExportType)
         {
             case ExportType.Excel:
+            {
                 var bytes = await _xlsxDataExportService.ExportAsync(data, SheetName, cancellationToken);
-                return new ExportDepartmentsResponse(bytes, ContentTypes.Xlsx, GetFileName());
+                return new ExportDepartmentsResponse(bytes, ContentTypes.Xlsx, GetFileName("xlsx"));
+            }
+
+            case ExportType.Html:
+            {
+                var bytes = await _templateHtmlDataExportService.ExportAsync(TemplateName, data, cancellationToken);
+                return new ExportDepartmentsResponse(bytes, ContentTypes.Html, GetFileName("html"));
+            }
 
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
-    private static string GetFileName()
+    private static string GetFileName(string extension)
     {
-        return $"Departments_export_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.xlsx";
+        return $"Departments_export_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.{extension}";
     }
 }

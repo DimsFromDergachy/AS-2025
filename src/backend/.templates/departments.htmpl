@@ -1,0 +1,32 @@
+<html>
+<head>
+	<title>Departments</title>
+</head>
+<body>
+	<div class="container">
+		<h2>Departments list</h2>
+		<table>
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Head</th>
+					<th>Number of teams</th>
+					<th>Number of employees</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{ for item in data }}
+					<tr>
+						<td>{{ item.id }}</td>
+						<td><a href="{{ item.url }}">{{ item.name }}</a></td>
+						<td>{{ if item.head != "" }}{{ item.head }}{{ else }}None{{ end }}</td>
+						<td>{{ item.teams_count }}</td>
+						<td>{{ item.employees_count }}</td>
+					</tr>
+				{{ end }}
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

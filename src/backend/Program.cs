@@ -98,7 +98,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
 
 builder.Services.AddProblemDetails();
 
-builder.Services.AddExport();
+builder.Services.AddExport(applicationOptions);
 
 builder.Services.AddCors(options =>
 {

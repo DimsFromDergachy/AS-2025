@@ -31,7 +31,7 @@ public static class DepartmentEndpoints
 
         group.MapGet("/list/export/{exportType}", async (IMediator mediator, [FromRoute] ExportType exportType, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] ExportDepartmentsRequest? request) =>
         {
-            var result = await mediator.Send(request ?? new ExportDepartmentsRequest());
+            var result = await mediator.Send(request ?? new ExportDepartmentsRequest() { ExportType = exportType });
             return Results.File(result.Value.Bytes, result.Value.ContentType, result.Value.FileName);
         });
 

@@ -12,6 +12,8 @@ public record ApplicationOptions
 
     public MinioOptions Minio { get; init; } = new();
 
+    public TemplatesOptions Templates { get; init; } = new();
+
     public int FrontendOriginPort { get; init; }
 
     public string HostName { get; init; } = string.Empty;

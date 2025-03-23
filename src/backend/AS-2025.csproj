@@ -32,12 +32,20 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.0-next.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.5" />
+    <PackageReference Include="Scriban" Version="6.0.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Database\Migrations\" />
+    <Folder Include=".static\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".templates\departments.htmpl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
