@@ -10,6 +10,7 @@ using AS_2025.Api.Algos;
 using AS_2025.Api.Client;
 using AS_2025.Api.Department;
 using AS_2025.Api.Employee;
+using AS_2025.Api.Image;
 using AS_2025.Api.Menu;
 using AS_2025.Api.Project;
 using AS_2025.Api.TableControlsPresentation;
@@ -22,11 +23,14 @@ using AS_2025.Exceptions;
 using AS_2025.Export;
 using AS_2025.HostedServices;
 using AS_2025.Hubs;
+using AS_2025.Image;
 using AS_2025.Import;
 using AS_2025.ReferenceItem;
 using AS_2025.Tags;
 using Microsoft.AspNetCore.Identity;
 using AS_2025.Middleware;
+using AS_2025.Minio;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.Local.json", true);
@@ -114,6 +118,18 @@ builder.Services.AddSignalR(options =>
 builder.Services.AddChannels();
 builder.Services.AddMiddlewares();
 
+//builder.Services.AddAntiforgery();
+builder.Services.AddMinio(client =>
+{
+    client
+        .WithEndpoint(applicationOptions.Minio.Endpoint, applicationOptions.Minio.Port)
+        .WithCredentials(applicationOptions.Minio.AccessKey, applicationOptions.Minio.SecretKey)
+        .WithSSL(false);
+});
+builder.Services.AddMinioService(applicationOptions);
+
+builder.Services.AddImageEditService();
+
 var app = builder.Build();
 
 app.UseCors("AllowOnRemoteVM");
@@ -137,6 +153,7 @@ app.MapTaskEndpoints();
 app.MapProjectEndpoints();
 app.MapTableControlsPresentationEndpoints();
 app.MapAlgosEndpoints();
+app.MapImageEndpoints();
 
 app.MapGroup("api/identity")
     .WithTags("Identity")
@@ -148,5 +165,7 @@ app.UseExceptionHandler();
 
 app.UseMiddlewares();
 app.MapHubs();
+
+//app.UseAntiforgery();
 
 app.Run();

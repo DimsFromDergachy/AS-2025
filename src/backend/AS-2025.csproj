@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Arial.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ardalis.Result" Version="10.1.0" />
     <PackageReference Include="Ardalis.Result.AspNetCore" Version="10.1.0" />
     <PackageReference Include="Ardalis.Result.FluentValidation" Version="10.1.0" />
@@ -28,13 +32,22 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.1" />
+    <PackageReference Include="Minio" Version="6.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.3" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.0-next.0" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.0.5" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Database\Migrations\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Arial.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
