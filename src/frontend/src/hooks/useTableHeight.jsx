@@ -1,27 +1,30 @@
-import { useState, useLayoutEffect } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
+import { useState, useEffect } from 'react';
 
-export const useTableHeight = (tableContainerRef, schema) => {
-  const [tableHeight, setTableHeight] = useState();
-  const resizeTable = useDebouncedCallback(
-    () => {
-      const node = tableContainerRef.current;
-      if (!node) return;
-      const { height } = node.getBoundingClientRect();
+export const useTableHeight = tableContainerRef => {
+  const [tableHeight, setTableHeight] = useState(0);
+
+  useEffect(() => {
+    if (!tableContainerRef) return;
+
+    const updateHeight = () => {
+      const { height } = tableContainerRef.getBoundingClientRect();
       setTableHeight(height - 98);
-    },
-    100,
-    { trailing: true, maxWait: 100 }
-  );
+    };
 
-  useLayoutEffect(() => {
-    resizeTable();
-    window.addEventListener('resize', resizeTable);
+    updateHeight();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateHeight();
+    });
+    resizeObserver.observe(tableContainerRef);
+
+    window.addEventListener('resize', updateHeight);
 
     return () => {
-      window.removeEventListener('resize', resizeTable);
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', updateHeight);
     };
-  }, [resizeTable, schema]);
+  }, [tableContainerRef]);
 
   return tableHeight;
 };
