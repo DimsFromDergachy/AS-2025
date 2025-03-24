@@ -27,11 +27,12 @@ const TablePage = ({ tableKey }) => {
   const [searchText, setSearchText] = useState('');
   const [detailedView, setDetailedView] = useState({});
 
-  const headerContainerRef = useRef(null);
-  const tableContainerRef = useRef(null);
-  const tableHeight = useTableHeight(tableContainerRef, schema);
+  const [headerContainerRef, setHeaderContainerRef] = useState(null);
+  const [tableContainerRef, setTableContainerRef] = useState(null);
+  const tableHeight = useTableHeight(tableContainerRef);
+  
   const headerHeight =
-    headerContainerRef.current?.getBoundingClientRect().height || 0;
+    headerContainerRef?.getBoundingClientRect().height || 0;
 
   const store = useGlobalStore();
   const { referenceEnums = {} } = store.enums.get({ noproxy: true }) || {};
@@ -82,6 +83,21 @@ const TablePage = ({ tableKey }) => {
     }),
     [tableKey, columnActions]
   );
+
+  const onSubmit = (item, isEdit) => {
+    const request = isEdit ? apiClient.put : apiClient.post;
+    const url = isEdit ? `/${tableKey}/${item.id}` : `/${tableKey}`;
+    request(url, item).then(resItem => {
+      if (isEdit) {
+        setData(prev =>
+          prev.map(el => (el.id === resItem.id ? resItem : el))
+        );
+      } else {
+        setData(prev => [...prev, resItem]);
+      }
+      setFormParams(prev => ({ ...prev, visible: false }));
+    });
+  };
 
   useEffect(() => {
     if (tableKey) {
@@ -137,7 +153,7 @@ const TablePage = ({ tableKey }) => {
   return (
     <div className="h-full overflow-hidden">
       <div
-        ref={headerContainerRef}
+        ref={setHeaderContainerRef}
         className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <Flex>
@@ -186,7 +202,7 @@ const TablePage = ({ tableKey }) => {
       </div>
 
       <div
-        ref={tableContainerRef}
+        ref={setTableContainerRef}
         style={{ height: `calc(100% - ${headerHeight + 10}px)` }}
       >
         <AntTable
@@ -227,12 +243,7 @@ const TablePage = ({ tableKey }) => {
           editMode={formParams.editMode}
           item={formParams.item}
           onClose={() => setFormParams(prev => ({ ...prev, visible: false }))}
-          onSubmit={item => {
-            apiClient.post(`/${tableKey}`, item).then(resItem => {
-              setData(prev => [...prev, resItem]);
-              setFormParams(prev => ({ ...prev, visible: false }));
-            });
-          }}
+          onSubmit={onSubmit}
         />
       )}
     </div>
