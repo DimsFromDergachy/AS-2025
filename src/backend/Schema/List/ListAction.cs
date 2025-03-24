@@ -9,4 +9,5 @@ public enum ListAction
     Search,
     Create,
     ExportXlsx,
+    ExportPdf,
 }
