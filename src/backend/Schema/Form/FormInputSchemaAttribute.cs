@@ -21,6 +21,8 @@ public class FormInputSchemaAttribute : Attribute
 
     public string? ReferenceRequest { get; init; }
 
+    public string? ModelKey { get; init; }
+
     public bool NumberFormatUseGrouping { get; init; } = true;
 
     public int NumberFormatMaximumFractionDigits { get; init; } = 20;

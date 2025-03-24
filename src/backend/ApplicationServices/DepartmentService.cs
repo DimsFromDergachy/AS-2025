@@ -1,6 +1,8 @@
 ﻿using AS_2025.Api.Department.Create;
 using AS_2025.Api.Department.Delete;
 using AS_2025.Api.Department.Export;
+using AS_2025.Api.Department.Get;
+using AS_2025.Api.Department.Update;
 using AS_2025.ApplicationServices.Filters;
 using AS_2025.Common;
 using AS_2025.Database;
@@ -20,6 +22,14 @@ public class DepartmentService
         _context = context;
     }
 
+    public async Task<Department> GetAsync(GetDepartmentRequest request, CancellationToken cancellationToken)
+    {
+        return await _context.Departments
+            .Include(x => x.Head)
+            .AsNoTracking()
+            .SingleAsync(x => x.Id == request.Id, cancellationToken);
+    }
+
     public async Task<Department> CreateAsync(CreateDepartmentRequest request, CancellationToken cancellationToken)
     {
         var department = Department.Create();
@@ -33,6 +43,26 @@ public class DepartmentService
         }
 
         await _context.Departments.AddAsync(department, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return department;
+    }
+
+    public async Task<Department> UpdateAsync(UpdateDepartmentRequest request, CancellationToken cancellationToken)
+    {
+        var department = await _context.Departments.Full()
+            .SingleAsync(x => x.Id == request.Id, cancellationToken);
+
+        department.Name = request.Name;
+
+        if (request.HeadId is not null)
+        {
+            var head = await _context.Employees
+                .FirstOrDefaultAsync(x => x.Id == request.HeadId && x.Type == EmployeeType.DepartmentHead, cancellationToken);
+            department.Head = head;
+        }
+
+        _context.Departments.Update(department);
         await _context.SaveChangesAsync(cancellationToken);
 
         return department;

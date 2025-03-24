@@ -1,3 +1,5 @@
-﻿namespace AS_2025.Api.Department.Create;
+﻿using AS_2025.Api.Department.List;
 
-public record CreateDepartmentResponse(Guid Id);
+namespace AS_2025.Api.Department.Create;
+
+public record CreateDepartmentResponse : ListDepartmentsItem;

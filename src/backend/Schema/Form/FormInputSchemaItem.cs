@@ -22,6 +22,8 @@ public record FormInputSchemaItem
 
     public string? ReferenceRequest { get; init; }
 
+    public string? ModelKey { get; init; }
+
     public NumberFormat? NumberFormat { get; init; }
 
     public static FormInputSchemaItem From(FormInputSchemaAttribute attribute, string key)
@@ -37,6 +39,7 @@ public record FormInputSchemaItem
             ReferenceType = attribute.ReferenceType,
             ReferenceName = attribute.ReferenceName,
             ReferenceRequest = attribute.ReferenceRequest,
+            ModelKey = attribute.ModelKey,
             NumberFormat = NumberFormat.From(attribute)
         };
     }
