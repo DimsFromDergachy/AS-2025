@@ -13,15 +13,18 @@ public class ExportDepartmentsHandler : IRequestHandler<ExportDepartmentsRequest
     private readonly DepartmentService _departmentService;
     private readonly IXlsxDataExportService<Domain.Entities.Department> _xlsxDataExportService;
     private readonly ITemplateHtmlDataExportService<Domain.Entities.Department> _templateHtmlDataExportService;
+    private readonly IPdfDataExportService<Domain.Entities.Department> _pdfDataExportService;
 
     public ExportDepartmentsHandler(
         DepartmentService departmentService, 
         IXlsxDataExportService<Domain.Entities.Department> xlsxDataExportService,
-        ITemplateHtmlDataExportService<Domain.Entities.Department> templateHtmlDataExportService)
+        ITemplateHtmlDataExportService<Domain.Entities.Department> templateHtmlDataExportService, 
+        IPdfDataExportService<Domain.Entities.Department> pdfDataExportService)
     {
         _departmentService = departmentService;
         _xlsxDataExportService = xlsxDataExportService;
         _templateHtmlDataExportService = templateHtmlDataExportService;
+        _pdfDataExportService = pdfDataExportService;
     }
 
     public async Task<Result<ExportDepartmentsResponse>> Handle(ExportDepartmentsRequest request, CancellationToken cancellationToken)
@@ -40,6 +43,12 @@ public class ExportDepartmentsHandler : IRequestHandler<ExportDepartmentsRequest
             {
                 var bytes = await _templateHtmlDataExportService.ExportAsync(TemplateName, data, cancellationToken);
                 return new ExportDepartmentsResponse(bytes, ContentTypes.Html, GetFileName("html"));
+            }
+
+            case ExportType.Pdf:
+            {
+                var bytes = await _pdfDataExportService.ExportAsync(TemplateName, data, cancellationToken);
+                return new ExportDepartmentsResponse(bytes, ContentTypes.Pdf, GetFileName("pdf"));
             }
 
             default:

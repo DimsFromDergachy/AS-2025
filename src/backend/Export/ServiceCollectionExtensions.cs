@@ -13,6 +13,7 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<IXlsxDataExportService<Department>, XlsxDataExportService<Department, Model.Department>>();
         services.AddTransient<ITemplateHtmlDataExportService<Department>, TemplateHtmlDataExportService<Department, Model.Department>>();
+        services.AddTransient<IPdfDataExportService<Department>, PdfDataExportService<Department>>();
 
         services.AddTransient<IExportModelConverter<Department, Model.Department>, DepartmentExportModelConverter>();
 
