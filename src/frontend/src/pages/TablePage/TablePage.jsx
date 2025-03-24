@@ -84,6 +84,21 @@ const TablePage = ({ tableKey }) => {
     [tableKey, columnActions]
   );
 
+  const onSubmit = (item, isEdit) => {
+    const request = isEdit ? apiClient.put : apiClient.post;
+    const url = isEdit ? `/${tableKey}/${item.id}` : `/${tableKey}`;
+    request(url, item).then(resItem => {
+      if (isEdit) {
+        setData(prev =>
+          prev.map(el => (el.id === resItem.id ? resItem : el))
+        );
+      } else {
+        setData(prev => [...prev, resItem]);
+      }
+      setFormParams(prev => ({ ...prev, visible: false }));
+    });
+  };
+
   useEffect(() => {
     if (tableKey) {
       apiClient.get(`/${tableKey}/list`).then(({ items }) => {
@@ -228,12 +243,7 @@ const TablePage = ({ tableKey }) => {
           editMode={formParams.editMode}
           item={formParams.item}
           onClose={() => setFormParams(prev => ({ ...prev, visible: false }))}
-          onSubmit={item => {
-            apiClient.post(`/${tableKey}`, item).then(resItem => {
-              setData(prev => [...prev, resItem]);
-              setFormParams(prev => ({ ...prev, visible: false }));
-            });
-          }}
+          onSubmit={onSubmit}
         />
       )}
     </div>

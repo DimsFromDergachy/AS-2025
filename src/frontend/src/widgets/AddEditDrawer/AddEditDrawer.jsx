@@ -72,7 +72,7 @@ export default function AddEditDrawer(props) {
   const title = editMode && item ? 'Редактировать элемент' : 'Добавить элемент';
 
   const handleOk = () => {
-    onSubmit(values);
+    onSubmit({...values, id: item?.id}, editMode);
   };
 
   const handleCancel = () => {
