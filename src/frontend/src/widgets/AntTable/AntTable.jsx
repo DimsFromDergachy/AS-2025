@@ -36,7 +36,7 @@ export default function AntTable(props) {
 
   const globalStore = useGlobalStore();
   const [currentColumns, setCurrentColumns] = useState([]);
-  const [currentData, setCurrentData] = useState([]);
+  const [currentData, setCurrentData] = useState(null);
 
   const searchInput = useRef(null);
 
@@ -332,13 +332,14 @@ export default function AntTable(props) {
     setCurrentData(dataSource);
   }, [dataSource]);
 
+  if (!currentColumns.length || !currentData) return null;
+
   return (
     <Table
-      size="small"
       {...props}
+      size="small"
       columns={currentColumns}
       dataSource={currentData}
-      scroll={{ x: 1800 }}
       rowKey={item => item.id}
     />
   );

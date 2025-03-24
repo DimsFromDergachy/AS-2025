@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Input, Button, Flex, Descriptions, Drawer } from 'antd';
 import AntTable from 'src/widgets/AntTable';
 import AddEditDrawer from 'src/widgets/AddEditDrawer/AddEditDrawer';
@@ -12,6 +12,7 @@ import { useGlobalStore } from 'src/stores/globalStore';
 
 import { apiClient } from 'src/api/client';
 import { downloadFile, filterByFields } from 'src/helpers/functions';
+import { useTableHeight } from 'src/hooks/useTableHeight';
 
 const TablePage = ({ tableKey }) => {
   const [schema, setSchema] = useState({});
@@ -21,10 +22,16 @@ const TablePage = ({ tableKey }) => {
     editMode: false,
     item: null,
   });
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
+  const [data, setData] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
   const [searchText, setSearchText] = useState('');
   const [detailedView, setDetailedView] = useState({});
+
+  const headerContainerRef = useRef(null);
+  const tableContainerRef = useRef(null);
+  const tableHeight = useTableHeight(tableContainerRef, schema);
+  const headerHeight =
+    headerContainerRef.current?.getBoundingClientRect().height || 0;
 
   const store = useGlobalStore();
   const { referenceEnums = {} } = store.enums.get({ noproxy: true }) || {};
@@ -128,8 +135,11 @@ const TablePage = ({ tableKey }) => {
   }, [searchText, data, fieldsToSearch]);
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="h-full overflow-hidden">
+      <div
+        ref={headerContainerRef}
+        className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
         <Flex>
           <h1 className="text-2xl font-bold">{title}</h1>
           {commonActions.includes('ExportXlsx') && (
@@ -175,7 +185,10 @@ const TablePage = ({ tableKey }) => {
         </div>
       </div>
 
-      <Flex className="flex-1" vertical justify="space-between">
+      <div
+        ref={tableContainerRef}
+        style={{ height: `calc(100% - ${headerHeight + 10}px)` }}
+      >
         <AntTable
           availableActions={columnActions}
           columns={columns}
@@ -183,30 +196,30 @@ const TablePage = ({ tableKey }) => {
           pagination={{
             pageSize: 20,
             showTotal: total => `Всего записей: ${total}`,
-            hideOnSinglePage: true,
+            // hideOnSinglePage: true,
           }}
-          scroll={{ x: true }}
+          scroll={{ x: 1800, y: tableHeight }}
           bordered
         />
-        <Drawer
-          width={600}
-          open={detailedView.visible}
-          onClose={() => setDetailedView(prev => ({ ...prev, visible: false }))}
-          title="Подробная информация"
-        >
-          <Descriptions column={1} bordered>
-            {Object.entries(detailedView.data || {}).map(([key, value]) => (
-              <Descriptions.Item key={key} label={key}>
-                {Array.isArray(value)
-                  ? typeof value[0] === 'object'
-                    ? JSON.stringify(value)
-                    : value.join(', ')
-                  : value}
-              </Descriptions.Item>
-            ))}
-          </Descriptions>
-        </Drawer>
-      </Flex>
+      </div>
+      <Drawer
+        width={600}
+        open={detailedView.visible}
+        onClose={() => setDetailedView(prev => ({ ...prev, visible: false }))}
+        title="Подробная информация"
+      >
+        <Descriptions column={1} bordered>
+          {Object.entries(detailedView.data || {}).map(([key, value]) => (
+            <Descriptions.Item key={key} label={key}>
+              {Array.isArray(value)
+                ? typeof value[0] === 'object'
+                  ? JSON.stringify(value)
+                  : value.join(', ')
+                : value}
+            </Descriptions.Item>
+          ))}
+        </Descriptions>
+      </Drawer>
       {formSchema && (
         <AddEditDrawer
           open={formParams.visible}

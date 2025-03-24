@@ -6,112 +6,12 @@ import FormFieldsGroup from 'src/widgets/FormFieldsGroup';
 
 const { Title, Text } = Typography;
 
-const formFields = {
-  backpack: [
-    {
-      key: 'capacity',
-      label: 'Вместимость',
-      placeholder: 'Вместимость рюкзака',
-      visibilityType: 'Visible',
-      displayType: 'Integer',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-    },
-    {
-      key: 'temperature',
-      label: 'Температура',
-      placeholder: 'Температура',
-      visibilityType: 'Visible',
-      displayType: 'Decimal',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-    },
-    {
-      key: 'coolingRate',
-      label: 'Коэффициент охлаждения',
-      placeholder: 'Коэффициент охлаждения',
-      visibilityType: 'Visible',
-      displayType: 'Decimal',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-      precision: 3,
-      min: 0.01,
-      max: 0.9999,
-    },
-    {
-      key: 'iterationsPerTemp',
-      label: 'Итераций',
-      placeholder: 'Итераций на температуру',
-      visibilityType: 'Visible',
-      displayType: 'Integer',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-    },
-  ],
-  scheduler: [
-    {
-      key: 'quarterDays',
-      label: 'Дни',
-      placeholder: 'Дни',
-      visibilityType: 'Visible',
-      displayType: 'Integer',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-    },
-    {
-      key: 'temperature',
-      label: 'Температура',
-      placeholder: 'Температура',
-      visibilityType: 'Visible',
-      displayType: 'Decimal',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-    },
-    {
-      key: 'coolingRate',
-      label: 'Коэффициент охлаждения',
-      placeholder: 'Коэффициент охлаждения',
-      visibilityType: 'Visible',
-      displayType: 'Decimal',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-      precision: 3,
-      min: 0.01,
-      max: 0.9999,
-    },
-    {
-      key: 'iterationsPerTemp',
-      label: 'Итераций',
-      placeholder: 'Итераций на температуру',
-      visibilityType: 'Visible',
-      displayType: 'Integer',
-      referenceType: 'Model',
-      referenceName: null,
-      referenceRequest: null,
-      numberFormat: null,
-    },
-  ],
-};
-
 export default function Algos() {
   const { algorithm } = useParams();
   const [form] = Form.useForm();
 
   const [data, setData] = useState(null);
+  const [formSchema, setFormSchema] = useState(null);
 
   const onFinish = values => {
     apiClient.post(`/algos/${algorithm}`, values).then(res => {
@@ -122,27 +22,37 @@ export default function Algos() {
   useEffect(() => {
     setData(null);
     form.resetFields();
+    apiClient.get(`/algos/${algorithm}/schema`).then(res => {
+      setFormSchema(res);
+    });
   }, [form, algorithm]);
 
   return (
     <>
-      <Form
-        form={form}
-        autoComplete="off"
-        labelCol={{ flex: '1 1 140px' }}
-        labelAlign="left"
-        labelWrap
-        wrapperCol={{ flex: '1 1 380px' }}
-        validateMessages={{ required: 'Обязательное поле' }}
-        onFinish={onFinish}
-      >
-        <FormFieldsGroup fields={formFields[algorithm]} />
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            Сделать уличную магию
-          </Button>
-        </Form.Item>
-      </Form>
+      <>
+        <Title level={3}>{formSchema?.title}</Title>
+        <Form
+          form={form}
+          autoComplete="off"
+          labelCol={{ flex: '1 1 140px' }}
+          labelAlign="left"
+          labelWrap
+          wrapperCol={{ flex: '1 1 380px' }}
+          validateMessages={{ required: 'Обязательное поле' }}
+          onFinish={onFinish}
+        >
+          {formSchema && (
+            <>
+              <FormFieldsGroup fields={formSchema.inputs} />
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  Сделать уличную магию
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form>
+      </>
       <div>
         {data && (
           <div>
@@ -161,7 +71,6 @@ export default function Algos() {
                     <Descriptions
                       bordered
                       size="small"
-                      column={2}
                       items={val.map((item, index) => ({
                         key: index,
                         label: `Элемент ${index + 1}`,
@@ -175,7 +84,6 @@ export default function Algos() {
                 if (typeof val === 'object' && val !== null) {
                   return (
                     <Descriptions
-                      bordered
                       size="small"
                       column={1}
                       items={Object.entries(val).map(([objKey, objValue]) => ({

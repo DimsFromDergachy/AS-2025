@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Select, DatePicker, InputNumber, Checkbox } from 'antd';
+import Slider from '../Slider';
 
 const getFormControl = field => {
   const commonProps = {
@@ -33,20 +34,26 @@ const getFormControl = field => {
     case 'Percent': {
       const percent = field.displayType === 'Percent';
       const precision = field.displayType === 'Integer' ? 0 : 2;
+      const { min, max, step } = field.numberFormat || {};
 
       return (
         <InputNumber
           {...commonProps}
-          precision={field.precision || precision}
+          precision={precision}
           addonAfter={percent && '%'}
-          min={field.min || (percent ? 0 : undefined)}
-          max={field.max || (percent ? 100 : undefined)}
+          min={min}
+          max={max}
+          step={step}
         />
       );
     }
     case 'Checkbox':
       return <Checkbox />;
-    default:
+    case 'Slider': {
+      const { min, max, step } = field.numberFormat || {};
+      return <Slider min={min} max={max} step={step} />;
+    }
+      default:
       return <Input {...commonProps} />;
   }
 };

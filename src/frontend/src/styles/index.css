@@ -40,6 +40,10 @@
   background-color: #878787;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 .ant-layout-sider-children {
   .ant-menu-inline-collapsed {
     .ant-menu-item {
