@@ -1,7 +1,7 @@
 ﻿using AS_2025.Algos.Common;
-using AS_2025.Algos.DijkstraAlgorithm.Models;
+using AS_2025.Algos.GraphAlgorithm.Models;
 
-namespace AS_2025.Algos.DijkstraAlgorithm
+namespace AS_2025.Algos.GraphAlgorithm
 {
     public class DijkstraSolver<T>
     {
