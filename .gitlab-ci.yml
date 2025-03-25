@@ -55,6 +55,8 @@ deploy:
   script:
     - |
       ssh $VM_USER@$VM_HOST "
+        # Clean docker up
+        docker system prune -f
         # Create directory if it doesn't exist
         mkdir -p $VM_PATH
         # Go to project directory

@@ -38,7 +38,7 @@ jobs:
         
     - name: Restore dependencies
       run: dotnet restore
-      
+
     - name: Build
       run: dotnet build --no-restore --configuration Release
       
@@ -79,6 +79,9 @@ jobs:
       run: |
         # Deploy script
         ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "
+          # Clean docker up
+          docker system prune -f
+
           # Create directory if it doesn't exist
           mkdir -p ${{ secrets.VM_PATH }}
 
