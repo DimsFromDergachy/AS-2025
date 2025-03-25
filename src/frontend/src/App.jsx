@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { QueryClientProvider } from '@tanstack/react-query';
+// import { QueryClientProvider } from '@tanstack/react-query';
 import { App as AntApp, ConfigProvider } from 'antd';
+import { ruRu } from 'antd/lib/locale';
 import { RouterProvider, createBrowserRouter } from 'react-router';
 import { getRoutes } from './pages/routes';
 import { apiClient } from './api/client';
@@ -26,7 +27,7 @@ function App() {
 
   return (
     // <QueryClientProvider client={queryClient}>
-    <ConfigProvider theme={lightTheme}>
+    <ConfigProvider locale={ruRu} theme={lightTheme}>
       <AntApp
         message={{
           top: '90vh',
