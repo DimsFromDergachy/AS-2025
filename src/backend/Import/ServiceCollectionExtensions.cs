@@ -19,7 +19,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<JsonDataImportService<Team>>();
         services.AddTransient<IDataImportHandler<Team>, TeamDataImportHandler>();
 
-        services.AddTransient<ImportDataContext>();
+        services.AddScoped<ImportDataContext>();
+        services.AddScoped<RelationshipBuilder>();
 
         return services;
     }

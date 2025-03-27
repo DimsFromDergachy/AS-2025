@@ -19,8 +19,6 @@ public class TeamDataImportHandler : BaseDataImportHandler, IDataImportHandler<T
             ExternalId = x.Id,
             Name = x.Name,
             Type = Enum.TryParse(typeof(TeamType), x.Type, out var type) ? (TeamType)type : TeamType.Undefined,
-            Department = TryGetDepartment(x.DepartmentId, out var department) ? department : null,
-            TeamLead = TryGetEmployee(x.TeamLeadId, out var teamLead) ? teamLead : null,
         }).ToList();
 
         foreach (var team in teamsImported)

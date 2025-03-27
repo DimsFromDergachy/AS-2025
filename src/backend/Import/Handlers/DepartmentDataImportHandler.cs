@@ -1,6 +1,5 @@
 ﻿using AS_2025.Common;
 using AS_2025.Import.Filesystem.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace AS_2025.Import.Handlers;
 
@@ -22,8 +21,7 @@ public class DepartmentDataImportHandler : BaseDataImportHandler, IDataImportHan
 
         foreach (var department in departmentsImported)
         {
-            var existing = await Context.Departments.SingleOrDefaultAsync(x => x.ExternalId == department.ExternalId, cancellationToken);
-            if (existing is null)
+            if (!TryGetDepartment(department.ExternalId, out var existing))
             {
                 Context.Departments.Add(department);
                 continue;

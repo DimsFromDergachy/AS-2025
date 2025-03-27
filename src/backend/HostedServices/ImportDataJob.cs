@@ -67,6 +67,9 @@ public class ImportDataJob : IChainedHostedServiceJob
 
             _logger.LogInformation("Successfully imported data from {DataPath}", dataPath);
         }
+
+        var relationshipBuilder = serviceProvider.GetRequiredService<RelationshipBuilder>();
+        await relationshipBuilder.BuildAsync(cancellationToken);
     }
 
     private async Task ImportJson(IServiceProvider serviceProvider, string root, CancellationToken cancellationToken)
@@ -88,5 +91,8 @@ public class ImportDataJob : IChainedHostedServiceJob
 
             _logger.LogInformation("Successfully imported data from {DataPath}", dataPath);
         }
+
+        var relationshipBuilder = serviceProvider.GetRequiredService<RelationshipBuilder>();
+        await relationshipBuilder.BuildAsync(cancellationToken);
     }
 }
