@@ -1,14 +1,18 @@
 ﻿variables:
   BE_APPLICATION_PORT: 5002
   FE_APPLICATION_PORT: 5004
-  BACKEND_PATH: "https://$VM_HOST:5002"
+
   TG_CHAT: "-100$TG_CHAT_ID"
+
   TG_SUCCESS_MESSAGE: |
     ✅ Has been published [from GitLab]
     📝 Commit: $CI_COMMIT_TITLE
     👨‍💻 Author: $CI_COMMIT_AUTHOR
     🔗 Commit URL: $CI_PROJECT_URL/commit/$CI_COMMIT_SHA
     😎 $GITLAB_USER_NAME - GG!
+    ✅ Deployed on envs:
+      📌 prod: https://${PROD_VM_HOST}:5004
+
   TG_FAILURE_MESSAGE: |
     ❌ Fail to publish [from GitLab] ...
     📝 Commit: $CI_COMMIT_TITLE
@@ -35,8 +39,10 @@ build:
              --data '{"chat_id":"'$TG_CHAT'","text":"'"$TG_FAILURE_MESSAGE"'"}' \
              'https://api.telegram.org/bot'$TG_BOT_TOKEN'/sendMessage'
       fi
+  only:
+    - master
 
-deploy:
+.deploy_template: &deploy_definition
   stage: deploy
   image: ubuntu:24.04
   needs: [build]
@@ -88,6 +94,18 @@ deploy:
              --data '{"chat_id":"'$TG_CHAT'","text":"'"$TG_FAILURE_MESSAGE"'"}' \
              'https://api.telegram.org/bot'$TG_BOT_TOKEN'/sendMessage'
       fi
+  only:
+    - master
+
+deploy:prod:
+  <<: *deploy_definition
+  needs: [build]
+  environment: prod
+  variables:
+    ENVIRONMENT: prod
+    VM_HOST: ${PROD_VM_HOST}
+    VM_USER: ${PROD_VM_USER}
+    VM_PATH: ${PROD_VM_PATH}
 
 notify:
   stage: notify
@@ -97,6 +115,8 @@ notify:
       curl --header 'Content-Type: application/json' \
            --data '{"chat_id":"'$TG_CHAT'","text":"'"$TG_SUCCESS_MESSAGE"'"}' \
            'https://api.telegram.org/bot'$TG_BOT_TOKEN'/sendMessage'
+  only:
+    - master
 
 # integration:
 #   stage: notify

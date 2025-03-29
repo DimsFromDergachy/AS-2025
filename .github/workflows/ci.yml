@@ -7,10 +7,10 @@ on:
 env:
   BE_APPLICATION_PORT: 5002
   FE_APPLICATION_PORT: 5004
-  BACKEND_PATH: https://${{ secrets.VM_HOST }}:5002
 
   TG_CHAT: -100${{ secrets.TG_CHAT_ID }}
   TG_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+
   TG_SUCCESS_MESSAGE: |
     ✅ Has been published
     📝 Commit: ${{ github.event.head_commit.message }}
