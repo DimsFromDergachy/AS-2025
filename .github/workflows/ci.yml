@@ -79,8 +79,6 @@ jobs:
       run: |
         # Deploy script
         ssh ${{ secrets.VM_USER }}@${{ secrets.VM_HOST }} "
-          # Clean docker up
-          docker system prune -f
 
           # Create directory if it doesn't exist
           mkdir -p ${{ secrets.VM_PATH }}
@@ -110,6 +108,9 @@ jobs:
           # Rebuild and restart containers
           docker compose down
           docker compose up --build -d
+
+          # Clean docker up
+          docker system prune -f
         "
 
     - name: Send FAILURE message

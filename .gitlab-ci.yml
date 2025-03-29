@@ -61,12 +61,12 @@ build:
   script:
     - |
       ssh $VM_USER@$VM_HOST "
-        # Clean docker up
-        docker system prune -f
         # Create directory if it doesn't exist
         mkdir -p $VM_PATH
+
         # Go to project directory
         cd $VM_PATH
+
         # Pull latest code (if git repo exists)
         if [ -d .git ]; then
           git fetch origin
@@ -76,16 +76,22 @@ build:
           # First-time clone
           git clone https://gitlab.com/$CI_PROJECT_PATH .
         fi
+
         # Copy over the .env file if it doesn't exist
         # This assumes you've already set up the .env file on the VM
         if [ ! -f .env ]; then
           echo 'Please set up your .env file manually on first deployment'
         fi
+
         # Ensure certificate directory exists
         mkdir -p src/https
+
         # Rebuild and restart containers
         docker compose down
         docker compose up --build -d
+
+        # Clean docker up
+        docker system prune -f
       "
   after_script:
     - |
