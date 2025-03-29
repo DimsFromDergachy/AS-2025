@@ -9,10 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include=".templates\Api\Entity\EntityEndpoints.cst" />
-    <Compile Include=".templates\ApplicationServices\EntityService.cst" />
-    <Compile Include=".templates\ApplicationServices\Filters\ListEntitiesFilter.cst" />
-    <Compile Include=".templates\Database\Configuration\EntityConfiguration.cst" />
+    <None Include=".templates\Api\Entity\EntityEndpoints.cst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".templates\ApplicationServices\EntityService.cst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".templates\ApplicationServices\Filters\ListEntitiesFilter.cst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include=".templates\Database\Configuration\EntityConfiguration.cst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -29,7 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include=".templates\domain\entities\Entity.cst" />
+    <None Include=".templates\domain\entities\Entity.cst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
