@@ -21,6 +21,9 @@
     <None Include=".templates\Database\Configuration\EntityConfiguration.cst">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include=".templates\Domain\Entities\Entity.cst">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -32,14 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include=".templates\Domain\Entities\" />
     <Folder Include="generated\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include=".templates\domain\entities\Entity.cst">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
