@@ -1,12 +1,15 @@
-import { Button, Form, Typography, Descriptions } from 'antd';
+import { App, Button, Form, Typography, Descriptions, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { apiClient } from 'src/api/client';
 import FormFieldsGroup from 'src/widgets/FormFieldsGroup';
+import FileUploader from 'src/widgets/FileUploader';
 
 const { Title, Text } = Typography;
 
 export default function Algos() {
+  const { message } = App.useApp();
   const { algorithm } = useParams();
   const [form] = Form.useForm();
 
@@ -30,6 +33,7 @@ export default function Algos() {
   return (
     <>
       <>
+        <FileUploader />
         <Title level={3}>{formSchema?.title}</Title>
         <Form
           form={form}

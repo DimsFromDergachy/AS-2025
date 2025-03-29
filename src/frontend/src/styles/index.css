@@ -1,4 +1,4 @@
-@import "tailwindcss" important;
+@import 'tailwindcss' important;
 
 /* Firefox (uncomment to work in Firefox, although other properties will not work!)  */
 /** {
@@ -45,9 +45,22 @@
 }
 
 .ant-layout-sider-children {
-  .ant-menu-inline-collapsed {
-    .ant-menu-item {
-      line-height: 48px;
+  .SideMenu {
+    .ant-menu {
+      border-inline-end: none;
+    }
+    .ant-menu-inline-collapsed {
+      .ant-menu-item {
+        line-height: 48px;
+      }
+      .ant-menu-submenu {
+        :hover {
+          color: white;
+        }
+        .ant-menu-submenu-title {
+          line-height: 48px;
+        }
+      }
     }
   }
 }
@@ -60,4 +73,8 @@
 .ant-modal-confirm-content {
   padding-top: 8px;
   margin-left: -34px;
+}
+
+.GanttWrapper ._34SS0:nth-of-type(even) {
+  background-color: unset;
 }

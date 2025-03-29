@@ -6,12 +6,16 @@ import { RouterProvider, createBrowserRouter } from 'react-router';
 import { getRoutes } from './pages/routes';
 import { apiClient } from './api/client';
 // import { queryClient } from '~/shared/queryClient'
-import { lightTheme } from './styles/themes';
+import { lightTheme, darkTheme } from './styles/themes';
 import { AuthProvider } from './shared/Auth/AuthProvider';
-import { globalStore } from './stores/globalStore';
+import { globalStore, useGlobalStore } from './stores/globalStore';
 
 function App() {
+  const store = useGlobalStore();
+
   const [router, setRouter] = useState(null);
+  const darkMode = store.darkMode.get();
+  const designToken = darkMode ? darkTheme : lightTheme;
 
   useEffect(() => {
     apiClient.get('/menu/list').then(({ items }) => {
@@ -27,7 +31,7 @@ function App() {
 
   return (
     // <QueryClientProvider client={queryClient}>
-    <ConfigProvider locale={ruRu} theme={lightTheme}>
+    <ConfigProvider locale={ruRu} theme={designToken}>
       <AntApp
         message={{
           top: '90vh',

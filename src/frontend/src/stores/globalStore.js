@@ -8,6 +8,7 @@ export const globalStore = hookstate({
   },
   enums: null,
   mobile: false,
+  darkMode: true,
   menuItems: [],
   menuPermissions: {},
   rolePermissions: {},

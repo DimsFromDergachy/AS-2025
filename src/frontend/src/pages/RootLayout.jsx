@@ -1,5 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { HubConnectionBuilder, HttpTransportType, LogLevel } from '@microsoft/signalr';
+import {
+  HubConnectionBuilder,
+  LogLevel,
+} from '@microsoft/signalr';
 import { AuthContext } from 'src/shared/Auth/AuthContext';
 import { App } from 'antd';
 import { Suspense } from 'react';
@@ -18,13 +21,14 @@ const connectToHub = () => {
     .withAutomaticReconnect()
     .configureLogging(LogLevel.Information)
     .build();
-  
+
   connection.serverTimeoutInMilliseconds = 600_000;
 
   connection.on('ApiCallEvent', apiEvent => {
-    apiEvent.method !== 'GET' && console.log(
-      `API Event: ${apiEvent.method} ${apiEvent.path} at ${apiEvent.timestamp}`
-    );
+    apiEvent.method !== 'GET' &&
+      console.log(
+        `API Event: ${apiEvent.method} ${apiEvent.path} at ${apiEvent.timestamp}`
+      );
   });
 
   connection.start().catch(err => console.error(err));
@@ -42,7 +46,7 @@ export default function RootLayout() {
   const loading = globalStore.loading.get();
   const error = globalStore.serverError.get({ noproxy: true });
   const mobile = globalStore.mobile.get();
-  const enums = globalStore.enums.get();
+  const enums = globalStore.enums.get({ noproxy: true });
 
   const [_, pageKey] = pathname.split('/');
 
@@ -67,15 +71,17 @@ export default function RootLayout() {
     if (!authorized) navigate('/login');
     else {
       if (!pageKey) navigate('/dashboard');
-      const taggedEnumsReq = apiClient('/utils/tagged-enums');
-      const referenceEnumsReq = apiClient('/utils/reference-enums');
-      Promise.all([taggedEnumsReq, referenceEnumsReq]).then(
-        ([taggedEnums, referenceEnums]) => {
-          globalStore.enums.set({ taggedEnums, referenceEnums });
-        }
-      );
+      if (!enums) {
+        const taggedEnumsReq = apiClient('/utils/tagged-enums');
+        const referenceEnumsReq = apiClient('/utils/reference-enums');
+        Promise.all([taggedEnumsReq, referenceEnumsReq]).then(
+          ([taggedEnums, referenceEnums]) => {
+            globalStore.enums.set({ taggedEnums, referenceEnums });
+          }
+        );
+      }
     }
-  }, [navigate, authorized]);
+  }, [enums, pageKey, navigate, authorized]);
 
   useEffect(() => {
     if (error.message) {
@@ -101,7 +107,7 @@ export default function RootLayout() {
             <SideMenu setCollapsed={setCollapsed} />
           </Sider>
 
-          <Layout className="bg-gray-50">
+          <Layout>
             <Header
               className="sticky top-0 z-10 p-0 shadow-sm flex items-center"
               style={{

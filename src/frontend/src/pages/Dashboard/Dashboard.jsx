@@ -67,7 +67,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="Wrapper">
+    <div className="GanttWrapper">
       <div className='mb-4'>
         <ViewSwitcher
           onViewModeChange={viewMode => setView(viewMode)}
