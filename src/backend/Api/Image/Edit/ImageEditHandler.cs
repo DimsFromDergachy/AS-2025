@@ -35,7 +35,7 @@ public class ImageEditHandler : IRequestHandler<ImageEditRequest, Result<ImageEd
 
     private string GetModifiedFileName(string originalFileName)
     {
-        var extension = originalFileName[originalFileName.LastIndexOf(".", StringComparison.Ordinal)..];
+        var extension = originalFileName[(originalFileName.LastIndexOf(".", StringComparison.Ordinal) + 1)..];
         return originalFileName.Replace($".{extension}", $".modified.{extension}");
     }
 }
