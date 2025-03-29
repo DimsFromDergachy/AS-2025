@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include=".templates\Api\Entity\EntityEndpoints.cst" />
+    <Compile Include=".templates\ApplicationServices\EntityService.cst" />
+    <Compile Include=".templates\ApplicationServices\Filters\ListEntitiesFilter.cst" />
+    <Compile Include=".templates\Database\Configuration\EntityConfiguration.cst" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Ardalis.Result" Version="10.1.0" />
     <PackageReference Include="Ardalis.Result.AspNetCore" Version="10.1.0" />
     <PackageReference Include="Ardalis.Result.FluentValidation" Version="10.1.0" />
@@ -17,7 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include=".templates\Domain\Entities\" />
     <Folder Include="generated\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include=".templates\domain\entities\Entity.cst" />
   </ItemGroup>
 
 </Project>

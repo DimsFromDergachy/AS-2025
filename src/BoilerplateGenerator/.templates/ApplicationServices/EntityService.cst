@@ -1,0 +1,78 @@
+﻿using AS_2025.Api.{{ EntityName }}.Create;
+using AS_2025.Api.{{ EntityName }}.Delete;
+using AS_2025.Api.{{ EntityName }}.Export;
+using AS_2025.Api.{{ EntityName }}.Get;
+using AS_2025.Api.{{ EntityName }}.Update;
+using AS_2025.ApplicationServices.Filters;
+using AS_2025.Common;
+using AS_2025.Database;
+using AS_2025.Domain.Common;
+using AS_2025.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Task = System.Threading.Tasks.Task;
+
+namespace AS_2025.ApplicationServices;
+
+public class {{ EntityName }}Service
+{
+    private readonly IContext _context;
+
+    public {{ EntityName }}Service(IContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<{{ EntityName }}> GetAsync(Get{{ EntityName }}Request request, CancellationToken cancellationToken)
+    {
+        return await _context.{{ EntityName }}s
+            .Include(x => x.Head)
+            .AsNoTracking()
+            .SingleAsync(x => x.Id == request.Id, cancellationToken);
+    }
+
+    public async Task<{{ EntityName }}> CreateAsync(Create{{ EntityName }}Request request, CancellationToken cancellationToken)
+    {
+        var {{ EntityName }} = {{ EntityName }}.Create();
+        
+        // TODO fill entity
+
+        await _context.{{ EntityName }}s.AddAsync({{ EntityName }}, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return {{ EntityName }};
+    }
+
+    public async Task<{{ EntityName }}> UpdateAsync(Update{{ EntityName }}Request request, CancellationToken cancellationToken)
+    {
+        var {{ EntityName }} = await _context.{{ EntityName }}s.Full()
+            .SingleAsync(x => x.Id == request.Id, cancellationToken);
+
+        // TODO fill entity
+
+        _context.{{ EntityName }}s.Update({{ EntityName }});
+        await _context.SaveChangesAsync(cancellationToken);
+
+        return {{ EntityName }};
+    }
+
+    public async Task<IReadOnlyCollection<{{ EntityName }}>> ListAsync(List{{ EntityName }}sFilter filter, CancellationToken cancellationToken)
+    {
+        return await _context.{{ EntityName }}s.Full()
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyCollection<{{ EntityName }}>> ExportListAsync(Export{{ EntityName }}sRequest request,
+        CancellationToken cancellationToken)
+    {
+        return await _context.{{ EntityName }}s.Full()
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    public Task DeleteAsync(Delete{{ EntityName }}Request request, CancellationToken cancellationToken)
+    {
+        return _context.{{ EntityName }}s
+            .Where(x => x.Id == request.Id).ExecuteDeleteAsync(cancellationToken);
+    }
+}
